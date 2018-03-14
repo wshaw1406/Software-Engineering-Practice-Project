@@ -1,13 +1,15 @@
+package software_eng;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import java.awt.Window;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+
 
 public class TaskLogging {
 
@@ -19,7 +21,11 @@ public class TaskLogging {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+
+	}
+
+        public void onClick() {
+            		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					TaskLogging window = new TaskLogging();
@@ -29,8 +35,7 @@ public class TaskLogging {
 				}
 			}
 		});
-	}
-
+        }
 	/**
 	 * Create the application.
 	 */
