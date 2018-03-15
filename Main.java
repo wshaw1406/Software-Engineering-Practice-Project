@@ -10,8 +10,13 @@ package software_eng;
  * @author Will
  */
 public class Main {
+    
     public static void main(String args[]) {
-        TaskLogging test = new TaskLogging();
-        test.onClick();
+//        TaskLogging test = new TaskLogging();
+//        test.onClick();
+        
+        Database dbTest = new Database();
+        dbTest.connect();
+        dbTest.query();
     }
 }
