@@ -2,7 +2,6 @@ package software_eng;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-import java.awt.Window;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -18,12 +17,8 @@ public class TaskLogging {
 	private JTextField textField_1;
 
 	/**
-	 * Launch the application.
+	 * Method to 
 	 */
-	public static void main(String[] args) {
-
-	}
-
         public void onClick() {
             		EventQueue.invokeLater(new Runnable() {
 			public void run() {
