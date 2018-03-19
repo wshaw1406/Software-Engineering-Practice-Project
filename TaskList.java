@@ -5,10 +5,27 @@
  */
 package software_eng;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Will
  */
-public class TaskList {
+public class TaskList extends Task{
+    ArrayList<Task> tasks = new ArrayList<>();
     
+    TaskList()
+    {
+        
+    }
+    
+    public void addTask(Task task)
+    {
+        tasks.add(task);
+    }
+    
+    public void removeTask(Task task)
+    {
+        tasks.remove(task);
+    }
 }
