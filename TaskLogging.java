@@ -1,5 +1,5 @@
-package software_eng;
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
@@ -8,29 +8,41 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JSpinner;
+import javax.swing.JComboBox;
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.Calendar;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingUtilities;
+import javax.swing.text.DateFormatter;
+
 
 
 public class TaskLogging {
 
 	private JFrame frmTaskLogging;
-	private JTextField textField;
-	private JTextField textField_1;
 
 	/**
-	 * Method to 
+	 * Launch the application.
 	 */
-        public void onClick() {
-            		EventQueue.invokeLater(new Runnable() {
+	public static void main(String[] args) {
+		
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					TaskLogging window = new TaskLogging();
 					window.frmTaskLogging.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-        }
+	}
+
 	/**
 	 * Create the application.
 	 */
@@ -49,26 +61,16 @@ public class TaskLogging {
 		frmTaskLogging.getContentPane().setLayout(null);
 		
 		JLabel lblCaretakerName = new JLabel("Caretaker Name:");
-		lblCaretakerName.setBounds(25, 28, 89, 14);
+		lblCaretakerName.setBounds(25, 28, 117, 14);
 		frmTaskLogging.getContentPane().add(lblCaretakerName);
 		
 		JLabel lblTimeOfCompletion = new JLabel("Time of Completion: ");
-		lblTimeOfCompletion.setBounds(25, 53, 117, 14);
+		lblTimeOfCompletion.setBounds(25, 53, 134, 14);
 		frmTaskLogging.getContentPane().add(lblTimeOfCompletion);
 		
 		JLabel lblAdditionalComments = new JLabel("Additional Comments:");
-		lblAdditionalComments.setBounds(25, 78, 117, 14);
+		lblAdditionalComments.setBounds(25, 78, 134, 14);
 		frmTaskLogging.getContentPane().add(lblAdditionalComments);
-		
-		textField = new JTextField();
-		textField.setBounds(171, 50, 86, 20);
-		frmTaskLogging.getContentPane().add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(171, 25, 160, 20);
-		frmTaskLogging.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(171, 73, 206, 105);
@@ -81,5 +83,20 @@ public class TaskLogging {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBounds(292, 181, 89, 23);
 		frmTaskLogging.getContentPane().add(btnCancel);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerDateModel(new Date(1521619200000L), new Date(1521619200000L), new Date(1521662400000L), Calendar.HOUR_OF_DAY));
+		spinner.setBackground(new Color(240, 240, 240));
+		spinner.setBounds(171, 49, 134, 22);
+		frmTaskLogging.getContentPane().add(spinner);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker 1", "Caretaker 2", "Caretaker 3", "Caretaker 4", "Caretaker 5", "Caretaker 6"}));
+		comboBox.setBounds(171, 24, 134, 22);
+		frmTaskLogging.getContentPane().add(comboBox);
 	}
-}
+
+
+
+
+} 
