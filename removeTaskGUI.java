@@ -10,9 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class removeTask {
+public class removeTaskGUI {
 
-	private JFrame frmRemoveTask;
+	private JFrame frmRemoveTaskGUI;
 	private JTable table;
 
 	/**
@@ -22,8 +22,8 @@ public class removeTask {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					removeTask window = new removeTask();
-					window.frmRemoveTask.setVisible(true);
+					removeTaskGUI window = new removeTaskGUI();
+					window.frmRemoveTaskGUI.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,7 +34,7 @@ public class removeTask {
 	/**
 	 * Create the application.
 	 */
-	public removeTask() {
+	public removeTaskGUI() {
 		initialize();
 	}
 
@@ -42,27 +42,27 @@ public class removeTask {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmRemoveTask = new JFrame();
-		frmRemoveTask.setTitle("Remove Task");
-		frmRemoveTask.setBounds(100, 100, 481, 370);
-		frmRemoveTask.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmRemoveTask.getContentPane().setLayout(null);
+		frmRemoveTaskGUI = new JFrame();
+		frmRemoveTaskGUI.setTitle("Remove Task");
+		frmRemoveTaskGUI.setBounds(100, 100, 481, 370);
+		frmRemoveTaskGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmRemoveTaskGUI.getContentPane().setLayout(null);
 		
 		JLabel lblPleaseSelectA = new JLabel("Please select a task then, press 'Remove' to delete the Task");
 		lblPleaseSelectA.setBounds(10, 11, 445, 14);
-		frmRemoveTask.getContentPane().add(lblPleaseSelectA);
+		frmRemoveTaskGUI.getContentPane().add(lblPleaseSelectA);
 		
 		JLabel lblTask = new JLabel("Task");
 		lblTask.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTask.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		lblTask.setBounds(10, 39, 240, 23);
-		frmRemoveTask.getContentPane().add(lblTask);
+		frmRemoveTaskGUI.getContentPane().add(lblTask);
 		
 		JScrollPane scrollPane = new JScrollPane((Component) null);
 		scrollPane.setFocusable(false);
 		scrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane.setBounds(10, 73, 240, 248);
-		frmRemoveTask.getContentPane().add(scrollPane);
+		frmRemoveTaskGUI.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -92,7 +92,7 @@ public class removeTask {
 		
 		JButton button = new JButton("Remove");
 		button.setBounds(322, 154, 101, 32);
-		frmRemoveTask.getContentPane().add(button);
+		frmRemoveTaskGUI.getContentPane().add(button);
 	}
 
 }

@@ -10,9 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class removeUser {
+public class removeUserGUI {
 
-	private JFrame frmRemoveUser;
+	private JFrame frmRemoveUserGUI;
 	private JTable table;
 
 	/**
@@ -22,8 +22,8 @@ public class removeUser {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					removeUser window = new removeUser();
-					window.frmRemoveUser.setVisible(true);
+					removeUserGUI window = new removeUserGUI();
+					window.frmRemoveUserGUI.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,7 +34,7 @@ public class removeUser {
 	/**
 	 * Create the application.
 	 */
-	public removeUser() {
+	public removeUserGUI() {
 		initialize();
 	}
 
@@ -42,17 +42,17 @@ public class removeUser {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmRemoveUser = new JFrame();
-		frmRemoveUser.setTitle("Remove User");
-		frmRemoveUser.setBounds(100, 100, 490, 387);
-		frmRemoveUser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmRemoveUser.getContentPane().setLayout(null);
+		frmRemoveUserGUI = new JFrame();
+		frmRemoveUserGUI.setTitle("Remove User");
+		frmRemoveUserGUI.setBounds(100, 100, 490, 387);
+		frmRemoveUserGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmRemoveUserGUI.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane((Component) null);
 		scrollPane.setFocusable(false);
 		scrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane.setBounds(10, 90, 240, 248);
-		frmRemoveUser.getContentPane().add(scrollPane);
+		frmRemoveUserGUI.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -82,15 +82,15 @@ public class removeUser {
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		label.setBounds(10, 56, 240, 23);
-		frmRemoveUser.getContentPane().add(label);
+		frmRemoveUserGUI.getContentPane().add(label);
 		
 		JButton btnNewButton = new JButton("Remove");
 		btnNewButton.setBounds(309, 191, 101, 32);
-		frmRemoveUser.getContentPane().add(btnNewButton);
+		frmRemoveUserGUI.getContentPane().add(btnNewButton);
 		
 		JLabel lblPleaseSelectA = new JLabel("Please select a user then, press 'Remove' to delete the User");
 		lblPleaseSelectA.setBounds(10, 11, 340, 14);
-		frmRemoveUser.getContentPane().add(lblPleaseSelectA);
+		frmRemoveUserGUI.getContentPane().add(lblPleaseSelectA);
 	}
 
 }

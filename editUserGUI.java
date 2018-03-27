@@ -27,9 +27,9 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class editUser {
+public class editUserGUI {
 
-	private JFrame frmEditUser;
+	private JFrame frmEditUserGUI;
 	private JTable table;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -44,8 +44,8 @@ public class editUser {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					editUser window = new editUser();
-					window.frmEditUser.setVisible(true);
+					editUserGUI window = new editUserGUI();
+					window.frmEditUserGUI.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -56,7 +56,7 @@ public class editUser {
 	/**
 	 * Create the application.
 	 */
-	public editUser() {
+	public editUserGUI() {
 		initialize();
 	}
 
@@ -64,13 +64,13 @@ public class editUser {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmEditUser = new JFrame();
-		frmEditUser.setTitle("Edit User");
+		frmEditUserGUI = new JFrame();
+		frmEditUserGUI.setTitle("Edit User");
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		frmEditUser.getContentPane().add(panel, BorderLayout.CENTER);
+		frmEditUserGUI.getContentPane().add(panel, BorderLayout.CENTER);
 		
 		JLabel lblStaff = new JLabel("Staff");
 		lblStaff.setHorizontalAlignment(SwingConstants.CENTER);
@@ -192,3 +192,4 @@ public class editUser {
 		
 	}
 }
+
