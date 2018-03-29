@@ -57,12 +57,21 @@ public class CaretakerSchedule2 extends JFrame{
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"7:12-8:00", "Test","notes"},
-				{"8:00-9:00", "dsfdsf","notes2"},
+				{"8:00-9:00", "dsfdsf","notes"},
 			},
 			new String[] {
 				"Time", "Desc.", "Notes"
 			}
 		));
+		
+		JButton btnAssignNewTasks = new JButton("Assign new tasks");
+		btnAssignNewTasks.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TaskAllocation();
+			}
+		});
+		btnAssignNewTasks.setBounds(187, 333, 213, 25);
+		frame.getContentPane().add(btnAssignNewTasks);
 		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
 		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
 	}
@@ -121,7 +130,12 @@ class ButtonEditor extends DefaultCellEditor
 	public Object getCellEditorValue() {
 
 		if(clicked) {
-			JOptionPane.showMessageDialog(btn, lbl+" Clicked");
+			if(lbl == "notes") {
+				JOptionPane.showMessageDialog(btn, lbl+" Clicked!");
+			}
+			else if(lbl == "assign") {
+				JOptionPane.showMessageDialog(btn, "fuck");
+			}
 		}
 		clicked = false;
 		return new String(lbl);
@@ -135,7 +149,6 @@ class ButtonEditor extends DefaultCellEditor
 	
 	@Override
 	protected void fireEditingStopped() {
-		// TODO Auto-generated method stub
 		super.fireEditingStopped();
 	}
 }
