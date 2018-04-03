@@ -1,0 +1,8 @@
+CREATE TABLE users (
+	userID varchar(10) not null,
+	username varchar(30) not null,
+	passwordHash varchar(255) not null,
+	accountType varchar(10) not null,
+	name varchar(30) not null,
+	CONSTRAINT PK_User PRIMARY KEY (userID)
+);

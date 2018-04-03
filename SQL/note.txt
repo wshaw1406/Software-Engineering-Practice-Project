@@ -1,0 +1,2 @@
+just create these tables in the db named after your password if you're using the unis one - if youre doing it local host then just 
+set up a new db and change the url in the db class to ("jdbc:mysql://localhost/phpmyadmin:3306/dbname", "root", "") 

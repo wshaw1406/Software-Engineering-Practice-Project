@@ -1,0 +1,8 @@
+create table task (
+	taskID varchar(10) not null,
+	taskType varchar(15) not null,
+	taskTitle varchar(50) not null,
+	taskNotes varchar(255),
+	CONSTRAINT Chk_taskType CHECK (taskType IN ('Routine', 'One-off')),
+	CONSTRAINT PK_table PRIMARY KEY (taskID)
+);

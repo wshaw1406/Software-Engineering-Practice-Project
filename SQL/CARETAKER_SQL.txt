@@ -1,0 +1,10 @@
+create table caretaker (
+	caretakerID varchar(10) not null PRIMARY KEY,
+	healthNotes varchar(255) not null,
+	userID varchar(10) not null
+)
+
+ALTER TABLE caretaker
+	ADD CONSTRAINT KF_usersCaretaker
+	FOREIGN KEY (userID)
+	REFERENCES users(userID);

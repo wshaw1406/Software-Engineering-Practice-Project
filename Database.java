@@ -31,11 +31,12 @@ public class Database {
 	try
 	{
             con = DriverManager.getConnection("jdbc:mysql:"
-                	+ "//localhost/software_eng", "root", "");
+                	+ "//phpmyadmin.newnumyspace.co.uk:3306/unn_w16037851", "unn_w16037851", "QJC2NEFG");
             statement = con.createStatement();
         }
 	catch(SQLException sqlEx)
 	{
+            System.out.println(sqlEx.toString());
             System.out.println("Cannot connect to database!");
             System.exit(1);
 	}
