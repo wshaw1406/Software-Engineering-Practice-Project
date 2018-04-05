@@ -23,7 +23,8 @@ import javax.swing.table.TableCellRenderer;
 public class TaskAllocation {
 
 	private JFrame frame;
-	private JTable table;
+	public static JTable table;
+	public static DefaultTableModel model;
 
 	/**
 	 * Launch the application.
@@ -63,13 +64,21 @@ public class TaskAllocation {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, "notes", "assign"},
-				{null, null, null, "notes", "assign"},
 			},
 			new String[] {
-				"Time", "Desc.", "Due date", "Notes", "Assign"
+				"Time", "Name", "Due date", "Notes", "Assign"
 			}
 		));
+		
+		model = (DefaultTableModel) table.getModel();
+
+		for(Task task : Main.tasks)
+	    {
+			if(task.getTaskAssigned() == 0) {
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "note", "assign"});
+			}
+	    }
+		
 		table.getColumnModel().getColumn(2).setPreferredWidth(95);
 		scrollPane.setViewportView(table);
 		table.getColumnModel().getColumn(3).setCellRenderer(new ButtonRenderer());;

@@ -14,7 +14,8 @@ import javax.swing.table.TableCellRenderer;
 public class CaretakerSchedule2 extends JFrame{
 
 	private JFrame frame;
-	private JTable table;
+	public static JTable table;
+	public static DefaultTableModel model;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -48,18 +49,16 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.getContentPane().add(btnSave);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(200, 86, 200, 214);
+		scrollPane_1.setBounds(123, 86, 343, 214);
 		frame.getContentPane().add(scrollPane_1);
 		
 		table = new JTable();
 		scrollPane_1.setViewportView(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"7:12-8:00", "Test","notes"},
-				{"8:00-9:00", "dsfdsf","notes"},
 			},
 			new String[] {
-				"Time", "Desc.", "Notes"
+				"Time", "Title", "Notes"
 			}
 		));
 		
@@ -76,12 +75,15 @@ public class CaretakerSchedule2 extends JFrame{
 		
 		frame.setVisible(true);
 
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model = (DefaultTableModel) table.getModel();
 		
+		//If task is assigned to use show here
+	
 		for(Task task : Main.tasks)
 	    {
-			model.addRow(new Object[]{"Time", task.getTaskID(), "Notes"});
-	        System.out.println(task.getTaskNotes());
+			if(task.getTaskAssigned() == 1) {
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes"});
+			}
 	    }
 		
 	}
@@ -131,6 +133,7 @@ class ButtonEditor extends DefaultCellEditor
 	public Component getTableCellEditorComponent(JTable table, Object obj, boolean isSelected, int row, int column) {
 		lbl=(obj==null) ? "":obj.toString();
 		btn.setText(lbl);
+		
 		clicked = true;
 		
 		return btn;
@@ -139,12 +142,44 @@ class ButtonEditor extends DefaultCellEditor
 	@Override
 	public Object getCellEditorValue() {
 
+		DefaultTableModel model = CaretakerSchedule2.model;
+		DefaultTableModel allModel = TaskAllocation.model;
+		
+		int column1 = 1;
+		int row1 = 1;
+		String value = "";
+		
 		if(clicked) {
 			if(lbl == "notes") {
-				JOptionPane.showMessageDialog(btn, lbl+" Clicked!");
+				row1 = CaretakerSchedule2.table.getSelectedRow();
+				value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
+				for(Task task : Main.tasks)
+			    {
+					if(task.getTaskTitle() == value) {
+						JOptionPane.showMessageDialog(btn, task.getTaskNotes());
+					}
+			    }
 			}
 			else if(lbl == "assign") {
-				JOptionPane.showMessageDialog(btn, "fuck");
+				row1 = TaskAllocation.table.getSelectedRow();
+				value = TaskAllocation.table.getModel().getValueAt(row1, column1).toString();
+				for(Task task : Main.tasks)
+			    {
+					if(task.getTaskTitle() == value) {
+						JOptionPane.showMessageDialog(btn, "Task Assigned");
+						task.setTaskAssigned(0);
+					}
+			    }
+			}
+			else if(lbl == "note") {
+				row1 = TaskAllocation.table.getSelectedRow();
+				value = TaskAllocation.table.getModel().getValueAt(row1, column1).toString();
+				for(Task task : Main.tasks)
+			    {
+					if(task.getTaskTitle() == value) {
+						JOptionPane.showMessageDialog(btn, task.getTaskNotes());
+					}
+			    }
 			}
 		}
 		clicked = false;

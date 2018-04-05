@@ -16,16 +16,47 @@ public class Task {
     private String taskType;
     private String taskNotes;
     private String taskTitle;
+    private int taskTime;
+    private int taskAssigned;
     private ArrayList<Task> tasks;
     
-    public Task(String taskID, String taskType, String taskNotes, String taskTitle)
+    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, int taskAssigned)
     {
         setTaskID(taskID);
         setTaskType(taskType);
         setTaskNotes(taskNotes);
         setTaskTitle(taskTitle);
+        setTaskTime(taskTime);
+        setTaskAssigned(taskAssigned);
+    }
+    
+    /**
+     * @return the taskTime
+     */
+    public int getTaskTime() {
+        return taskTime;
     }
 
+    /**
+     * @param taskTime the taskTime to set
+     */
+    public void setTaskTime(int taskTime) {
+        this.taskTime = taskTime;
+    }
+    /**
+     * @return the taskAssigned
+     */
+    public int getTaskAssigned() {
+        return taskAssigned;
+    }
+
+    /**
+     * @param taskAssigned the taskAssigned to set
+     */
+    public void setTaskAssigned(int taskAssigned) {
+        this.taskAssigned = taskAssigned;
+    }
+    
     /**
      * @return the taskID
      */

@@ -128,8 +128,10 @@ public class Database {
             	String type = rs.getString("taskType");
             	String title = rs.getString("taskTitle");
             	String notes = rs.getString("taskNotes");
+            	int time = rs.getInt("taskTime");
+            	int assigned = rs.getInt("taskAssigned");
             	
-            	tasks.add(new Task(id,type,title,notes));
+            	tasks.add(new Task(id, type, title, notes, time, assigned));
             }
         }
         catch(Exception exc)
