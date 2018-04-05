@@ -21,7 +21,6 @@ public class CaretakerSchedule2 extends JFrame{
 			public void run() {
 				try {
 					CaretakerSchedule2 window = new CaretakerSchedule2();
-					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -74,6 +73,17 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.getContentPane().add(btnAssignNewTasks);
 		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
 		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
+		
+		frame.setVisible(true);
+
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		for(Task task : Main.tasks)
+	    {
+			model.addRow(new Object[]{"Time", task.getTaskID(), "Notes"});
+	        System.out.println(task.getTaskNotes());
+	    }
+		
 	}
 }
 

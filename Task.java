@@ -18,7 +18,7 @@ public class Task {
     private String taskTitle;
     private ArrayList<Task> tasks;
     
-    public void Task(String taskID, String taskType, String taskNotes, String taskTitle)
+    public Task(String taskID, String taskType, String taskNotes, String taskTitle)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -92,7 +92,7 @@ public class Task {
         tasks.remove(task);
     }
     
-    public void displayTasks(ArrayList<Task> tasks)
+    public static void displayTasks(ArrayList<Task> tasks)
     {
         for(Task task : tasks)
         {

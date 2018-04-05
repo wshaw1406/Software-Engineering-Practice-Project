@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,18 +29,18 @@ public class Database {
     
     public void connect()
     {
-	try
-	{
-            con = DriverManager.getConnection("jdbc:mysql:"
-                	+ "//phpmyadmin.newnumyspace.co.uk:3306/unn_w16037851", "unn_w16037851", "QJC2NEFG");
-            statement = con.createStatement();
-        }
-	catch(SQLException sqlEx)
-	{
-            System.out.println(sqlEx.toString());
-            System.out.println("Cannot connect to database!");
-            System.exit(1);
-	}
+		try
+		{
+	            con = DriverManager.getConnection("jdbc:mysql:"
+	                	+ "//localhost:3306/test", "root", "root");
+	            statement = con.createStatement();
+	            }
+		catch(SQLException sqlEx)
+		{
+	            System.out.println(sqlEx.toString());
+	            System.out.println("Cannot connect to database!");
+	            System.exit(1);
+		}
     }
     
     public void query() 
@@ -113,51 +114,29 @@ public class Database {
         }
     }
     
-    public ArrayList<Task> pullTasks()
+    public List<Task> pullTasks()
     {
         connect();
         ResultSet rs = null;
-        ResultSetMetaData rsmd = null;
-        ArrayList<Task> tasks = new ArrayList<>();
-        Task task = new Task();
+        List<Task> tasks = new ArrayList<Task>();
         try
         {
             rs = statement.executeQuery("SELECT * FROM task");
-            rsmd = rs.getMetaData();
             while(rs.next())
             {
-                for(int i=1; i<= rsmd.getColumnCount(); i++)
-                {
-                    if(rsmd.getColumnName(i).equals("taskID"))
-                    {
-                        task.setTaskID(rs.getString(i));
-                    }
-                    else if(rsmd.getColumnName(i).equals("taskType"))
-                    {
-                        task.setTaskType(rs.getString(i));
-                    }
-                    else if(rsmd.getColumnName(i).equals("taskTitle"))
-                    {
-                        task.setTaskTitle(rs.getString(i));
-                    }
-                    else if(rsmd.getColumnName(i).equals("taskNotes"))
-                    {
-                        task.setTaskNotes(rs.getString(i));
-                    }
-                    else
-                    {
-                        System.out.println("Error in column names.");
-                    }
-                    System.out.println(task);
-                    tasks.add(task);
-                }
-
+            	String id = rs.getString("taskID");
+            	String type = rs.getString("taskType");
+            	String title = rs.getString("taskTitle");
+            	String notes = rs.getString("taskNotes");
+            	
+            	tasks.add(new Task(id,type,title,notes));
             }
         }
-        catch(SQLException e)
+        catch(Exception exc)
         {
-            System.out.println("Failed to retrieve tasks.");
+            exc.printStackTrace();
         }
+        
         return tasks;
     }
     

@@ -13,20 +13,22 @@ import java.util.ArrayList;
  */
 public class Main {
     
+    public static ArrayList<Task> tasks = new ArrayList<>();
+
+    
     public static void main(String args[]) {
 //        TaskLogging test = new TaskLogging();
 //        test.onClick();
 //        
         Database dbTest = new Database();
 //        dbTest.pullUsers();
-        
-          Task task = new Task();
-//          task.setTaskID("321");
-//          
-          ArrayList<Task> tasks = new ArrayList<>();
+
 //          tasks.addTask(task);
 //          
-          tasks = dbTest.pullTasks();
-          task.displayTasks(tasks);
+          tasks = (ArrayList<Task>) dbTest.pullTasks();
+          Task.displayTasks(tasks);
+          
+          System.out.println("Main size: " + tasks.size());
+          new CaretakerSchedule2();
     }
 }
