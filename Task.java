@@ -17,10 +17,10 @@ public class Task {
     private String taskNotes;
     private String taskTitle;
     private int taskTime;
-    private int taskAssigned;
+    private boolean taskAssigned;
     private ArrayList<Task> tasks;
     
-    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, int taskAssigned)
+    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, boolean taskAssigned)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -46,14 +46,14 @@ public class Task {
     /**
      * @return the taskAssigned
      */
-    public int getTaskAssigned() {
+    public boolean getTaskAssigned() {
         return taskAssigned;
     }
 
     /**
      * @param taskAssigned the taskAssigned to set
      */
-    public void setTaskAssigned(int taskAssigned) {
+    public void setTaskAssigned(boolean taskAssigned) {
         this.taskAssigned = taskAssigned;
     }
     

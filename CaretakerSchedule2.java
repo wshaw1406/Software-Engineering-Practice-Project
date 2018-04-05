@@ -66,6 +66,7 @@ public class CaretakerSchedule2 extends JFrame{
 		btnAssignNewTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new TaskAllocation();
+				frame.hide();
 			}
 		});
 		btnAssignNewTasks.setBounds(187, 333, 213, 25);
@@ -81,7 +82,7 @@ public class CaretakerSchedule2 extends JFrame{
 	
 		for(Task task : Main.tasks)
 	    {
-			if(task.getTaskAssigned() == 1) {
+			if(task.getTaskAssigned() == true) {
 				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes"});
 			}
 	    }
@@ -117,7 +118,7 @@ class ButtonEditor extends DefaultCellEditor
 		btn = new JButton();
 		btn.setOpaque(true);
 		
-		
+
 		btn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -150,6 +151,8 @@ class ButtonEditor extends DefaultCellEditor
 		String value = "";
 		
 		if(clicked) {
+			System.out.println(btn.getName());
+
 			if(lbl == "notes") {
 				row1 = CaretakerSchedule2.table.getSelectedRow();
 				value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
@@ -167,7 +170,7 @@ class ButtonEditor extends DefaultCellEditor
 			    {
 					if(task.getTaskTitle() == value) {
 						JOptionPane.showMessageDialog(btn, "Task Assigned");
-						task.setTaskAssigned(0);
+						task.setTaskAssigned(false);
 					}
 			    }
 			}

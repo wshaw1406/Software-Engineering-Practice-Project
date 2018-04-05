@@ -129,7 +129,7 @@ public class Database {
             	String title = rs.getString("taskTitle");
             	String notes = rs.getString("taskNotes");
             	int time = rs.getInt("taskTime");
-            	int assigned = rs.getInt("taskAssigned");
+            	boolean assigned = rs.getBoolean("taskAssigned");
             	
             	tasks.add(new Task(id, type, title, notes, time, assigned));
             }
