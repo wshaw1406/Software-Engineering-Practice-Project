@@ -40,11 +40,34 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.setTitle("Caretaker Schedule");
 		frame.getContentPane().setLayout(null);
 		
-		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(0, 366, 330, 49);
-		frame.getContentPane().add(btnBack);
+		JButton btnUndo = new JButton("Undo");
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new Main();
+			}
+		});
+		btnUndo.setBounds(0, 366, 330, 49);
+		frame.getContentPane().add(btnUndo);
 		
 		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model = (DefaultTableModel) table.getModel();
+				for(int i = 0; i < model.getRowCount(); i++) {
+					Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
+					for(Task task : Main.tasks)
+				    {
+						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
+							task.setTaskCompleted(true);
+						}
+				    }
+				}
+				// UPDATE DB WITH EACH ARRAY LIST ITEM
+				frame.hide();
+				frame.show();
+			}
+		});
 		btnSave.setBounds(330, 366, 330, 49);
 		frame.getContentPane().add(btnSave);
 		
@@ -58,9 +81,16 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Title", "Notes"
+				"Time", "Title", "Notes", "Completed"
 			}
-		));
+		) {
+			Class[] columnTypes = new Class[] {
+				Object.class, Object.class, Object.class, Boolean.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
 		
 		JButton btnAssignNewTasks = new JButton("Assign new tasks");
 		btnAssignNewTasks.addActionListener(new ActionListener() {
@@ -71,8 +101,16 @@ public class CaretakerSchedule2 extends JFrame{
 		});
 		btnAssignNewTasks.setBounds(187, 333, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);
-		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
-		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new adminGUI();
+			}
+		});
+		btnNewButton.setBounds(56, 34, 97, 25);
+		frame.getContentPane().add(btnNewButton);;
 		
 		frame.setVisible(true);
 
@@ -83,7 +121,7 @@ public class CaretakerSchedule2 extends JFrame{
 		for(Task task : Main.tasks)
 	    {
 			if(task.getTaskAssigned() == true) {
-				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes"});
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
 			}
 	    }
 		

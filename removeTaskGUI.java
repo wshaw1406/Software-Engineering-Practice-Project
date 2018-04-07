@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -67,22 +69,6 @@ public class removeTaskGUI {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
-				{null, null},
 			},
 			new String[] {
 				"ID", "Name"
@@ -90,9 +76,17 @@ public class removeTaskGUI {
 		));
 		scrollPane.setViewportView(table);
 		
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+		for(Task task : Main.tasks)
+	    {
+			model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle()});
+	    }
+		
 		JButton button = new JButton("Remove");
 		button.setBounds(322, 154, 101, 32);
 		frmRemoveTaskGUI.getContentPane().add(button);
+		frmRemoveTaskGUI.setVisible(true);
 	}
 
 }

@@ -18,9 +18,10 @@ public class Task {
     private String taskTitle;
     private int taskTime;
     private boolean taskAssigned;
+    private boolean taskCompleted;
     private ArrayList<Task> tasks;
     
-    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, boolean taskAssigned)
+    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, boolean taskAssigned, boolean taskCompleted)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -28,8 +29,16 @@ public class Task {
         setTaskTitle(taskTitle);
         setTaskTime(taskTime);
         setTaskAssigned(taskAssigned);
+        setTaskCompleted(taskCompleted);
     }
     
+    public boolean getTaskCompleted() {
+    	return taskCompleted;
+    }
+    
+    public void setTaskCompleted(boolean taskCompleted) {
+    	this.taskCompleted = taskCompleted;
+    }
     /**
      * @return the taskTime
      */

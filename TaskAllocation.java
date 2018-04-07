@@ -107,8 +107,9 @@ public class TaskAllocation {
 							task.setTaskAssigned(true);
 						}
 				    }
-					System.out.println(value);
 				}
+				frame.hide();
+				new CaretakerSchedule2();
 			}
 		});
 		frame.getContentPane().add(btnSubmit);

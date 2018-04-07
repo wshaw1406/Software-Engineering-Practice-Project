@@ -130,8 +130,9 @@ public class Database {
             	String notes = rs.getString("taskNotes");
             	int time = rs.getInt("taskTime");
             	boolean assigned = rs.getBoolean("taskAssigned");
+            	boolean completed = rs.getBoolean("taskCompleted");
             	
-            	tasks.add(new Task(id, type, title, notes, time, assigned));
+            	tasks.add(new Task(id, type, title, notes, time, assigned, completed));
             }
         }
         catch(Exception exc)

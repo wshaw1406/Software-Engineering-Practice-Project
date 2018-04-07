@@ -100,6 +100,13 @@ public class adminGUI {
 		frmAdministration.getContentPane().add(btnEdit_1);
 		
 		JButton button_1 = new JButton("Remove");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmAdministration.hide();
+				new removeTaskGUI();
+				
+			}
+		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		button_1.setBounds(417, 181, 92, 23);
 		frmAdministration.getContentPane().add(button_1);
@@ -154,6 +161,6 @@ public class adminGUI {
 		lblTaskReport.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblTaskReport.setBounds(306, 264, 92, 23);
 		frmAdministration.getContentPane().add(lblTaskReport);
+		frmAdministration.setVisible(true);
 	}
-
 }

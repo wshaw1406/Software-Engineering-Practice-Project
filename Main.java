@@ -31,4 +31,8 @@ public class Main {
           System.out.println("Main size: " + tasks.size());
           new CaretakerSchedule2();
     }
+    
+    public Main() {
+    	main(null);
+    }
 }
