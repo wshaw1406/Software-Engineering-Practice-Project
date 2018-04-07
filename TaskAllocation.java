@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -96,7 +97,7 @@ public class TaskAllocation {
 				model.addRow(new Object[]{task.getTaskPriority(), task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "notes", false});
 			}
 	    }
-		scrollPane.setViewportView(TableRowRenderingTip.createData((DefaultTableModel) table.getModel()));
+		scrollPane.setViewportView(createData((DefaultTableModel) table.getModel()));
 		
 		btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
@@ -129,6 +130,37 @@ public class TaskAllocation {
 		table.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor(new JTextField()));
 		
 		frame.setVisible(true);
+	}
+	
+	static public JComponent createData(DefaultTableModel model)
+	{
+		JTable table = new JTable( model )
+		{
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
+			{
+				Component c = super.prepareRenderer(renderer, row, column);
+
+				//  Color row based on a cell value
+
+				if (!isRowSelected(row))
+				{
+					c.setBackground(getBackground());
+					int modelRow = convertRowIndexToModel(row);
+					String type = (String)getModel().getValueAt(modelRow, 0);
+					if ("3".equals(type)) c.setBackground(Color.GREEN);
+					if ("2".equals(type)) c.setBackground(Color.YELLOW);
+					if ("1".equals(type)) c.setBackground(Color.RED);
+
+				}
+
+				return c;
+			}
+		};
+
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table.changeSelection(0, 0, false, false);
+        table.setAutoCreateRowSorter(true);
+		return new JScrollPane( table );
 	}
 }
 
