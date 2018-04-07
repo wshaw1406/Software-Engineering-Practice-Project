@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 
@@ -73,16 +75,17 @@ public class TaskAllocation {
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Name", "Due date", "Notes", "Assign"
+				"Priority", "Time", "Name", "Due date", "Notes","Assign"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Object.class, Boolean.class
+				Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
+		
 		table.getColumnModel().getColumn(2).setPreferredWidth(95);
 		
 		model = (DefaultTableModel) table.getModel();
@@ -90,10 +93,10 @@ public class TaskAllocation {
 		for(Task task : Main.tasks)
 	    {
 			if(task.getTaskAssigned() == false) {
-				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "notes", false});
+				model.addRow(new Object[]{task.getTaskPriority(), task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "notes", false});
 			}
 	    }
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(TableRowRenderingTip.createData((DefaultTableModel) table.getModel()));
 		
 		btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
@@ -124,6 +127,7 @@ public class TaskAllocation {
 		frame.getContentPane().add(btnCancel);
 		table.getColumnModel().getColumn(3).setCellRenderer(new ButtonRenderer());;
 		table.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor(new JTextField()));
+		
 		frame.setVisible(true);
 	}
 }

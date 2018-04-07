@@ -3,10 +3,12 @@ package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
 import javax.swing.*;
 import java.sql.*;
 import java.util.*;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -81,11 +83,11 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Title", "Notes", "Completed"
+				"Time", "Title", "Notes", "Completed", "Priority"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Boolean.class
+				Object.class, Object.class, Object.class, Boolean.class, Object.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -120,12 +122,12 @@ public class CaretakerSchedule2 extends JFrame{
 	
 		for(Task task : Main.tasks)
 	    {
-			if(task.getTaskAssigned() == true) {
-				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
+			if(task.getTaskAssigned() == false) {
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted(), task.getTaskPriority()});
 			}
 	    }
-		
 	}
+	
 }
 
 class ButtonRenderer extends JButton implements TableCellRenderer
@@ -139,7 +141,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer
 			int row, int column) {
 		
 		setText((obj==null) ? "":obj.toString());
-		
+
 		return this;
 	} 
 }
