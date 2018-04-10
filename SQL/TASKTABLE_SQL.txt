@@ -12,3 +12,8 @@ create table task (
 	CONSTRAINT PK_table PRIMARY KEY (taskID)
 );
 
+INSERT INTO `task` (`taskID`, `taskType`, `taskTitle`, `taskNotes`, `taskTime`, `taskAssigned`, `taskCompleted`, `taskDue`, `taskPriority`) VALUES
+('1', 'outdoor', 'testTitle1', 'testNotes1', 30, 0, 0, '0000-00-00', '2'),
+('2', 'sdsij', 'testTitle2', 'testNotes2', 90, 1, 1, '0000-00-00', '2'),
+('3', 'windows', 'REST', 'dfsdf', 30, 1, 0, '0000-00-00', '3'),
+('4', 'windllows', 'REllST', 'dfsdf', 30, 0, 0, '0000-00-00', '3');
