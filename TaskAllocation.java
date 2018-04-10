@@ -93,8 +93,9 @@ public class TaskAllocation {
 
 		for(Task task : Main.tasks)
 	    {
-			if(task.getTaskAssigned() == false) {
-				model.addRow(new Object[]{task.getTaskPriority(), task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "notes", false});
+			//Fill out the table with tasks that are not assigned and tasks that are assigned to the user already
+			if(task.getTaskAssigned() == false || task.getTaskAssigned() == true) {
+				model.addRow(new Object[]{task.getTaskPriority(), task.getTaskTime(), task.getTaskTitle(), "DSFSDF", "notes", task.getTaskAssigned()});
 			}
 	    }
 		scrollPane.setViewportView(createData((DefaultTableModel) table.getModel()));
@@ -104,11 +105,15 @@ public class TaskAllocation {
 			public void actionPerformed(ActionEvent e) {
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
-					Boolean value = (Boolean) table.getModel().getValueAt(i, 4);
+					Boolean value = (Boolean) table.getModel().getValueAt(i, 5);
 					for(Task task : Main.tasks)
 				    {
-						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
+						if(task.getTaskTitle() == table.getModel().getValueAt(i, 2).toString() && value == true) {
 							task.setTaskAssigned(true);
+						}
+						//Allow user to de-select a task
+						if(task.getTaskTitle() == table.getModel().getValueAt(i, 2).toString() && value == false) {
+							task.setTaskAssigned(false);
 						}
 				    }
 				}

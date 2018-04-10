@@ -11,6 +11,8 @@ import java.util.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class CaretakerSchedule2 extends JFrame{
@@ -60,8 +62,10 @@ public class CaretakerSchedule2 extends JFrame{
 					Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
 					for(Task task : Main.tasks)
 				    {
+						//for each task that matches the tasks in the caretakers timetable
 						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
 							task.setTaskCompleted(true);
+							System.out.println(task.getTaskCompleted());
 						}
 				    }
 				}
@@ -77,17 +81,18 @@ public class CaretakerSchedule2 extends JFrame{
 		scrollPane_1.setBounds(123, 86, 343, 214);
 		frame.getContentPane().add(scrollPane_1);
 		
-		table = new JTable();
+		table = new JTable();		
 		scrollPane_1.setViewportView(table);
+		
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Title", "Notes", "Completed", "Priority"
+				"Time", "Title", "Notes", "Completed"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Boolean.class, Object.class
+				Object.class, Object.class, Object.class, Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -114,6 +119,9 @@ public class CaretakerSchedule2 extends JFrame{
 		btnNewButton.setBounds(56, 34, 97, 25);
 		frame.getContentPane().add(btnNewButton);;
 		
+		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
+		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
+		
 		frame.setVisible(true);
 
 		model = (DefaultTableModel) table.getModel();
@@ -122,12 +130,11 @@ public class CaretakerSchedule2 extends JFrame{
 	
 		for(Task task : Main.tasks)
 	    {
-			if(task.getTaskAssigned() == false) {
-				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted(), task.getTaskPriority()});
+			if(task.getTaskAssigned() == true) {
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
 			}
 	    }
 	}
-	
 }
 
 class ButtonRenderer extends JButton implements TableCellRenderer
