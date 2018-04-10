@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 
 
@@ -98,9 +99,9 @@ public class adminGUI {
 
 		
 
-		JButton btnUsersInformation = new JButton("User Information");
+		JButton btnViewUsers = new JButton("View Users");
 
-		btnUsersInformation.addActionListener(new ActionListener() {
+		btnViewUsers.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				//GO TO userInformation Page
@@ -108,14 +109,14 @@ public class adminGUI {
 
 		});
 
-		btnUsersInformation.setBounds(95, 129, 154, 61);
+		btnViewUsers.setBounds(95, 129, 154, 61);
 
-		frmAdministration.getContentPane().add(btnUsersInformation);
+		frmAdministration.getContentPane().add(btnViewUsers);
 
 		
 
-		JButton btnTaskInformation = new JButton("Task Information");
-		btnTaskInformation.addActionListener(new ActionListener() {
+		JButton btnViewTasks = new JButton("View Tasks");
+		btnViewTasks.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				//GO TO taskInformation Page
@@ -123,9 +124,19 @@ public class adminGUI {
 
 		});
 
-		btnTaskInformation.setBounds(326, 129, 154, 61);
+		btnViewTasks.setBounds(326, 129, 154, 61);
 
-		frmAdministration.getContentPane().add(btnTaskInformation);
+		frmAdministration.getContentPane().add(btnViewTasks);
+		
+		JLabel lblUserInfromation = new JLabel("User Infromation");
+		lblUserInfromation.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUserInfromation.setBounds(95, 111, 154, 16);
+		frmAdministration.getContentPane().add(lblUserInfromation);
+		
+		JLabel lblTaskInfromation = new JLabel("Task Infromation");
+		lblTaskInfromation.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTaskInfromation.setBounds(326, 111, 154, 16);
+		frmAdministration.getContentPane().add(lblTaskInfromation);
 
 	}
 
