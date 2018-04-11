@@ -1,3 +1,5 @@
+package software_eng;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;

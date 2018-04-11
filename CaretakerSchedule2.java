@@ -3,16 +3,9 @@ package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.*;
-import java.sql.*;
-import java.util.*;
-
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 
 public class CaretakerSchedule2 extends JFrame{
@@ -189,9 +182,6 @@ class ButtonEditor extends DefaultCellEditor
 	
 	@Override
 	public Object getCellEditorValue() {
-
-		DefaultTableModel model = CaretakerSchedule2.model;
-		DefaultTableModel allModel = TaskAllocation.model;
 		
 		int column1 = 1;
 		int row1 = 1;

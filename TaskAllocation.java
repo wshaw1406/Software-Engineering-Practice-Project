@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -33,6 +34,11 @@ public class TaskAllocation {
 	public static DefaultTableModel model;
 	private JButton btnSubmit;
 	private JButton btnCancel;
+	private void sort() {
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
+		table.setRowSorter(sorter);
+	}
+	
 
 	/**
 	 * Launch the application.
@@ -135,6 +141,7 @@ public class TaskAllocation {
 		table.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor(new JTextField()));
 		
 		frame.setVisible(true);
+		sort();
 	}
 	
 	static public JComponent createData(DefaultTableModel model)

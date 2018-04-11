@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 
@@ -75,6 +77,7 @@ public class usersInformation {
 	public usersInformation() {
 
 		initialize();
+		frmUserInformation.setVisible(true);
 
 	}
 

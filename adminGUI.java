@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 
@@ -66,6 +68,7 @@ public class adminGUI {
 	public adminGUI() {
 
 		initialize();
+		frmAdministration.setVisible(true);
 
 	}
 
@@ -104,6 +107,8 @@ public class adminGUI {
 		btnViewUsers.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
+				frmAdministration.hide();
+				new usersInformation();
 				//GO TO userInformation Page
 			}
 
@@ -119,7 +124,8 @@ public class adminGUI {
 		btnViewTasks.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				//GO TO taskInformation Page
+				frmAdministration.hide();
+				new taskInformation();
 			}
 
 		});
@@ -137,9 +143,20 @@ public class adminGUI {
 		lblTaskInfromation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTaskInfromation.setBounds(326, 111, 154, 16);
 		frmAdministration.getContentPane().add(lblTaskInfromation);
+		
+		JButton btnUserReports = new JButton("User Reports");
+		btnUserReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmAdministration.hide();
+				new UserReports();
+			}
+		});
+		btnUserReports.setBounds(95, 239, 154, 61);
+		frmAdministration.getContentPane().add(btnUserReports);
+		
+		JButton btnTaskReports = new JButton("Task Reports");
+		btnTaskReports.setBounds(326, 239, 154, 61);
+		frmAdministration.getContentPane().add(btnTaskReports);
 
 	}
-
-
-
 }
