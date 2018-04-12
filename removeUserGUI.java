@@ -1,4 +1,6 @@
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -44,7 +46,7 @@ public class removeUserGUI {
 	private void initialize() {
 		frmRemoveUserGUI = new JFrame();
 		frmRemoveUserGUI.setTitle("Remove User");
-		frmRemoveUserGUI.setBounds(100, 100, 490, 387);
+		frmRemoveUserGUI.setBounds(100, 100, 288, 460);
 		frmRemoveUserGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmRemoveUserGUI.getContentPane().setLayout(null);
 		
@@ -84,13 +86,26 @@ public class removeUserGUI {
 		label.setBounds(10, 56, 240, 23);
 		frmRemoveUserGUI.getContentPane().add(label);
 		
-		JButton btnNewButton = new JButton("Remove");
-		btnNewButton.setBounds(309, 191, 101, 32);
-		frmRemoveUserGUI.getContentPane().add(btnNewButton);
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//
+				System.exit(0);
+			}			
+		});
+		btnCancel.setBounds(132, 362, 101, 32);
+		frmRemoveUserGUI.getContentPane().add(btnCancel);
 		
-		JLabel lblPleaseSelectA = new JLabel("Please select a user then, press 'Remove' to delete the User");
-		lblPleaseSelectA.setBounds(10, 11, 340, 14);
+		JLabel lblPleaseSelectA = new JLabel("Please select a user then, press 'Remove'");
+		lblPleaseSelectA.setBounds(10, 0, 262, 34);
 		frmRemoveUserGUI.getContentPane().add(lblPleaseSelectA);
+		
+		JLabel lblToDeleteThe = new JLabel(" to delete the User");
+		lblToDeleteThe.setBounds(10, 28, 147, 14);
+		frmRemoveUserGUI.getContentPane().add(lblToDeleteThe);
+		
+		JButton button = new JButton("Remove");
+		button.setBounds(22, 362, 101, 32);
+		frmRemoveUserGUI.getContentPane().add(button);
 	}
-
 }
