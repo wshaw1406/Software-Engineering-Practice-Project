@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -37,7 +35,6 @@ public class taskInformation {
 	 */
 	public taskInformation() {
 		initialize();
-		frame.setVisible(true);
 	}
 
 	/**

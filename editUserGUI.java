@@ -172,9 +172,15 @@ public class editUserGUI {
 		label_7.setBounds(276, 260, 76, 14);
 		panel.add(label_7);
 		
-		JButton button = new JButton("Cancel");
-		button.setBounds(276, 298, 89, 23);
-		panel.add(button);
+		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//
+				System.exit(0);
+			}			
+		});
+		cancel.setBounds(276, 298, 89, 23);
+		panel.add(cancel);
 		
 		JButton button_1 = new JButton("Submit");
 		button_1.addActionListener(new ActionListener() {
