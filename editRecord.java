@@ -98,8 +98,13 @@ public class editRecord {
 		btnCancel.addActionListener(new ActionListener(){
 			//If clicked, closes GUI,  takes user back to previous page
 			public void actionPerformed(ActionEvent e){
-				System.exit(0);
-				//TAKE USER BACK TO PREVIOUS PAGE
+				btnCancel.addActionListener(new ActionListener(){
+					//If clicked, closes GUI
+					public void actionPerformed(ActionEvent e){
+						frmeditRecord.hide();
+						new CaretakerSchedule2();
+					}
+				});
 			}
 		});
 		btnCancel.setBounds(292, 181, 89, 23);

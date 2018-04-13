@@ -1,4 +1,3 @@
-package software_eng;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +26,6 @@ public class TaskLogging {
 			public void run() {
 				try {
 					TaskLogging window = new TaskLogging();
-					window.frmTaskLogging.setVisible(true);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,6 +39,7 @@ public class TaskLogging {
 	 */
 	public TaskLogging() {
 		initialize();
+		frmTaskLogging.setVisible(true);
 	}
 
 	/**
@@ -100,9 +99,11 @@ public class TaskLogging {
 		btnCancel.addActionListener(new ActionListener(){
 			//If clicked, closes GUI
 			public void actionPerformed(ActionEvent e){
-				System.exit(0);
+				frmTaskLogging.hide();
+				new CaretakerSchedule2();
 			}
 		});
+		
 		btnCancel.setBounds(292, 181, 89, 23);
 		frmTaskLogging.getContentPane().add(btnCancel);
 		
