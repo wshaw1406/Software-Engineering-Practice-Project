@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +48,7 @@ public class CaretakerSchedule2 extends JFrame{
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
 					Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
@@ -57,16 +56,18 @@ public class CaretakerSchedule2 extends JFrame{
 				    {
 						//for each task that matches the tasks in the caretakers timetable
 						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
+							new TaskLogging();
 							task.setTaskCompleted(true);
 							System.out.println(task.getTaskCompleted());
 						}
 				    }
 				}
 				// UPDATE DB WITH EACH ARRAY LIST ITEM
-				frame.hide();
-				frame.show();
+
 			}
+			
 		});
+		frame.setVisible(true);
 		btnSave.setBounds(330, 366, 330, 49);
 		frame.getContentPane().add(btnSave);
 		
@@ -92,6 +93,8 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		
+		
+		
 		JButton btnAssignNewTasks = new JButton("Assign new tasks");
 		btnAssignNewTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -102,7 +105,7 @@ public class CaretakerSchedule2 extends JFrame{
 		btnAssignNewTasks.setBounds(187, 333, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);
 		
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("Home");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.hide();
