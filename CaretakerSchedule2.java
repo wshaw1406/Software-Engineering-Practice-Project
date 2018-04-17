@@ -1,15 +1,9 @@
-package software_eng;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.util.*;
 
 
 public class CaretakerSchedule2 extends JFrame{
@@ -51,17 +45,17 @@ public class CaretakerSchedule2 extends JFrame{
 		btnUndo.setBounds(0, 366, 330, 49);
 		frame.getContentPane().add(btnUndo);
 		
-		JButton btnSave = new JButton("Save");
-		btnSave.addActionListener(new ActionListener() {
+		JButton btnComplete = new JButton("Complete");
+		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
+				frame.hide();
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
-					Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
+					//Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
 					for(Task task : Main.tasks)
 				    {
 						//for each task that matches the tasks in the caretakers timetable
-						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
+						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() ) {
 							new TaskLogging();
 							task.setTaskCompleted(true);
 							System.out.println(task.getTaskCompleted());
@@ -70,15 +64,14 @@ public class CaretakerSchedule2 extends JFrame{
 				}
 				// UPDATE DB WITH EACH ARRAY LIST ITEM
 
+
 			}
-			
 		});
-		frame.setVisible(true);
-		btnSave.setBounds(330, 366, 330, 49);
-		frame.getContentPane().add(btnSave);
+		btnComplete.setBounds(330, 366, 330, 49);
+		frame.getContentPane().add(btnComplete);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(123, 86, 343, 214);
+		scrollPane_1.setBounds(160, 88, 343, 214);
 		frame.getContentPane().add(scrollPane_1);
 		
 		table = new JTable();		
@@ -88,11 +81,13 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Time allocated", "Title", "Notes", "Completed"
+				"Time", "Title", "Notes"
 			}
 		) {
+
+			
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Object.class, Boolean.class
+				Object.class, Object.class, Object.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -106,51 +101,47 @@ public class CaretakerSchedule2 extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				new TaskAllocation();
 				frame.hide();
+
 			}
 		});
-		btnAssignNewTasks.setBounds(187, 333, 213, 25);
+		btnAssignNewTasks.setBounds(225, 328, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);
 		
-		JButton btnNewButton = new JButton("Home");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnHome = new JButton("Home");
+		btnHome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.hide();
 				new adminGUI();
 			}
 		});
-		btnNewButton.setBounds(56, 34, 97, 25);
-		frame.getContentPane().add(btnNewButton);;
+		btnHome.setBounds(12, 13, 97, 25);
+		frame.getContentPane().add(btnHome);
+		
+		JButton btnEditCompletedTask = new JButton("Completed Tasks");
+		btnEditCompletedTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.hide();
+				
+			}
+		});
+		btnEditCompletedTask.setBounds(554, 13, 97, 25);
+		frame.getContentPane().add(btnEditCompletedTask);
 		
 		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
 		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
-		
+
+
 		frame.setVisible(true);
 
 		model = (DefaultTableModel) table.getModel();
 		
-		//Create time formatting
-		
-		String startTime = "9:15";
-		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		 Date d = null;
-		try {
-			d = df.parse(startTime);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		} 
-		 Calendar cal = Calendar.getInstance();
-		 cal.setTime(d);
-		 String newTime = df.format(cal.getTime());
-		 		
 		//If task is assigned to use show here
 	
 		for(Task task : Main.tasks)
 	    {
 			if(task.getTaskAssigned() == true) {
-				model.addRow(new Object[]{newTime ,task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
+				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes" });
 			}
-			cal.add(Calendar.MINUTE, task.getTaskTime());
-			newTime = df.format(cal.getTime());
 	    }
 	}
 }
