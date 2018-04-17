@@ -1,9 +1,15 @@
+package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import java.util.*;
 
 
 public class CaretakerSchedule2 extends JFrame{
@@ -82,11 +88,11 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Title", "Notes", "Completed"
+				"Time", "Time allocated", "Title", "Notes", "Completed"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Boolean.class
+				Object.class, Object.class, Object.class, Object.class, Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -122,13 +128,29 @@ public class CaretakerSchedule2 extends JFrame{
 
 		model = (DefaultTableModel) table.getModel();
 		
+		//Create time formatting
+		
+		String startTime = "9:15";
+		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		 Date d = null;
+		try {
+			d = df.parse(startTime);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} 
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(d);
+		 String newTime = df.format(cal.getTime());
+		 		
 		//If task is assigned to use show here
 	
 		for(Task task : Main.tasks)
 	    {
 			if(task.getTaskAssigned() == true) {
-				model.addRow(new Object[]{task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
+				model.addRow(new Object[]{newTime ,task.getTaskTime(), task.getTaskTitle(), "notes", task.getTaskCompleted()});
 			}
+			cal.add(Calendar.MINUTE, task.getTaskTime());
+			newTime = df.format(cal.getTime());
 	    }
 	}
 }
