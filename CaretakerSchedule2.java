@@ -128,8 +128,6 @@ public class CaretakerSchedule2 extends JFrame{
 
 		model = (DefaultTableModel) table.getModel();
 		
-		//Create time formatting
-		
 		String startTime = "9:15";
 		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		 Date d = null;
