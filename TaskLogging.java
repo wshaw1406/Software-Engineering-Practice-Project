@@ -175,7 +175,7 @@ public class TaskLogging {
 			if(task.getTaskTitle() == value) {
 				txtTaskName.setText(task.getTaskTitle());
 			}
-	    }s
+	    }
 			
 		txtTaskName.setEditable(false);
 		txtTaskName.setBounds(169, 30, 116, 22);

@@ -51,17 +51,17 @@ public class CaretakerSchedule2 extends JFrame{
 		btnUndo.setBounds(0, 366, 330, 49);
 		frame.getContentPane().add(btnUndo);
 		
-		JButton btnSave = new JButton("Save");
-		btnSave.addActionListener(new ActionListener() {
+		JButton btnComplete = new JButton("Complete");
+		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
+				frame.hide();
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
-					Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
+					//Boolean value = (Boolean) table.getModel().getValueAt(i, 3);
 					for(Task task : Main.tasks)
 				    {
 						//for each task that matches the tasks in the caretakers timetable
-						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() && value == true) {
+						if(task.getTaskTitle() == table.getModel().getValueAt(i, 1).toString() ) {
 							new TaskLogging();
 							task.setTaskCompleted(true);
 							System.out.println(task.getTaskCompleted());
@@ -70,12 +70,13 @@ public class CaretakerSchedule2 extends JFrame{
 				}
 				// UPDATE DB WITH EACH ARRAY LIST ITEM
 
+
 			}
-			
 		});
+		
 		frame.setVisible(true);
-		btnSave.setBounds(330, 366, 330, 49);
-		frame.getContentPane().add(btnSave);
+		btnComplete.setBounds(330, 366, 330, 49);
+		frame.getContentPane().add(btnComplete);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(123, 86, 343, 214);
@@ -119,7 +120,17 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnNewButton.setBounds(56, 34, 97, 25);
-		frame.getContentPane().add(btnNewButton);;
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnEditCompletedTask = new JButton("Completed Tasks");
+		btnEditCompletedTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.hide();
+				
+			}
+		});
+		btnEditCompletedTask.setBounds(554, 13, 97, 25);
+		frame.getContentPane().add(btnEditCompletedTask);
 		
 		table.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());;
 		table.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JTextField()));
