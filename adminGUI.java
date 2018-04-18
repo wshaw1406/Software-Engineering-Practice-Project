@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -59,6 +61,6 @@ public class adminGUI {
 		JButton btnTaskInformation = new JButton("Task Information");
 		btnTaskInformation.setBounds(326, 129, 127, 61);
 		frmAdministration.getContentPane().add(btnTaskInformation);
+		frmAdministration.setVisible(true);
 	}
-
 }

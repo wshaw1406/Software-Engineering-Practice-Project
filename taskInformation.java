@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class taskInformation {
 
@@ -35,6 +39,7 @@ public class taskInformation {
 	 */
 	public taskInformation() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -82,6 +87,12 @@ public class taskInformation {
 		frame.getContentPane().add(label_3);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new TaskReports();
+			}
+		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnReport.setBounds(430, 259, 89, 23);
 		frame.getContentPane().add(btnReport);
