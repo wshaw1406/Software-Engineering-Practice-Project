@@ -28,6 +28,7 @@ public class TaskReports {
 	private static DefaultTableModel model;
 	private static JComboBox cmBxType;
 	private static JComboBox cmBxComplete;
+	private static JComboBox cmBxTaskAssigned;
 
 
 	/**
@@ -59,7 +60,7 @@ public class TaskReports {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 591, 428);
+		frame.setBounds(100, 100, 591, 462);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -74,7 +75,7 @@ public class TaskReports {
 				}
 			}
 		});
-		btnDownload.setBounds(222, 343, 97, 25);
+		btnDownload.setBounds(222, 377, 97, 25);
 		frame.getContentPane().add(btnDownload);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -88,12 +89,19 @@ public class TaskReports {
 			new String[] {
 				"Task ID", "Task Name", "Task Type", "Task assigned?", "Completed by", "Completed Date", "Completed Time"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 274, 549, 61);
+		panel.setBounds(12, 274, 549, 90);
 		frame.getContentPane().add(panel);
 		
 		JPanel panel_1 = new JPanel();
@@ -118,11 +126,47 @@ public class TaskReports {
 		cmBxType.setSelectedIndex(0);
 		panel_2.add(cmBxType);
 		
+		JPanel panel_6 = new JPanel();
+		panel.add(panel_6);
+		
+		JLabel lblTaskAssigned = new JLabel("Task Assigned");
+		panel_6.add(lblTaskAssigned);
+		
+		cmBxTaskAssigned = new JComboBox();
+		cmBxTaskAssigned.setModel(new DefaultComboBoxModel(new String[] {"Any", "True", "False"}));
+		cmBxTaskAssigned.setSelectedIndex(0);
+		panel_6.add(cmBxTaskAssigned);
+		
+		JPanel panel_3 = new JPanel();
+		panel.add(panel_3);
+		
+		JLabel lblSrchCompletedBy = new JLabel("Completed by");
+		panel_3.add(lblSrchCompletedBy);
+		
+		JComboBox cmBxCompletedBy = new JComboBox();
+		cmBxCompletedBy.setModel(new DefaultComboBoxModel(new String[] {"Any"}));
+		cmBxCompletedBy.setSelectedIndex(0);
+		panel_3.add(cmBxCompletedBy);
+		
+		JPanel panel_4 = new JPanel();
+		panel.add(panel_4);
+		
+		JLabel lblCompletedBefore = new JLabel("Completed Before");
+		panel_4.add(lblCompletedBefore);
+		
+		JPanel panel_5 = new JPanel();
+		panel.add(panel_5);
+		
+		JLabel lblCompletedAfter = new JLabel("Completed After");
+		panel_5.add(lblCompletedAfter);
+		
 		MyItemListener actionListener = new MyItemListener();
 	    cmBxType.addItemListener(actionListener);
 	    cmBxComplete.addItemListener(actionListener);
+	    cmBxTaskAssigned.addItemListener(actionListener);
 	    
-		updateTable();
+	    updateTable();
+	    
 	}
 	
 	public static void updateTable() {
@@ -130,24 +174,73 @@ public class TaskReports {
 		model = (DefaultTableModel) table.getModel();
 		String complete = (String) cmBxComplete.getSelectedItem();
 		String type = (String) cmBxType.getSelectedItem();
+		String assigned = (String) cmBxTaskAssigned.getSelectedItem();
+
+		clearTable();
 		
-		try {
-			for(Task task : Main.tasks)
-		    {
-				if(complete != "Any") {
-					if(task.getTaskCompleted() == Boolean.parseBoolean(complete)) {
-						model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(), task.getTaskCompleted(), "Completed date", "completed time"});
+		for(Task task : Main.tasks)
+		{
+			model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(), task.getTaskCompleted(), "Completed date", "completed time"});
+		}
+		
+		switch(type) {
+			case "Routine": 
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					String value = (String) model.getValueAt(i, 2);
+					if(value.equals("One-off")) {
+						model.removeRow(i);
 					}
-				}
-				else{
-					model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(), "Completed by", "Completed date", "completed time"});
-				}
-		    }
+				};
+			break;
+			case "One-off": 
+				for (int i = model.getRowCount() - 1; i >= 0; i--) {
+					String value = (String) model.getValueAt(i, 2);
+					if(value.equals("Routine")) {
+						model.removeRow(i);
+					}
+				};
+			break;
 		}
-		catch(Exception ex) {
-			System.out.println(ex);
-			}
+		
+		switch(complete) {
+			case "True":
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					boolean value = (boolean) model.getValueAt(i, 4);
+					if(value == false) {
+						model.removeRow(i);
+					}
+				};
+			break;
+			case "False":
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					boolean value = (boolean) model.getValueAt(i, 4);
+					if(value == true) {
+						model.removeRow(i);
+					}
+				};
+			break;
 		}
+		
+		switch(assigned) {
+			case "True":
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					boolean value = (boolean) model.getValueAt(i, 3);
+					if(value == false) {
+						model.removeRow(i);
+					}
+				};
+			break;
+			case "False":
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					boolean value = (boolean) model.getValueAt(i, 3);
+					if(value == true) {
+						model.removeRow(i);
+					}
+				};
+			break;
+		}
+	}
+	
 	public static void clearTable() {
 		model = (DefaultTableModel) table.getModel();
 
@@ -199,8 +292,7 @@ class MyItemListener implements ItemListener {
 
 		    if (evt.getStateChange() == ItemEvent.SELECTED) {
 		      // Item was just selected
-		TaskReports.clearTable();
-	    TaskReports.updateTable();
+		    	TaskReports.updateTable();
 		    }
 	  }
 	}
