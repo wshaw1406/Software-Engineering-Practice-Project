@@ -13,7 +13,7 @@ public class Database {
 	public void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:U:\\SQLite\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Jordan\\Documents\\GitHub\\Software-Engineering-Practice-Project\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{
@@ -26,6 +26,7 @@ public class Database {
 	        connect();
 	        ResultSet rs = null;
 	        List<Task> tasks = new ArrayList<Task>();
+	        
 	        try
 	        {
 			 	Statement stmt = con.createStatement(); 
@@ -37,7 +38,7 @@ public class Database {
 	            	String title = rs.getString("taskTitle");
 	            	String notes = rs.getString("taskNotes");
 	            	int duration = rs.getInt("taskDuration");
-	            	boolean assigned = rs.getBoolean("taskAssigned");
+	            	String assigned = rs.getString("taskAssigned");
 	            	boolean completed = rs.getBoolean("taskCompleted");
 	            	String priority = rs.getString("taskPriority");
 	            	
@@ -48,7 +49,7 @@ public class Database {
 	        {
 	            exc.printStackTrace();
 	        }
-	        
+	      
 	        return tasks;
 	    }
 	

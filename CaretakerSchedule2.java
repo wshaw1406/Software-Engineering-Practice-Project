@@ -1,3 +1,4 @@
+package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -127,7 +128,6 @@ public class CaretakerSchedule2 extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
 				frame.hide();
-				/////////////////////////////////////////////////////////////////////////////////////////////////
 			}
 		});
 		btnEditCompletedTask.setBounds(503, 13, 148, 25);
@@ -168,15 +168,16 @@ public class CaretakerSchedule2 extends JFrame{
 		//For loop, runs through the tasks in Main
 		for(Task task : Main.tasks)
 	    {
+			System.out.println(task.getTaskAssigned());
 			//If, taskAssigned is true, run code
-			if(task.getTaskAssigned() == true) {
+			if(task.getTaskAssigned() == null) {
 				//If, taskCompleted is false, run code
 				if(task.getTaskCompleted() == false) {
 					//Fills in table with respective data
-				model.addRow(new Object[]{newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskTime(), task.getTaskType() });
+				model.addRow(new Object[]{newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), task.getTaskType() });
 				}
 			}
-			cal.add(Calendar.MINUTE, task.getTaskTime());
+			cal.add(Calendar.MINUTE, task.getTaskDuration());
 			newTime = df.format(cal.getTime());
 	    }
 		// Runs sort function

@@ -87,11 +87,11 @@ public class TaskReports {
 			new Object[][] {
 			},
 			new String[] {
-				"Task ID", "Task Name", "Task Type", "Task assigned?", "Completed by", "Completed Date", "Completed Time"
+				"Task ID", "Task Name", "Task Type", "Task assigned?", "Task Duration","Completed by", "Completed Date", "Completed Time"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false, false
+				false, false, false, false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -180,7 +180,7 @@ public class TaskReports {
 		
 		for(Task task : Main.tasks)
 		{
-			model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(), task.getTaskCompleted(), "Completed date", "completed time"});
+			model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
 		}
 		
 		switch(type) {
@@ -205,7 +205,7 @@ public class TaskReports {
 		switch(complete) {
 			case "True":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
-					boolean value = (boolean) model.getValueAt(i, 4);
+					boolean value = (boolean) model.getValueAt(i, 5);
 					if(value == false) {
 						model.removeRow(i);
 					}
@@ -213,7 +213,7 @@ public class TaskReports {
 			break;
 			case "False":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
-					boolean value = (boolean) model.getValueAt(i, 4);
+					boolean value = (boolean) model.getValueAt(i, 5);
 					if(value == true) {
 						model.removeRow(i);
 					}
@@ -272,7 +272,7 @@ public class TaskReports {
 	        sb.append(',');
 	        sb.append(task.getTaskTitle());
 	        sb.append(',');
-	        sb.append(task.getTaskTime());
+	      //  sb.append(task.getTaskTime());
 	        sb.append(',');
 	        sb.append(task.getTaskAssigned());
 	        sb.append(',');

@@ -2,16 +2,20 @@ package software_eng;
 
 import java.util.*;
 
+
 /**
  *
  * @author Will
  */
 public class Main {
+	
+	public static ArrayList<Task> tasks = new ArrayList<>();
     
     public static void main(String args[]) {
-		//new taskInformation();
     	Database db = new Database();
-    	User user = db.pullSingleUser("tweed7");
-    	System.out.println(user.getGender());
+    	tasks = (ArrayList<Task>) db.pullTasks();
+		new CaretakerSchedule2();
+    //	User user = db.pullSingleUser("tweed7");
+    //	System.out.println(user.getGender());
    }
 }
