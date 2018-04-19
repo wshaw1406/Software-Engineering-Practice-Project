@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.Date;
 
 public class Database {
-	private Statement stmt;
 	private Connection con;
 	
 	public Database() {
@@ -15,7 +14,6 @@ public class Database {
 		try
 		{
 		con = DriverManager.getConnection("jdbc:sqlite:U:\\SQLite\\softwareEng.db");
-		stmt = con.createStatement();
 		}
 		catch(SQLException e) 
 		{
@@ -30,6 +28,7 @@ public class Database {
 	        List<Task> tasks = new ArrayList<Task>();
 	        try
 	        {
+			 	Statement stmt = con.createStatement(); 
 	            rs = stmt.executeQuery("SELECT * FROM task");
 	            while(rs.next())
 	            {
@@ -53,6 +52,7 @@ public class Database {
 	        return tasks;
 	    }
 	
+	 //User methods
 	 public List<User> pullUsers()
 	    {
 	        connect();
@@ -60,6 +60,7 @@ public class Database {
 	        List<User> users = new ArrayList<User>();
 	        try
 	        {
+			 	Statement stmt = con.createStatement(); 
 	            rs = stmt.executeQuery("SELECT * FROM users");
 	            while(rs.next())
 	            {
@@ -80,4 +81,29 @@ public class Database {
 	        
 	        return users;
 	    }
+	 
+	 public User pullSingleUser(String username) {
+		 connect();
+		 ResultSet rs = null;
+		 User user;
+		 try
+		 {
+			 Statement stmt = con.createStatement(); 
+			 rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "'");
+	           		String id = rs.getString("username");
+	            	String passwordHash = rs.getString("passwordHash");
+	            	String firstname = rs.getString("firstname");
+	            	String surname = rs.getString("surname");
+	            	String accountType = rs.getString("accountType");
+	            	String gender = rs.getString("gender");
+	            	user = new User(id, passwordHash, firstname, surname, gender, accountType);
+	            	return user;
+
+		 }
+		 catch(SQLException e)
+		 {
+			 System.out.println(e.toString());
+		 }
+		 return null;
+	 }
 }
