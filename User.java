@@ -11,6 +11,11 @@ public class User {
 	private String gender;
 	private String accountType;
 	
+	public User() 
+	{
+		
+	}
+	
 	public User(String username, String passwordHash, String firstName, String surname,
 			String gender, String accountType)
 	{

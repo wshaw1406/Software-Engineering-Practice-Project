@@ -1,23 +1,24 @@
 package software_eng;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Will
  */
 public class Task {
-    private String taskID;
+    private int taskID;
     private String taskType;
     private String taskNotes;
     private String taskTitle;
     private int taskDuration;
-    private boolean taskAssigned;
+    private String taskAssigned;
     private boolean taskCompleted;
     private ArrayList<Task> tasks;
-    private String taskPriority;
+    private int taskPriority;
     
-    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, boolean taskAssigned, boolean taskCompleted, String taskPriority)
+    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, int taskPriority)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -25,23 +26,40 @@ public class Task {
         setTaskTitle(taskTitle);
         setTaskDuration(taskDuration);
         setTaskAssigned(taskAssigned);
+        setTaskCompleted(taskCompleted);
         setTaskPriority(taskPriority);
     }
     
-    public String generateTaskID() {
+    public int generateTaskID() {
     	Database db = new Database();
     	db.connect();
-    	db.pullTaskIDS();
+    	int tempCheck = 0;
+    	List<Task> tasks = db.pullTasks();
+    	for(Task task: tasks) {
+    		if(task.getTaskID() > tempCheck) {
+    			tempCheck = task.getTaskID();
+    		} else {
+    			return task.getTaskID()+1;
+    		}
+    	}
+    	return 0;
     }
     
-    public String getTaskPriority() {
+    public int getTaskPriority() {
     	return taskPriority;
     }
     
-    public void setTaskPriority(String taskPriority) {
+    public void setTaskPriority(int taskPriority) {
     	this.taskPriority = taskPriority;
     }
     
+    public boolean getTaskCompleted() {
+    	return taskCompleted;
+    }
+    
+    public void setTaskCompleted(boolean taskCompleted) {
+    	this.taskCompleted = taskCompleted;
+    }
     /**
      * @return the taskTime
      */
@@ -58,28 +76,28 @@ public class Task {
     /**
      * @return the taskAssigned
      */
-    public boolean getTaskAssigned() {
+    public String getTaskAssigned() {
         return taskAssigned;
     }
 
     /**
      * @param taskAssigned the taskAssigned to set
      */
-    public void setTaskAssigned(boolean taskAssigned) {
+    public void setTaskAssigned(String taskAssigned) {
         this.taskAssigned = taskAssigned;
     }
     
     /**
      * @return the taskID
      */
-    public String getTaskID() {
+    public int getTaskID() {
         return taskID;
     }
 
     /**
      * @param taskID the taskID to set
      */
-    public void setTaskID(String taskID) {
+    public void setTaskID(int taskID) {
         this.taskID = taskID;
     }
 
