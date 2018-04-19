@@ -4,7 +4,6 @@ import java.util.Date;
 
 
 public class User {
-	private int userID;
 	private String username;
 	private String passwordHash;
 	private String firstName;
@@ -24,15 +23,6 @@ public class User {
 	}
 	
 	/*getters*/
-	
-	/**
-	 * get the user ID
-	 * @return userID
-	 */
-	public int getUserID()
-	{
-		return userID;
-	}
 	
 	/**
 	 * gets username
@@ -89,15 +79,6 @@ public class User {
 	}
 	
 	/*setters*/
-	
-	/**
-	 * sets the userID 
-	 * @param userID
-	 */
-	public void setUserID(int userID)
-	{
-		this.userID=userID;
-	}
 	
 	/**
 	 * sets the username
@@ -162,11 +143,11 @@ public class User {
 		user.removeUser(user);
 	}
 	
-	public void displayTasks(ArrayList<User> users)
+	public void displayUsers(ArrayList<User> users)
     {
         for(User user : users)
         {
-            System.out.println("UserID: " + user.getUserID());
+            System.out.println("UserID: " + user.getUsername());
         }
     }
 }
