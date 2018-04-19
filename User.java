@@ -1,9 +1,6 @@
-/**
- * User class
- * @author Daniel Parr
- */
-
+package software_eng;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class User {
@@ -12,19 +9,16 @@ public class User {
 	private String passwordHash;
 	private String firstName;
 	private String surname;
-	private int dateOfBirth;
 	private String gender;
 	private String accountType;
 	
-	public User(int userID, String username, String passwordHash, String firstName, String surname,
-			int dateOfBirth, String gender, String accountType)
+	public User(String username, String passwordHash, String firstName, String surname,
+			String gender, String accountType)
 	{
-		this.userID = userID;
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.firstName = firstName;
 		this.surname = surname;
-		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.accountType = accountType;
 	}
@@ -74,15 +68,6 @@ public class User {
 	public String getSurname()
 	{
 		return surname;
-	}
-	
-	/**
-	 * gets date of birth
-	 * @return dateOfBirth
-	 */
-	public int getDateOfBirth()
-	{
-		return dateOfBirth;
 	}
 	
 	/**
@@ -148,15 +133,6 @@ public class User {
 	public void setSurname(String surname)
 	{
 		this.surname=surname;
-	}
-	
-	/**
-	 * sets the dateOfBirth of a user
-	 * @param dateOfBirth
-	 */
-	public void setDateOfBirth(int dateOfBirth)
-	{
-		this.dateOfBirth=dateOfBirth;
 	}
 	
 	/**

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package software_eng;
 
 import java.util.ArrayList;
@@ -16,22 +11,27 @@ public class Task {
     private String taskType;
     private String taskNotes;
     private String taskTitle;
-    private int taskTime;
+    private int taskDuration;
     private boolean taskAssigned;
     private boolean taskCompleted;
     private ArrayList<Task> tasks;
     private String taskPriority;
     
-    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskTime, boolean taskAssigned, boolean taskCompleted, String taskPriority)
+    public Task(String taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, boolean taskAssigned, boolean taskCompleted, String taskPriority)
     {
         setTaskID(taskID);
         setTaskType(taskType);
         setTaskNotes(taskNotes);
         setTaskTitle(taskTitle);
-        setTaskTime(taskTime);
+        setTaskDuration(taskDuration);
         setTaskAssigned(taskAssigned);
-        setTaskCompleted(taskCompleted);
         setTaskPriority(taskPriority);
+    }
+    
+    public String generateTaskID() {
+    	Database db = new Database();
+    	db.connect();
+    	db.pullTaskIDS();
     }
     
     public String getTaskPriority() {
@@ -42,25 +42,18 @@ public class Task {
     	this.taskPriority = taskPriority;
     }
     
-    public boolean getTaskCompleted() {
-    	return taskCompleted;
-    }
-    
-    public void setTaskCompleted(boolean taskCompleted) {
-    	this.taskCompleted = taskCompleted;
-    }
     /**
      * @return the taskTime
      */
-    public int getTaskTime() {
-        return taskTime;
+    public int getTaskDuration() {
+        return taskDuration;
     }
 
     /**
      * @param taskTime the taskTime to set
      */
-    public void setTaskTime(int taskTime) {
-        this.taskTime = taskTime;
+    public void setTaskDuration(int taskDuration) {
+        this.taskDuration = taskDuration;
     }
     /**
      * @return the taskAssigned

@@ -21,18 +21,6 @@ public class taskInformation {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					taskInformation window = new taskInformation();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -57,11 +45,23 @@ public class taskInformation {
 		frame.getContentPane().add(label);
 		
 		JButton button = new JButton("Add");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new CreateTaskGUI();
+				frame.setVisible(false);
+			}
+		});
 		button.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		button.setBounds(430, 110, 92, 23);
 		frame.getContentPane().add(button);
 		
 		JButton button_1 = new JButton("Edit");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new EditTaskGUI();
+				frame.setVisible(false);
+			}
+		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		button_1.setBounds(430, 160, 92, 23);
 		frame.getContentPane().add(button_1);
@@ -87,12 +87,6 @@ public class taskInformation {
 		frame.getContentPane().add(label_3);
 		
 		JButton btnReport = new JButton("Report");
-		btnReport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				new TaskReports();
-			}
-		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnReport.setBounds(430, 259, 89, 23);
 		frame.getContentPane().add(btnReport);
