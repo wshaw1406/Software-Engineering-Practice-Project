@@ -16,9 +16,9 @@ public class Task {
     private String taskAssigned;
     private boolean taskCompleted;
     private ArrayList<Task> tasks;
-    private int taskPriority;
+    private String taskPriority;
     
-    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, int taskPriority)
+    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -45,11 +45,11 @@ public class Task {
     	return 0;
     }
     
-    public int getTaskPriority() {
+    public String getTaskPriority() {
     	return taskPriority;
     }
     
-    public void setTaskPriority(int taskPriority) {
+    public void setTaskPriority(String taskPriority) {
     	this.taskPriority = taskPriority;
     }
     
