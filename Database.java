@@ -31,7 +31,7 @@ public class Database {
 	        try
 	        {
 			 	Statement stmt = con.createStatement(); 
-	            rs = stmt.executeQuery("SELECT * FROM task SORT BY taskID");
+	            rs = stmt.executeQuery("SELECT * FROM task");
 	            while(rs.next())
 	            {
 	            	int id = rs.getInt("taskID");
@@ -41,7 +41,7 @@ public class Database {
 	            	int duration = rs.getInt("taskDuration");
 	            	String assigned = rs.getString("taskAssigned");
 	            	boolean completed = rs.getBoolean("taskCompleted");
-	                int priority = rs.getInt("taskPriority");
+	                String priority = rs.getString("taskPriority");
 	            	
 	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority));
 	            }
@@ -72,7 +72,7 @@ public class Database {
 	            	}
 	            	taskAssigned = rs.getString("taskAssigned");
 	            	boolean taskCompleted = rs.getBoolean("taskCompleted");
-	            	int taskPriority = rs.getInt("taskPriority");
+	            	String taskPriority = rs.getString("taskPriority");
 	            	task = new Task(taskID, taskType, taskTitle, taskNotes, taskDuration, taskAssigned, taskCompleted, taskPriority);
 	            	return task;
 
