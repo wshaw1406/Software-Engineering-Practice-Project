@@ -108,6 +108,50 @@ public class CreateTaskGUI {
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Database db = new Database();
+				Task task = new Task();
+				task.setTaskID(task.generateTaskID());
+				task.setTaskTitle(textField.getText());
+				if(rdbtnRegular.isSelected())
+				{
+				    task.setTaskType("Regular");
+				}
+				else
+				{
+					task.setTaskType("One-off");
+				}
+				
+				try {
+				prioritySpinner.commitEdit();
+				}
+				catch(java.text.ParseException ex)
+				{
+					System.out.println(ex.toString());
+				}
+				if((int)prioritySpinner.getValue() == 1) 
+				{
+					task.setTaskPriority("Low");
+				}
+				else if((int)prioritySpinner.getValue() == 2)
+				{
+					task.setTaskPriority("Medium");
+				}
+				else
+				{
+					task.setTaskPriority("High");
+				}
+				
+				try {
+					durationSpinner.commitEdit();
+				}
+				catch(java.text.ParseException exc)
+				{
+					System.out.println(exc.toString());
+				}
+				task.setTaskDuration((int)durationSpinner.getValue());
+				
+				task.setTaskNotes(textArea.getText());
+				db.pushSingleTask(task);
 			}
 		});
 		btnSubmit.setBounds(286, 279, 89, 23);

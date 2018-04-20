@@ -19,11 +19,13 @@ public class EditTaskGUI {
 
 	private JFrame frame;
 	private JTextField textField;
+	private String taskTitle;
 
 	/**
 	 * Create the application.
 	 */
-	public EditTaskGUI() {
+	public EditTaskGUI(String taskTitle) {
+		this.taskTitle = taskTitle;
 		initialize();
 		frame.setVisible(true);
 	}
@@ -37,6 +39,21 @@ public class EditTaskGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		Database db = new Database();
+		Task defaultTask = db.pullSingleTask(taskTitle);
+		int defaultPriority = 1;
+		if(defaultTask.getTaskPriority().equals("Low"))
+		{
+			defaultPriority = 1;
+		}
+		else if(defaultTask.getTaskPriority().equals("Medium"))
+		{
+			defaultPriority = 2;
+		}
+		else
+		{
+			defaultPriority = 3;
+		}
 		JLabel lblInsertTheDetails = new JLabel("Edit the details of the task and then submit\r\n");
 		lblInsertTheDetails.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblInsertTheDetails.setBounds(10, 11, 336, 14);
@@ -67,9 +84,10 @@ public class EditTaskGUI {
 		textField.setBounds(126, 58, 86, 20);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
+		textField.setText(defaultTask.getTaskTitle());
 		
 		JSpinner prioritySpinner = new JSpinner();
-		prioritySpinner.setModel(new SpinnerNumberModel(1, 1, 3, 1));
+		prioritySpinner.setModel(new SpinnerNumberModel(defaultPriority, 1, 3, 1));
 		prioritySpinner.setBounds(126, 84, 53, 20);
 		frame.getContentPane().add(prioritySpinner);
 		
@@ -78,7 +96,7 @@ public class EditTaskGUI {
 		frame.getContentPane().add(lblPriority);
 		
 		JSpinner durationSpinner = new JSpinner();
-		durationSpinner.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
+		durationSpinner.setModel(new SpinnerNumberModel(new Integer(defaultTask.getTaskDuration()), null, null, new Integer(1)));
 		durationSpinner.setBounds(126, 109, 53, 20);
 		frame.getContentPane().add(durationSpinner);
 		
@@ -89,10 +107,47 @@ public class EditTaskGUI {
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(126, 140, 220, 56);
 		frame.getContentPane().add(textArea);
+		textArea.setText(defaultTask.getTaskNotes());
 		
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Task task = defaultTask;
+				task.setTaskID(defaultTask.getTaskID());
+				task.setTaskTitle(textField.getText());
+				
+				
+				try {
+				prioritySpinner.commitEdit();
+				}
+				catch(java.text.ParseException ex)
+				{
+					System.out.println(ex.toString());
+				}
+				if((int)prioritySpinner.getValue() == 1) 
+				{
+					task.setTaskPriority("Low");
+				}
+				else if((int)prioritySpinner.getValue() == 2)
+				{
+					task.setTaskPriority("Medium");
+				}
+				else
+				{
+					task.setTaskPriority("High");
+				}
+				
+				try {
+					durationSpinner.commitEdit();
+				}
+				catch(java.text.ParseException exc)
+				{
+					System.out.println(exc.toString());
+				}
+				task.setTaskDuration((int)durationSpinner.getValue());
+				
+				task.setTaskNotes(textArea.getText());
+				db.updateTask(task);
 			}
 		});
 		btnSubmit.setBounds(286, 209, 89, 23);

@@ -1,6 +1,7 @@
 package software_eng;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,19 +31,20 @@ public class Task {
         setTaskPriority(taskPriority);
     }
     
+    public Task()
+    {
+    	
+    }
+    
     public int generateTaskID() {
     	Database db = new Database();
     	db.connect();
-    	int tempCheck = 0;
     	List<Task> tasks = db.pullTasks();
+    	ArrayList<Integer> taskIDs = new ArrayList<Integer>();
     	for(Task task: tasks) {
-    		if(task.getTaskID() > tempCheck) {
-    			tempCheck = task.getTaskID();
-    		} else {
-    			return task.getTaskID()+1;
-    		}
+    		taskIDs.add(task.getTaskID());
     	}
-    	return 0;
+    	return Collections.max(taskIDs)+1;
     }
     
     public String getTaskPriority() {
