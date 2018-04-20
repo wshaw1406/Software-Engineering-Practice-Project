@@ -79,7 +79,7 @@ public class taskInformation {
 		JButton button_1 = new JButton("Edit");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new EditTaskGUI((String)comboBox.getSelectedItem());
+				//new EditTaskGUI((String)comboBox.getSelectedItem());
 				frame.setVisible(false);
 			}
 		});
@@ -116,6 +116,12 @@ public class taskInformation {
 		frame.getContentPane().add(label_3);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new TaskReports();
+			}
+		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnReport.setBounds(157, 259, 89, 23);
 		frame.getContentPane().add(btnReport);

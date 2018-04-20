@@ -180,7 +180,12 @@ public class TaskReports {
 		
 		for(Task task : Main.tasks)
 		{
-			model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
+			if(task.getTaskAssigned() == null) {
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), "None",task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});	
+			}
+			else {
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
+			}
 		}
 		
 		switch(type) {
@@ -195,7 +200,7 @@ public class TaskReports {
 			case "One-off": 
 				for (int i = model.getRowCount() - 1; i >= 0; i--) {
 					String value = (String) model.getValueAt(i, 2);
-					if(value.equals("Routine")) {
+					if(value.equals("Regular")) {
 						model.removeRow(i);
 					}
 				};
@@ -224,16 +229,16 @@ public class TaskReports {
 		switch(assigned) {
 			case "True":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
-					boolean value = (boolean) model.getValueAt(i, 3);
-					if(value == false) {
+					String value = (String) model.getValueAt(i, 3);
+					if(value.equals("None")) {
 						model.removeRow(i);
 					}
 				};
 			break;
 			case "False":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
-					boolean value = (boolean) model.getValueAt(i, 3);
-					if(value == true) {
+					String value = (String) model.getValueAt(i, 3);
+					if(!value.equals("None")) {
 						model.removeRow(i);
 					}
 				};

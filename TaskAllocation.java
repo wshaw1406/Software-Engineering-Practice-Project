@@ -112,10 +112,14 @@ public class TaskAllocation {
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
 					Boolean value = (Boolean) table.getModel().getValueAt(i, 5);
+					if (value == null) {
+						value = false;
+					}
 					for(Task task : Main.tasks)
 				    {
-						if(task.getTaskTitle() == table.getModel().getValueAt(i, 2).toString() && value == true) {
-							//SET TASK ASSIGNED TO USERS IDtask.setTaskAssigned(true);
+						if(task.getTaskTitle().equals(model.getValueAt(i, 2).toString()) && value == true) {
+							//Set task assigned to the users id
+							task.setTaskAssigned("123");
 						}
 						//Allow user to de-select a task
 						if(task.getTaskTitle() == table.getModel().getValueAt(i, 2).toString() && value == false) {
@@ -159,9 +163,9 @@ public class TaskAllocation {
 					c.setBackground(getBackground());
 					int modelRow = convertRowIndexToModel(row);
 					String type = (String)getModel().getValueAt(modelRow, 0);
-					if ("3".equals(type)) c.setBackground(Color.GREEN);
-					if ("2".equals(type)) c.setBackground(Color.YELLOW);
-					if ("1".equals(type)) c.setBackground(Color.RED);
+					if ("Low".equals(type)) c.setBackground(Color.GREEN);
+					if ("Medium".equals(type)) c.setBackground(Color.YELLOW);
+					if ("High".equals(type)) c.setBackground(Color.RED);
 
 				}
 
