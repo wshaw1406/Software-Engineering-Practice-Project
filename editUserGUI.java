@@ -114,10 +114,12 @@ public class editUserGUI {
 		surnameField.setColumns(10);
 		surnameField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {
 				char c=e.getKeyChar();
 				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
 				        e.consume();
+					usernameField.setText(surnameField.getText()+userIDField.getText());		
+					
 			}
 		});
 		surnameField.setBounds(201, 150, 182, 20);
@@ -199,11 +201,14 @@ public class editUserGUI {
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				User updateUser = new User();	
+				int userID = Integer.parseInt(userIDField.getText());
 				updateUser.setFirstName(firstnameField.getText());
 				updateUser.setSurname(surnameField.getText());
 				updateUser.setAccountType((String) accountTypeBox.getSelectedItem());
 				updateUser.setGender((String) genderBox.getSelectedItem());
 				updateUser.setPasswordHash("asdfasdf");
+				updateUser.setUserID(userID);
+				updateUser.setUsername(usernameField.getText());
 				db.updateUser(updateUser);
 			}
 		});
