@@ -1,4 +1,3 @@
-package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +16,8 @@ public class CaretakerSchedule2 extends JFrame{
 	private JFrame frame;
 	public static JTable table;
 	public static DefaultTableModel model;
+	private Database db;
+
 	//Sorts rows in table
 	private void sort() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
@@ -94,17 +95,18 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Priority", "Title", "Time Allocated", "Type"
+				"Time", "Priority", "Title", "Time Allocated", "Notes"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false
+				false, false, false, false, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
 		table.getColumnModel().getColumn(3).setPreferredWidth(103);
+		
 		
 		//JButton for Assign New Tasks	
 		JButton btnAssignNewTasks = new JButton("Assign New Tasks");
@@ -128,10 +130,15 @@ public class CaretakerSchedule2 extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
 				frame.hide();
+				//Opens Task Reports
+				new TaskReports();
 			}
 		});
 		btnEditCompletedTask.setBounds(503, 13, 148, 25);
 		frame.getContentPane().add(btnEditCompletedTask);
+		
+		table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());;
+		table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JTextField()));
 		
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
@@ -172,14 +179,16 @@ public class CaretakerSchedule2 extends JFrame{
 			//If, taskAssigned is true, run code
 			if(task.getTaskAssigned() == null) {
 				//If, taskCompleted is false, run code
+				//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1
 				if(task.getTaskCompleted() == false) {
 					//Fills in table with respective data
-				model.addRow(new Object[]{newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), task.getTaskType() });
+				model.addRow(new Object[]{newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
 				}
 			}
 			cal.add(Calendar.MINUTE, task.getTaskDuration());
 			newTime = df.format(cal.getTime());
 	    }
+		
 		// Runs sort function
 		sort();
 	}
@@ -235,7 +244,31 @@ class ButtonEditor extends DefaultCellEditor
 		return btn;
 	}
 	
-	
+	@Override
+		public Object getCellEditorValue() {
+			
+			int column1 = 2;
+			int row1 = 1;
+			String value = "";
+			
+			if(clicked) {
+				//System.out.println(btn.getName());
+				//System.out.printf("testing"); 
+
+					if(lbl == "Notes") {
+					row1 = CaretakerSchedule2.table.getSelectedRow();
+					value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
+					for(Task task : Main.tasks)
+				    {
+						if(task.getTaskTitle() == value) {
+							JOptionPane.showMessageDialog(btn, task.getTaskNotes());
+						}
+				    }
+				}
+			}
+			clicked = false;
+			return new String(lbl);
+		}
 	
 	@Override
 	public boolean stopCellEditing() {

@@ -1,9 +1,12 @@
-
+/* This page logs incompleted tasks from CaretakerSchedule. */
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.awt.event.*;
 import java.util.*;
 import java.util.Calendar;
+
 
 import javax.swing.table.DefaultTableModel;
 
@@ -13,6 +16,8 @@ public class TaskLogging {
 	public static JTable table;
 	public static DefaultTableModel model;
 	private JTextField txtTaskName;
+	private Database db;
+
 
 	/**
 	 * Launch the application.
@@ -35,6 +40,8 @@ public class TaskLogging {
 	 * Create the application.
 	 */
 	public TaskLogging() {
+		db = new Database();
+		db.connect();
 		initialize();
 		frmTaskLogging.setVisible(true);
 	}
@@ -51,15 +58,13 @@ public class TaskLogging {
 		frmTaskLogging.setBounds(100, 100, 434, 298);
 		frmTaskLogging.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTaskLogging.getContentPane().setLayout(null);
-		
-		//CONNECT TO DATABASE
-		//CONNECT TO PREVIOUS PAGE
-		
+				
 		//JLabel for Caretaker Name
 		JLabel lblCaretakerName = new JLabel("Caretaker Name:");
-		//GET CARETAKER NAME WHO MEANT TO DO IT
 		lblCaretakerName.setBounds(23, 62, 117, 14);
 		frmTaskLogging.getContentPane().add(lblCaretakerName);
+		
+		
 		
 		//JLabel for TimeOfCompletion 
 		JLabel lblTimeOfCompletion = new JLabel("Time of Completion: ");
@@ -79,15 +84,43 @@ public class TaskLogging {
 				//When clicked, shows Dialog confirming action 
 				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
 				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    //If, the user selects the 'No' option
 				    if (response == JOptionPane.NO_OPTION) {
-				      System.out.println("");
+				    	//Prints nothing
+				        System.out.println("");
+				    //Else if, the user selects the 'yes' option
 				    } else if (response == JOptionPane.YES_OPTION) {
-				      System.out.println("Task has been logged");
-				      frmTaskLogging.setVisible(false); 
-				      new CaretakerSchedule2();
-				      //Updates database, task logged, takes user back to previous page
-				      //UPDATE DATABASEs
-				      //TAKE USER BACK TO PREVIOUS PAGE
+				    	int column = 2;
+						int row = 2;
+						String value = "";
+						
+						//Sets row to the selected row
+						row = CaretakerSchedule2.table.getSelectedRow();
+						//Sets value to the Model
+						value = CaretakerSchedule2.table.getModel().getValueAt(row, column).toString();
+						//For loop, Goes through the tasks
+						for(Task task : Main.tasks)
+					    {
+							//If, the TaskTitle is equal to the String value
+							if(task.getTaskTitle() == value) {
+								//Sets the test to the taskTitle
+						    	task.setTaskCompleted(true);
+						    	//task.setTaskAssigned(); FIX THIS!!!!!!!!!!!!!1
+						    	//task.setTaskNotes(taskNotes); THIS TOO!!!!!!!!!!!!!!
+						    	//task.setCompletedTimeand Date - Will needs to step up
+						    	
+
+							}
+					    }
+				    	//Prints Task has been logged
+				    	System.out.println("Task has been logged");
+				    	//Hides this JFrame
+				    	frmTaskLogging.setVisible(false); 
+				    	//Opens CaretakerSchedule2
+				    	new CaretakerSchedule2();
+				    	
+				    	//Updates database, task logged
+				    	//UPDATE DATABASEs
 				    } 
 			}
 		});
@@ -98,15 +131,16 @@ public class TaskLogging {
 		JButton btnCancel = new JButton("Cancel");
 		//ActionLinstener for when it is clicked
 		btnCancel.addActionListener(new ActionListener(){
-			//If clicked, closes GUI
+			//When JButton is clicked
 			public void actionPerformed(ActionEvent e){
+				//Prints out No task logged
 				System.out.println("No task logged");
+				//Sets Frames visibilty to false (hides it)
 			    frmTaskLogging.setVisible(false); 
+			    //Opens new CaretakerSchedule2
 			    new CaretakerSchedule2();
-				
 			}
-		});
-		
+		});		
 		btnCancel.setBounds(290, 215, 89, 23);
 		frmTaskLogging.getContentPane().add(btnCancel);
 		
@@ -123,12 +157,23 @@ public class TaskLogging {
 		spinner.setBounds(169, 83, 134, 22);
 		frmTaskLogging.getContentPane().add(spinner);
 		
+		List<User> userList = db.pullUsers();
+		
+		String[] users = new String[userList.size()];
+		int i = 0;
+		for(User user: userList) {
+			users[i] = user.getFirstName();
+			i++;
+    	}
 		//JComboBox for choosing caretakers
-		JComboBox comboBox = new JComboBox();
+		JComboBox comboCaretakerName = new JComboBox();
+		//if(user.getAccountType() == "Caretaker") {  NEED TO FIX!!!!!!!!
+			User user = db.pullSingleUser((String) comboCaretakerName.getSelectedItem());
+		//}
 		//List of Options
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker 1", "Caretaker 2", "Caretaker 3", "Caretaker 4", "Caretaker 5", "Caretaker 6"}));
-		comboBox.setBounds(169, 58, 134, 22);
-		frmTaskLogging.getContentPane().add(comboBox);
+		comboCaretakerName.setModel(new DefaultComboBoxModel(users));
+		comboCaretakerName.setBounds(169, 58, 134, 22);
+		frmTaskLogging.getContentPane().add(comboCaretakerName);
 		
 		//JScrollPane for JTextArea, so overflow of text can be seen
 		JScrollPane scrollPane = new JScrollPane();
@@ -148,6 +193,7 @@ public class TaskLogging {
 			//When clicked, displays message, telling user what to do
 			public void actionPerformed(ActionEvent arg0) {
 				Component frame = null;
+				//Opens JOptionPane
 				JOptionPane.showMessageDialog(frame,
 						"Select the Caretaker that completed the job, "
 									+ "\nSelect the time it was completed at, "
@@ -157,29 +203,37 @@ public class TaskLogging {
 		btnHelp.setBounds(23, 214, 89, 23);
 		frmTaskLogging.getContentPane().add(btnHelp);
 		
+		//JLabel for TaskName
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(23, 33, 134, 16);
 		frmTaskLogging.getContentPane().add(lblTaskName);
 		
+		//JTextField for txtTaskName
 		txtTaskName = new JTextField();
 
-		int column1 = 1;
-		int row1 = 1;
-		String value = "";
-		
-		
-		row1 = CaretakerSchedule2.table.getSelectedRow();
-		value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
-		for(Task task : Main.tasks)
-	    {
-			if(task.getTaskTitle() == value) {
-				txtTaskName.setText(task.getTaskTitle());
-			}
-	    }
-			
-		txtTaskName.setEditable(false);
-		txtTaskName.setBounds(169, 30, 116, 22);
-		frmTaskLogging.getContentPane().add(txtTaskName);
-		txtTaskName.setColumns(10);
+		//Defines variables column, row and value
+				int column = 2;
+				int row = 2;
+				String value = "";
+				
+				//Sets row to the selected row
+				row = CaretakerSchedule2.table.getSelectedRow();
+				//Sets value to the Model
+				value = CaretakerSchedule2.table.getModel().getValueAt(row, column).toString();
+				//For loop, Goes through the tasks
+				for(Task task : Main.tasks)
+			    {
+					//If, the TaskTitle is equal to the String value
+					if(task.getTaskTitle() == value) {
+						//Sets the test to the taskTitle
+						txtTaskName.setText(task.getTaskTitle());
+					}
+			    }
+				//Makes textbox uneditable 
+				txtTaskName.setEditable(false);
+				txtTaskName.setBounds(169, 30, 116, 22);
+				frmTaskLogging.getContentPane().add(txtTaskName);
+				txtTaskName.setColumns(10);
+
 	}
 } 
