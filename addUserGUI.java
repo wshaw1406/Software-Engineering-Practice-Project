@@ -28,15 +28,18 @@ import java.awt.event.MouseMotionAdapter;
 public class addUserGUI {
 
 	private JFrame frmAddNewUser;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField firstnameField;
+	private JTextField surnameField;
+	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_6;
+	private Database db;
+	private boolean passMatch= false;
+	private JTextField userIDField;
 	
 
 	/**
@@ -66,14 +69,15 @@ public class addUserGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmAddNewUser = new JFrame();
+		User user = new User();
+		frmAddNewUser = new JFrame();		
 		frmAddNewUser.setTitle("Add New User");
 		frmAddNewUser.setBounds(100, 100, 450, 426);
 		frmAddNewUser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAddNewUser.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("* First name");
-		lblNewLabel.setBounds(59, 60, 76, 14);
+		lblNewLabel.setBounds(59, 103, 76, 14);
 		frmAddNewUser.getContentPane().add(lblNewLabel);
 		
 		JLabel validation = new JLabel("");
@@ -84,24 +88,8 @@ public class addUserGUI {
 		validation2.setBounds(182, 291, 516, 14);
 		frmAddNewUser.getContentPane().add(validation2);
 		
-		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c=e.getKeyChar();
-				        e.consume();
-			}
-		});		
-		textField.setBounds(182, 60, 170, 20);
-		frmAddNewUser.getContentPane().add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblSurname = new JLabel("* Surname");
-		lblSurname.setBounds(59, 96, 76, 14);
-		frmAddNewUser.getContentPane().add(lblSurname);
-		
-		textField_1 = new JTextField();
-		textField_1.addKeyListener(new KeyAdapter() {
+		firstnameField = new JTextField();
+		firstnameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c=e.getKeyChar();
@@ -109,63 +97,76 @@ public class addUserGUI {
 				        e.consume();
 			}
 		});
-		textField_1.setColumns(10);
-		textField_1.setBounds(182, 96, 170, 20);
-		frmAddNewUser.getContentPane().add(textField_1);
+		firstnameField.setBounds(182, 103, 184, 20);
+		frmAddNewUser.getContentPane().add(firstnameField);
+		firstnameField.setColumns(10);
 		
-		JLabel lblDateOfBirth = new JLabel("* Date of Birth");
-		lblDateOfBirth.setBounds(59, 133, 121, 14);
-		frmAddNewUser.getContentPane().add(lblDateOfBirth);
+		JLabel lblSurname = new JLabel("* Surname");
+		lblSurname.setBounds(59, 139, 76, 14);
+		frmAddNewUser.getContentPane().add(lblSurname);
+		
+		surnameField = new JTextField();
+		surnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				char c=e.getKeyChar();
+				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				        e.consume();
+					String userID = Integer.toString(user.getUserID());
+					usernameField.setText(surnameField.getText()+userIDField.getText());			}
+		});
+		surnameField.setColumns(10);
+		surnameField.setBounds(182, 139, 184, 20);
+		frmAddNewUser.getContentPane().add(surnameField);
 		
 		JLabel lblAccountType = new JLabel("* Account Type");
 		lblAccountType.setBounds(59, 173, 110, 14);
 		frmAddNewUser.getContentPane().add(lblAccountType);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Administrator"}));
-		comboBox.setBounds(181, 170, 121, 20);
-		frmAddNewUser.getContentPane().add(comboBox);
+		JComboBox accountTypeBox = new JComboBox();
+		accountTypeBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Administrator"}));
+		accountTypeBox.setBounds(181, 170, 121, 20);
+		frmAddNewUser.getContentPane().add(accountTypeBox);		
 		
-		JLabel lblUsername = new JLabel("* Username");
+		JComboBox genderBox = new JComboBox();
+		genderBox.setToolTipText("");
+		genderBox.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female" }));
+		genderBox.setBounds(181, 205, 121, 20);
+		frmAddNewUser.getContentPane().add(genderBox);	
+		
+		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setBounds(59, 242, 76, 14);
 		frmAddNewUser.getContentPane().add(lblUsername);
 		
 		JLabel lblGender = new JLabel("* Gender");
 		lblGender.setBounds(59, 208, 76, 14);
-		frmAddNewUser.getContentPane().add(lblGender);		
+		frmAddNewUser.getContentPane().add(lblGender);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996", "1995", "1994", "1993", "1992", "1991", "1990", "1989", "1988", "1987", "1986", "1985", "1984", "1983", "1982", "1981", "1980", "1979", "1978", "1977", "1976", "1975", "1974", "1973", "1972", "1971", "1970", "1969", "1968", "1967", "1966", "1965", "1964", "1963", "1962", "1961", "1960", "1959", "1958", "1957", "1956", "1955", "1954", "1953", "1952", "1951", "1950", "1949", "1948", "1947", "1946", "1945", "1944", "1943", "1942", "1941", "1940", "1939", "1938", "1937", "1936", "1935", "1934", "1933", "1932", "1931", "1930", "1929", "1928", "1927", "1926", "1925", "1924", "1923", "1922", "1921", "1920", "1919", "1918", "1917", "1916", "1915", "1914", "1913", "1912", "1911", "1910", "1909", "1908", "1907", "1906", "1905", "1904", "1903", "1902", "1901", "1900"}));
-		comboBox_2.setBounds(288, 130, 64, 20);
-		frmAddNewUser.getContentPane().add(comboBox_2);
-		
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}));
-		comboBox_3.setBounds(236, 130, 44, 20);
-		frmAddNewUser.getContentPane().add(comboBox_3);
-		
-		JComboBox comboBox_4 = new JComboBox();
-		comboBox_4.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		comboBox_4.setBounds(182, 130, 44, 20);
-		frmAddNewUser.getContentPane().add(comboBox_4);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setToolTipText("");
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female", "Not specified"}));
-		comboBox_1.setBounds(181, 205, 121, 20);
-		frmAddNewUser.getContentPane().add(comboBox_1);
-		
-		textField_2 = new JTextField();
-		textField_2.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent arg0) {
-				textField_2.setText(textField_1.getText()+comboBox_4.getSelectedItem());
+		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Database db = new Database();
+				User newUser = new User();	
+				int userID = Integer.parseInt(userIDField.getText());
+				newUser.setFirstName(firstnameField.getText());
+				newUser.setSurname(surnameField.getText());
+				newUser.setAccountType((String) accountTypeBox.getSelectedItem());
+				newUser.setGender((String) genderBox.getSelectedItem());
+				newUser.setUsername(usernameField.getText());
+				newUser.setUserID(userID);
+				db.pushSingleUser(newUser);
 			}
-		});		
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBounds(182, 239, 170, 20);
-		frmAddNewUser.getContentPane().add(textField_2);
+		});
+		btnSubmit.setEnabled(false);
+
+		btnSubmit.setBounds(234, 354, 89, 23);
+		frmAddNewUser.getContentPane().add(btnSubmit);	
+		
+		usernameField = new JTextField();		
+		usernameField.setEditable(false);
+		usernameField.setColumns(10);
+		usernameField.setBounds(182, 239, 184, 20);
+		frmAddNewUser.getContentPane().add(usernameField);
 		
 		JLabel lblPassword = new JLabel("* Password");
 		lblPassword.setBounds(59, 277, 76, 14);
@@ -175,21 +176,18 @@ public class addUserGUI {
 		String p2 = passwordField.getText();
 		passwordField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				if (passwordField.getText().length() < 5){
-				     validation2.setText("Password must be 6 or more characters");
+			public void keyReleased(KeyEvent e) {
+				if (passwordField.getText().length() < 8){
+				     validation2.setText("Password must be 8 or more characters");
+					 btnSubmit.setEnabled(false);
+
 			} else {
 				validation2.setText("");
 			}
 			}
-		});
-		
-		passwordField.setBounds(182, 274, 170, 20);
-		frmAddNewUser.getContentPane().add(passwordField);
-		
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(234, 354, 89, 23);
-		frmAddNewUser.getContentPane().add(btnSubmit);
+		});		
+		passwordField.setBounds(182, 274, 184, 20);
+		frmAddNewUser.getContentPane().add(passwordField);		
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener(){
@@ -198,7 +196,7 @@ public class addUserGUI {
 				System.exit(0);
 			}			
 		});
-
+		
 		btnCancel.setBounds(119, 354, 89, 23);
 		frmAddNewUser.getContentPane().add(btnCancel);
 		JLabel lblPleaseFillIn = new JLabel("Please fill in the form the press submit to add the user");
@@ -223,19 +221,40 @@ public class addUserGUI {
 			public void keyReleased(KeyEvent e) {
 				if (passwordField.getText().equals(passwordField_1.getText())){
 					rePassVal.setText("");
+					passMatch = true;
 				}
 				else{
 					rePassVal.setText("Passwords must match");
+					passMatch = false;
 				}
 			}
 		});
-		passwordField_1.setBounds(182, 305, 170, 20);
-		frmAddNewUser.getContentPane().add(passwordField_1);			
-
-		String day = String.valueOf(comboBox_4.getSelectedItem());
-		String month= String.valueOf(comboBox_3.getSelectedItem());
-		String year= String.valueOf(comboBox_2.getSelectedItem());
-		String DOB= year+ "" + month + ""+ day;
+		passwordField_1.setBounds(182, 305, 184, 20);
+		frmAddNewUser.getContentPane().add(passwordField_1);
+		
+		int userID = User.generateUserID();
+		String userIDString = Integer.toString(userID);
+		
+		userIDField = new JTextField();
+		userIDField.setText(userIDString);
+		userIDField.setEditable(false);
+		userIDField.setBounds(182, 70, 184, 20);
+		frmAddNewUser.getContentPane().add(userIDField);
+		userIDField.setColumns(10);
+		
+		JLabel lblUserId = new JLabel("User ID");
+		lblUserId.setBounds(63, 73, 46, 14);
+		frmAddNewUser.getContentPane().add(lblUserId);
+		
+		frmAddNewUser.getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+					btnSubmit.setEnabled(false);
+					}
+				else{btnSubmit.setEnabled(true);}
+			}
+		  });
 		}	
 	}
 
