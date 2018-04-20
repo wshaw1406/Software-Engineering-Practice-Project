@@ -4,6 +4,7 @@ import java.util.Date;
 
 
 public class User {
+	private int userID;
 	private String username;
 	private String passwordHash;
 	private String firstName;
@@ -16,9 +17,10 @@ public class User {
 		
 	}
 	
-	public User(String username, String passwordHash, String firstName, String surname,
+	public User(int userID, String username, String passwordHash, String firstName, String surname,
 			String gender, String accountType)
 	{
+		this.userID = userID;
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.firstName = firstName;
@@ -29,6 +31,9 @@ public class User {
 	
 	/*getters*/
 	
+	public int getUserID() {
+		return userID;
+	}
 	/**
 	 * gets username
 	 * @return username
@@ -137,6 +142,11 @@ public class User {
 	public void setAccountType(String accountType)
 	{
 		this.accountType=accountType;
+	}
+	
+	public void setUserID(int userID)
+	{
+		this.userID = userID;
 	}
 	
 	/**

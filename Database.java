@@ -128,14 +128,15 @@ public class Database {
 	            rs = stmt.executeQuery("SELECT * FROM users");
 	            while(rs.next())
 	            {
-	            	String id = rs.getString("username");
+	            	int id = rs.getInt("userID");
+	            	String username = rs.getString("username");
 	            	String passwordHash = rs.getString("passwordHash");
 	            	String firstname = rs.getString("firstname");
 	            	String surname = rs.getString("surname");
 	            	String accountType = rs.getString("accountType");
 	            	String gender = rs.getString("gender");
 	            	
-	            	users.add(new User(id, passwordHash, firstname, surname, gender, accountType));
+	            	users.add(new User(id, username, passwordHash, firstname, surname, gender, accountType));
 	            }
 	        }
 	        catch(Exception exc)
@@ -146,21 +147,21 @@ public class Database {
 	        return users;
 	    }
 	 
-	 public User pullSingleUser(String username) {
+	 public User pullSingleUser(String usernameSearch) {
 		 connect();
 		 ResultSet rs = null;
 		 User user;
 		 try
 		 {
 			 Statement stmt = con.createStatement(); 
-			 rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "'");
-	           		String id = rs.getString("username");
+			 rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + usernameSearch + "'");
+			 		int id = rs.getInt("userID");
 	            	String passwordHash = rs.getString("passwordHash");
 	            	String firstname = rs.getString("firstname");
 	            	String surname = rs.getString("surname");
 	            	String accountType = rs.getString("accountType");
 	            	String gender = rs.getString("gender");
-	            	user = new User(id, passwordHash, firstname, surname, gender, accountType);
+	            	user = new User(id, usernameSearch, passwordHash, firstname, surname, gender, accountType);
 	            	return user;
 
 		 }
@@ -173,8 +174,8 @@ public class Database {
 	 
 	 public void pushSingleUser(User user) {
 		 connect();
-		 String sql = "INSERT INTO users (username, passwordHash, accountType, firstname, surname, gender)"
-		 		+ "VALUES ('" + user.getUsername() + "', '" + user.getPasswordHash() + "', '" + user.getAccountType()
+		 String sql = "INSERT INTO users (userID, username, passwordHash, accountType, firstname, surname, gender)"
+		 		+ "VALUES ('" + user.getUserID() + "', '" + user.getUsername() + "', '" + user.getPasswordHash() + "', '" + user.getAccountType()
 		 		+ "', '" + user.getFirstName() + "', '" + user.getSurname() + "', '" + user.getGender() + "');";
 		 
 		 try
