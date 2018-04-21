@@ -18,8 +18,9 @@ public class Task {
     private boolean taskCompleted;
     private ArrayList<Task> tasks;
     private String taskPriority;
+    private int taskTimeCompleted;
     
-    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority)
+    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority, int taskTimeCompleted)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -45,6 +46,15 @@ public class Task {
     		taskIDs.add(task.getTaskID());
     	}
     	return Collections.max(taskIDs)+1;
+    }
+    
+    public int getTaskTimeCompleted() {
+    	return taskTimeCompleted;
+    }
+    
+    public void setTaskTimeCompleted(int taskTimeCompleted)
+    {
+    	this.taskTimeCompleted = taskTimeCompleted;
     }
     
     public String getTaskPriority() {

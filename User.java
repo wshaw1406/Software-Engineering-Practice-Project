@@ -1,11 +1,6 @@
-/**
- * User class
- * @author Daniel Parr
- */
-
+package software_eng;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Date;
 
 
 public class User {
@@ -17,8 +12,13 @@ public class User {
 	private String gender;
 	private String accountType;
 	
+	public User() 
+	{
+		
+	}
+	
 	public User(int userID, String username, String passwordHash, String firstName, String surname,
-			 String gender, String accountType)
+			String gender, String accountType)
 	{
 		this.userID = userID;
 		this.username = username;
@@ -29,27 +29,9 @@ public class User {
 		this.accountType = accountType;
 	}
 	
-	public User(){
-		
-	}
+	/*getters*/
 	
-	 public static int generateUserID() {
-	    	Database db = new Database();
-	    	db.connect();
-	    	List<User> users = db.pullUsers();
-	    	ArrayList<Integer> userIDs = new ArrayList<Integer>();
-	    	for(User user: users){
-	    		userIDs.add(user.getUserID());
-	    		}
-	    	return Collections.max(userIDs)+1;
-	    	}
-	
-	/*getters*/	
-	/**
-	 * gets userID
-	 * @return userID
-	 */
-	public int getUserID(){
+	public int getUserID() {
 		return userID;
 	}
 	/**
@@ -87,7 +69,7 @@ public class User {
 	{
 		return surname;
 	}
-
+	
 	/**
 	 * gets gender
 	 * @return gender
@@ -107,13 +89,6 @@ public class User {
 	}
 	
 	/*setters*/
-	/**
-	 * sets the userID
-	 * @param userID
-	 */
-	public void setUserID(int userID){
-		this.userID=userID;
-	}
 	
 	/**
 	 * sets the username
@@ -169,6 +144,11 @@ public class User {
 		this.accountType=accountType;
 	}
 	
+	public void setUserID(int userID)
+	{
+		this.userID = userID;
+	}
+	
 	/**
 	 * removes a user from the list of users
 	 * @param user
@@ -182,7 +162,7 @@ public class User {
     {
         for(User user : users)
         {
-            System.out.println("Username: " + user.getUsername());
+            System.out.println("UserID: " + user.getUsername());
         }
     }
 }
