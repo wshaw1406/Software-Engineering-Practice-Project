@@ -1,3 +1,4 @@
+package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -176,7 +177,7 @@ public class CaretakerSchedule2 extends JFrame{
 		for(Task task : Main.tasks)
 	    {
 			System.out.println(task.getTaskAssigned());
-			//If, taskAssigned is true, run code
+			//If, taskAssigned == users id
 			if(task.getTaskAssigned() == null) {
 				//If, taskCompleted is false, run code
 				//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1

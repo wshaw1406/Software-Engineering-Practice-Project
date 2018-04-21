@@ -160,7 +160,7 @@ public class TaskReports {
 		JLabel lblCompletedAfter = new JLabel("Completed After");
 		panel_5.add(lblCompletedAfter);
 		
-		MyItemListener actionListener = new MyItemListener();
+		TaskReportsAL actionListener = new TaskReportsAL();
 	    cmBxType.addItemListener(actionListener);
 	    cmBxComplete.addItemListener(actionListener);
 	    cmBxTaskAssigned.addItemListener(actionListener);
@@ -291,7 +291,7 @@ public class TaskReports {
 	}
 }
 
-class MyItemListener implements ItemListener {
+class TaskReportsAL implements ItemListener {
 	  // This method is called only if a new item has been selected.
 	  public void itemStateChanged(ItemEvent evt) {
 
