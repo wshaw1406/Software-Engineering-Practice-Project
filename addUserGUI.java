@@ -31,7 +31,7 @@ public class addUserGUI {
 	private JTextField firstnameField;
 	private JTextField surnameField;
 	private JTextField usernameField;
-	private JPasswordField passwordField;
+	static JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	private JTextField textField_3;
 	private JTextField textField_4;
@@ -63,6 +63,7 @@ public class addUserGUI {
 	 */
 	public addUserGUI() {
 		initialize();
+		frmAddNewUser.setVisible(true);
 	}
 
 	/**
@@ -154,7 +155,11 @@ public class addUserGUI {
 				newUser.setGender((String) genderBox.getSelectedItem());
 				newUser.setUsername(usernameField.getText());
 				newUser.setUserID(userID);
+				Security.main(passwordField.getText());
+				newUser.setPasswordHash(Security.getHashedPass());
 				db.pushSingleUser(newUser);
+				frmAddNewUser.setVisible(false);
+				new usersInformation();
 			}
 		});
 		btnSubmit.setEnabled(false);
@@ -187,13 +192,14 @@ public class addUserGUI {
 			}
 		});		
 		passwordField.setBounds(182, 274, 184, 20);
-		frmAddNewUser.getContentPane().add(passwordField);		
+		String plainTextPass = passwordField.getText();
+		frmAddNewUser.getContentPane().add(passwordField);	
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//
-				System.exit(0);
+				new usersInformation();
+				frmAddNewUser.setVisible(false);
 			}			
 		});
 		

@@ -50,6 +50,7 @@ public class removeUserGUI {
 		db = new Database();
 		db.connect();
 		initialize();
+		frmRemoveUserGUI.setVisible(true);
 	}
 
 	/**
@@ -66,8 +67,8 @@ public class removeUserGUI {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//
-				System.exit(0);
+				new usersInformation();
+				frmRemoveUserGUI.setVisible(false);
 			}			
 		});
 		btnCancel.setBounds(45, 242, 101, 32);

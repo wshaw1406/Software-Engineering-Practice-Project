@@ -5,16 +5,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.sql.Connection;
+import java.util.List;
 
 public class loginGUI extends JFrame {
 
 	private JFrame frmLogin;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -34,6 +37,7 @@ public class loginGUI extends JFrame {
 
 
 	public loginGUI() {
+		db = new Database();
 		initialize();
 	}
 
@@ -62,20 +66,47 @@ public class loginGUI extends JFrame {
 		lblPassword.setBounds(64, 95, 70, 14);
 		frmLogin.getContentPane().add(lblPassword);
 		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(146, 94, 165, 20);
+		frmLogin.getContentPane().add(passwordField);
+
+		List<User> userList = db.pullUsers();		
+		String[] users = new String[userList.size()];
+		int i = 0;
+		for(User user: userList) {
+			users[i] = user.getUsername();
+			i++;
+    	}
+		
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSubmit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//
+				User user = db.pullSingleUser(textField.getText());
 				
-			}			
-		});
+				try{
+					String retrievedHashedPass = user.getPasswordHash();	
+					String enteredPassword = passwordField.getText();
+					Security.main(enteredPassword);
+						if(user.getUsername().equals(textField.getText()) && Security.getHashedPass().equals(retrievedHashedPass)){
+							if(user.getAccountType().equals("Administrator")){
+								new adminGUI();
+							}
+							else{
+								new CaretakerSchedule2();
+							}
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Incorrect Login details");
+						}				
+					}
+					catch(NullPointerException e1){ 
+						JOptionPane.showMessageDialog(null, "Incorrect Login details");
+					}				
+				}			
+		});	
 		btnSubmit.setBounds(222, 143, 89, 23);
 		frmLogin.getContentPane().add(btnSubmit);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(146, 94, 165, 20);
-		frmLogin.getContentPane().add(passwordField);
 		
 		JButton btnForgot = new JButton("Forgotten Password");
 		btnForgot.addActionListener(new ActionListener(){

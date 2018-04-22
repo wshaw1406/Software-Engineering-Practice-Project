@@ -42,12 +42,10 @@ public class editUserGUI {
 	private JTextField firstnameField;
 	private JTextField surnameField;
 	private JTextField usernameField;
-	private JPasswordField passwordField;
-	private JPasswordField passwordField_1;
 	private Database db;
 	private JTextField textField_3;
-	private boolean passMatch= false;
 	private boolean valid;
+	boolean resetPass =false;
 	private JTextField userIDField;
 
 	/**
@@ -71,8 +69,8 @@ public class editUserGUI {
 	 */
 	public editUserGUI() {
 		db = new Database();
-		db.connect();
 		initialize();
+		frmEditUserGUI.setVisible(true);
 	}
 
 	/**
@@ -80,7 +78,7 @@ public class editUserGUI {
 	 */
 	private void initialize() {		
 		frmEditUserGUI = new JFrame();
-		frmEditUserGUI.setBounds(100, 100, 487, 440);
+		frmEditUserGUI.setBounds(100, 100, 487, 418);
 		frmEditUserGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmEditUserGUI.setTitle("Edit User");
 		
@@ -130,7 +128,7 @@ public class editUserGUI {
 		panel.add(label_4);
 		
 		JComboBox accountTypeBox = new JComboBox();
-		accountTypeBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Admin"}));
+		accountTypeBox.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Administrator"}));
 		accountTypeBox.setBounds(200, 181, 98, 20);
 		panel.add(accountTypeBox);
 		
@@ -152,85 +150,24 @@ public class editUserGUI {
 		usernameField.setColumns(10);
 		usernameField.setBounds(201, 250, 182, 20);
 		panel.add(usernameField);
-				
-		JLabel validation = new JLabel("");
-		validation.setBounds(201, 302, 435, 14);
-		panel.add(validation);	
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(201, 285, 182, 20);
-		passwordField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (passwordField.getText().length() < 8){
-				     validation.setText("Password must be 8 or more characters");
-			} else {
-				validation.setText("");
-			}
-			}
-		});
-		panel.add(passwordField);
-		
-		JLabel label_7 = new JLabel("Password");
-		label_7.setBounds(55, 288, 76, 14);
-		panel.add(label_7);
 		
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//
-				System.exit(0);
+				new usersInformation();
+				frmEditUserGUI.setVisible(false);
 			}			
 		});
-		cancel.setBounds(100, 363, 89, 23);
+		cancel.setBounds(102, 343, 89, 23);
 		panel.add(cancel);
 		
 		JLabel lblPleaseSelectA = new JLabel("Please select a user to edit then, press submit to change the users information");
 		lblPleaseSelectA.setBounds(10, 11, 558, 14);
-		panel.add(lblPleaseSelectA);		
+		panel.add(lblPleaseSelectA);
 		
-		JLabel lblReenterPassword = new JLabel("Re-enter Password");
-		lblReenterPassword.setBounds(55, 319, 306, 14);
-		panel.add(lblReenterPassword);
-		
-		JLabel rePassVal = new JLabel("");
-		rePassVal.setBounds(201, 338, 380, 14);
-		panel.add(rePassVal);
-		
-		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				User updateUser = new User();	
-				int userID = Integer.parseInt(userIDField.getText());
-				updateUser.setFirstName(firstnameField.getText());
-				updateUser.setSurname(surnameField.getText());
-				updateUser.setAccountType((String) accountTypeBox.getSelectedItem());
-				updateUser.setGender((String) genderBox.getSelectedItem());
-				updateUser.setPasswordHash("asdfasdf");
-				updateUser.setUserID(userID);
-				updateUser.setUsername(usernameField.getText());
-				db.updateUser(updateUser);
-			}
-		});
-		submit.setBounds(256, 363, 89, 23);
-		panel.add(submit);
-				
-		passwordField_1 = new JPasswordField();
-		passwordField_1.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (passwordField.getText().equals(passwordField_1.getText())){
-					rePassVal.setText("");
-					passMatch = true;
-				}
-				else{
-					rePassVal.setText("Passwords must match");
-					passMatch = false;
-				}
-			}
-		});
-		passwordField_1.setBounds(201, 316, 182, 20);
-		panel.add(passwordField_1);		
+		JLabel resetConfirm = new JLabel("");
+		resetConfirm.setBounds(201, 318, 230, 14);
+		panel.add(resetConfirm);
 		
 		List<User> userList = db.pullUsers();
 		
@@ -240,7 +177,7 @@ public class editUserGUI {
 			users[i] = user.getUsername();
 			i++;
     	}
-		
+				
 		JComboBox userDropDown = new JComboBox();
 		userDropDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -258,6 +195,40 @@ public class editUserGUI {
 		userDropDown.setBounds(127, 49, 201, 20);
 		panel.add(userDropDown);
 		
+
+		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				resetPass=true;				
+				resetConfirm.setText("Password Reset to 'password'");
+			}
+		});
+		btnReset.setBounds(201, 295, 89, 23);
+		panel.add(btnReset);
+		
+		JButton submit = new JButton("Submit");
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				User updateUser = new User();	
+				int userID = Integer.parseInt(userIDField.getText());
+				updateUser.setFirstName(firstnameField.getText());
+				updateUser.setSurname(surnameField.getText());
+				updateUser.setAccountType((String) accountTypeBox.getSelectedItem());
+				updateUser.setGender((String) genderBox.getSelectedItem());
+				updateUser.setUserID(userID);
+				if(resetPass==true){
+					Security.main("password");
+					updateUser.setPasswordHash(Security.getHashedPass());
+				}
+				updateUser.setUsername(usernameField.getText());
+				db.updateUser(updateUser);
+				frmEditUserGUI.setVisible(false);
+				new usersInformation();
+			}
+		});
+		submit.setBounds(257, 343, 89, 23);
+		panel.add(submit);
+		
 		userIDField = new JTextField();
 		userIDField.setEditable(false);
 		userIDField.setBounds(201, 80, 180, 20);
@@ -267,11 +238,15 @@ public class editUserGUI {
 		JLabel lblUserid = new JLabel("UserID");
 		lblUserid.setBounds(55, 83, 76, 14);
 		panel.add(lblUserid);
+				
+		JLabel lblResetPassword = new JLabel("Reset Password");
+		lblResetPassword.setBounds(55, 299, 108, 14);
+		panel.add(lblResetPassword);	
 		
 		frmEditUserGUI.getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				if(firstnameField.getText().equals("") || surnameField.getText().equals("")|| passMatch == false){
+				if(firstnameField.getText().equals("") || surnameField.getText().equals("")){
 					submit.setEnabled(false);
 					}
 				else{submit.setEnabled(true);}
