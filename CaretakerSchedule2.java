@@ -1,4 +1,3 @@
-package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,10 +54,11 @@ public class CaretakerSchedule2 extends JFrame{
 		JButton btnUndo = new JButton("Undo");
 		//ActionListener, when button is clicked
 		btnUndo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Hides frame and creates new Main
+			public void actionPerformed(ActionEvent arg0) {
+				//Hides frame
 				frame.hide();
-				new Main();
+				//Opens Task Reports
+				new CaretakerSchedule2();
 			}
 		});
 		btnUndo.setBounds(0, 366, 330, 49);
@@ -70,7 +70,7 @@ public class CaretakerSchedule2 extends JFrame{
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Hides the frame
-				frame.hide();
+				frame.setVisible(false);
 				//Creates TaskLogging 
 				new TaskLogging();
 
@@ -96,17 +96,26 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"Time", "Priority", "Title", "Time Allocated", "Notes"
+				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes"
 			}
 		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, true
+				true, false, false, false, false, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(3).setPreferredWidth(103);
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+		table.getColumnModel().getColumn(4).setPreferredWidth(103);
 		
 		
 		//JButton for Assign New Tasks	
@@ -122,7 +131,10 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnAssignNewTasks.setBounds(225, 328, 213, 25);
-		frame.getContentPane().add(btnAssignNewTasks);
+		frame.getContentPane().add(btnAssignNewTasks);;
+		
+		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
+		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
 		
 		//JButton for Completed Tasks
 		JButton btnEditCompletedTask = new JButton("Completed Tasks");
@@ -136,10 +148,7 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnEditCompletedTask.setBounds(503, 13, 148, 25);
-		frame.getContentPane().add(btnEditCompletedTask);
-		
-		table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());;
-		table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JTextField()));
+		frame.getContentPane().add(btnEditCompletedTask);;
 		
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
@@ -155,8 +164,20 @@ public class CaretakerSchedule2 extends JFrame{
 									+ "\n then, tick the tasks you want and press 'submit'.");
 			}		
 		});
-		btnHelp.setBounds(12, 13, 97, 25);
+		btnHelp.setBounds(12, 328, 97, 25);
 		frame.getContentPane().add(btnHelp);
+		
+		JButton btnLogout = new JButton("Log-out");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Hides frame
+				frame.hide();
+				//Opens Task Reports
+				new loginGUI();
+			}
+		});
+		btnLogout.setBounds(12, 13, 97, 25);
+		frame.getContentPane().add(btnLogout);
 		
 		//Table for caretakers tasks
 		model = (DefaultTableModel) table.getModel();
@@ -183,7 +204,7 @@ public class CaretakerSchedule2 extends JFrame{
 				//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1
 				if(task.getTaskCompleted() == false) {
 					//Fills in table with respective data
-				model.addRow(new Object[]{newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
+				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
 				}
 			}
 			cal.add(Calendar.MINUTE, task.getTaskDuration());
@@ -248,7 +269,7 @@ class ButtonEditor extends DefaultCellEditor
 	@Override
 		public Object getCellEditorValue() {
 			
-			int column1 = 2;
+			int column1 = 3;
 			int row1 = 1;
 			String value = "";
 			

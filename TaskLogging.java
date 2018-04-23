@@ -17,6 +17,7 @@ public class TaskLogging {
 	public static DefaultTableModel model;
 	private JTextField txtTaskName;
 	private Database db;
+	private JTextField txtTaskID;
 
 
 	/**
@@ -63,70 +64,17 @@ public class TaskLogging {
 		JLabel lblCaretakerName = new JLabel("Caretaker Name:");
 		lblCaretakerName.setBounds(23, 62, 117, 14);
 		frmTaskLogging.getContentPane().add(lblCaretakerName);
-		
-		
-		
+			
 		//JLabel for TimeOfCompletion 
 		JLabel lblTimeOfCompletion = new JLabel("Time of Completion: ");
 		lblTimeOfCompletion.setBounds(23, 87, 134, 14);
 		frmTaskLogging.getContentPane().add(lblTimeOfCompletion);
 		
 		//JLabel for AdditionalComments
-		JLabel lblAdditionalComments = new JLabel("Additional Comments:");
-		lblAdditionalComments.setBounds(23, 112, 134, 14);
-		frmTaskLogging.getContentPane().add(lblAdditionalComments);
-		
-		//JButton for Submit
-		JButton btnSubmit = new JButton("Submit");
-		//ActionListener for when button is clicked
-		btnSubmit.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				//When clicked, shows Dialog confirming action 
-				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
-				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				    //If, the user selects the 'No' option
-				    if (response == JOptionPane.NO_OPTION) {
-				    	//Prints nothing
-				        System.out.println("");
-				    //Else if, the user selects the 'yes' option
-				    } else if (response == JOptionPane.YES_OPTION) {
-				    	int column = 2;
-						int row = 2;
-						String value = "";
-						
-						//Sets row to the selected row
-						row = CaretakerSchedule2.table.getSelectedRow();
-						//Sets value to the Model
-						value = CaretakerSchedule2.table.getModel().getValueAt(row, column).toString();
-						//For loop, Goes through the tasks
-						for(Task task : Main.tasks)
-					    {
-							//If, the TaskTitle is equal to the String value
-							if(task.getTaskTitle() == value) {
-								//Sets the test to the taskTitle
-						    	task.setTaskCompleted(true);
-						    	//task.setTaskAssigned(); FIX THIS!!!!!!!!!!!!!1
-						    	//task.setTaskNotes(taskNotes); THIS TOO!!!!!!!!!!!!!!
-						    	//task.setCompletedTimeand Date - Will needs to step up
-						    	
-
-							}
-					    }
-				    	//Prints Task has been logged
-				    	System.out.println("Task has been logged");
-				    	//Hides this JFrame
-				    	frmTaskLogging.setVisible(false); 
-				    	//Opens CaretakerSchedule2
-				    	new CaretakerSchedule2();
-				    	
-				    	//Updates database, task logged
-				    	//UPDATE DATABASEs
-				    } 
-			}
-		});
-		btnSubmit.setBounds(169, 215, 89, 23);
-		frmTaskLogging.getContentPane().add(btnSubmit);
-		
+		JLabel lblNotes = new JLabel("Notes:");
+		lblNotes.setBounds(23, 112, 134, 14);
+		frmTaskLogging.getContentPane().add(lblNotes);
+	
 		//JButton for Cancel
 		JButton btnCancel = new JButton("Cancel");
 		//ActionLinstener for when it is clicked
@@ -143,19 +91,20 @@ public class TaskLogging {
 		});		
 		btnCancel.setBounds(290, 215, 89, 23);
 		frmTaskLogging.getContentPane().add(btnCancel);
-		
+	
 		//Jspinner for TimeOfCompletion 
-		JSpinner spinner = new JSpinner();
+		JSpinner spinnerTime = new JSpinner();
 		//Gets current time
 		Date datenow = Calendar.getInstance().getTime();
 		SpinnerDateModel smb = new SpinnerDateModel(datenow, null, null, Calendar.HOUR_OF_DAY);
-		spinner.setModel(smb);
+		spinnerTime.setModel(smb);
 		//Displays day, month, year, hour, minute currently
-		JSpinner.DateEditor d = new JSpinner.DateEditor(spinner, "dd-MM-yyyy HH:mm");
-		spinner.setEditor(d);
-		spinner.setBackground(new Color(240, 240, 240));
-		spinner.setBounds(169, 83, 134, 22);
-		frmTaskLogging.getContentPane().add(spinner);
+		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "HH:mm");
+		spinnerTime.setEditor(de_spinnerTime);
+		spinnerTime.setBackground(new Color(240, 240, 240));
+		spinnerTime.setBounds(169, 83, 134, 22);
+		frmTaskLogging.getContentPane().add(spinnerTime);
+		
 		
 		List<User> userList = db.pullUsers();
 		
@@ -165,26 +114,21 @@ public class TaskLogging {
 			users[i] = user.getFirstName();
 			i++;
     	}
+		
 		//JComboBox for choosing caretakers
 		JComboBox comboCaretakerName = new JComboBox();
-		//if(user.getAccountType() == "Caretaker") {  NEED TO FIX!!!!!!!!
-			User user = db.pullSingleUser((String) comboCaretakerName.getSelectedItem());
+		comboCaretakerName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+		//if(user.getAccountType() == "Caretaker") {  NEED TO FIX! only caretakers to show
+				User user = db.pullSingleUser((String) comboCaretakerName.getSelectedItem());
+			}
+		});
 		//}
 		//List of Options
 		comboCaretakerName.setModel(new DefaultComboBoxModel(users));
 		comboCaretakerName.setBounds(169, 58, 134, 22);
 		frmTaskLogging.getContentPane().add(comboCaretakerName);
 		
-		//JScrollPane for JTextArea, so overflow of text can be seen
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(169, 112, 210, 90);
-		frmTaskLogging.getContentPane().add(scrollPane);
-		
-		//JTextArea for Additional comments to be added
-		JTextArea txtrTypeAnyComment = new JTextArea();
-		scrollPane.setViewportView(txtrTypeAnyComment);
-		txtrTypeAnyComment.setText("#Type any comments here");
-		txtrTypeAnyComment.setLineWrap(true);
 		
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
@@ -207,13 +151,30 @@ public class TaskLogging {
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(23, 33, 134, 16);
 		frmTaskLogging.getContentPane().add(lblTaskName);
+			
+		//JScrollPane for JTextArea, so overflow of text can be seen
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(169, 112, 210, 90);
+		frmTaskLogging.getContentPane().add(scrollPane);
+		
+		//JTextArea for Additional comments to be added
+		JTextArea txtrNotes = new JTextArea();
+		scrollPane.setViewportView(txtrNotes);
+		txtrNotes.setLineWrap(true);
+		
+		txtTaskID = new JTextField();		
+		txtTaskID.setBounds(169, 0, 116, 22);
+		frmTaskLogging.getContentPane().add(txtTaskID);
+		txtTaskID.setColumns(10);
+		txtTaskID.setVisible(false);
+		
 		
 		//JTextField for txtTaskName
 		txtTaskName = new JTextField();
 
 		//Defines variables column, row and value
-				int column = 2;
-				int row = 2;
+				int column = 3;
+				int row;
 				String value = "";
 				
 				//Sets row to the selected row
@@ -227,6 +188,12 @@ public class TaskLogging {
 					if(task.getTaskTitle() == value) {
 						//Sets the test to the taskTitle
 						txtTaskName.setText(task.getTaskTitle());
+						txtrNotes.setText(task.getTaskNotes());
+						int ID = task.getTaskID();
+						String IDString= Integer.toString(ID);
+						txtTaskID.setText(IDString);
+						int Time = task.getTaskID();
+						String StringTime= Integer.toString(Time);
 					}
 			    }
 				//Makes textbox uneditable 
@@ -234,6 +201,46 @@ public class TaskLogging {
 				txtTaskName.setBounds(169, 30, 116, 22);
 				frmTaskLogging.getContentPane().add(txtTaskName);
 				txtTaskName.setColumns(10);
+				
+			
+				//JButton for Submit
+				JButton btnSubmit = new JButton("Submit");
+				//ActionListener for when button is clicked
+				btnSubmit.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent arg0){
+						//When clicked, shows Dialog confirming action 
+						int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
+						        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						    //If, the user selects the 'No' option
+						    if (response == JOptionPane.NO_OPTION) {
+						    	//Prints nothing
+						        System.out.println("");
+						    //Else if, the user selects the 'yes' option
+						    } else if (response == JOptionPane.YES_OPTION) {
+						    	
+					    	    Task updateTask = new Task();	
+								int taskID = Integer.parseInt(txtTaskID.getText());
+								updateTask.setTaskNotes(txtrNotes.getText());
+								//int taskTimeCompleted = Integer.parseInt(spinnerTime.getText());
+								//updateTask.setTaskTimeCompleted(taskTimeCompleted);
+								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
+								updateTask.setTaskCompleted(true);
+								updateTask.setTaskID(taskID);
+								db.updateTask(updateTask);
+
+						    	//Prints Task has been logged
+						    	System.out.println("Task has been logged");
+						    	//Hides this JFrame
+						    	frmTaskLogging.setVisible(false); 
+						    	//Opens CaretakerSchedule2
+						    	new CaretakerSchedule2();
+						    } 
+					}
+				});
+				btnSubmit.setBounds(169, 215, 89, 23);
+				frmTaskLogging.getContentPane().add(btnSubmit);
+				
+
 
 	}
 } 
