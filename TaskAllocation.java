@@ -82,11 +82,11 @@ public class TaskAllocation {
 			new Object[][] {
 			},
 			new String[] {
-				"Priority", "Time", "Name", "Due date", "Notes","Assign"
+				"TaskID", "Priority", "Time", "Name", "Due date", "Notes","Assign"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
+				Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -99,9 +99,16 @@ public class TaskAllocation {
 
 		for(Task task : Main.tasks)
 	    {
+			String taskAssID = task.getTaskAssigned();
+			if(taskAssID == null) {
+				taskAssID = "0";
+			}
 			//Fill out the table with tasks that are not assigned and tasks that are assigned to the user already
-			if(task.getTaskAssigned() == null /* OR IF TASK IS ASSIGNED TO USER|| task.getTaskAssigned() == true*/) {
-				model.addRow(new Object[]{task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", task.getTaskAssigned()});
+			if(taskAssID == "0" || taskAssID.equals("null")) {
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", false});
+			}
+			if(taskAssID.equals(Main.user.getUsername())) {
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", true});
 			}
 	    }
 		scrollPane.setViewportView(createData((DefaultTableModel) table.getModel()));
@@ -111,18 +118,18 @@ public class TaskAllocation {
 			public void actionPerformed(ActionEvent e) {
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
-					Boolean value = (Boolean) table.getModel().getValueAt(i, 5);
+					Boolean value = (Boolean) table.getModel().getValueAt(i, 6);
 					if (value == null) {
 						value = false;
 					}
 					for(Task task : Main.tasks)
 				    {
-						if(task.getTaskTitle().equals(model.getValueAt(i, 2).toString()) && value == true) {
+						if(task.getTaskID() == (Integer.valueOf((int) model.getValueAt(i, 0))) && value == true) {
 							//Set task assigned to the users id
-							task.setTaskAssigned("123");
+							task.setTaskAssigned(Main.user.getUsername());
 						}
 						//Allow user to de-select a task
-						if(task.getTaskTitle() == table.getModel().getValueAt(i, 2).toString() && value == false) {
+						if(task.getTaskID() == Integer.valueOf((int) model.getValueAt(i, 0)) && value == false) {
 							task.setTaskAssigned(null);
 						}
 				    }
@@ -162,7 +169,7 @@ public class TaskAllocation {
 				{
 					c.setBackground(getBackground());
 					int modelRow = convertRowIndexToModel(row);
-					String type = (String)getModel().getValueAt(modelRow, 0);
+					String type = (String)getModel().getValueAt(modelRow, 1);
 					if ("Low".equals(type)) c.setBackground(Color.GREEN);
 					if ("Medium".equals(type)) c.setBackground(Color.YELLOW);
 					if ("High".equals(type)) c.setBackground(Color.RED);
@@ -179,4 +186,3 @@ public class TaskAllocation {
 		return new JScrollPane( table );
 	}
 }
-

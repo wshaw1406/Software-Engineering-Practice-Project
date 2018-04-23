@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,13 +72,15 @@ public class CaretakerSchedule2 extends JFrame{
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Hides the frame
-				frame.setVisible(false);
+			//	frame.setVisible(false);
 				//Creates TaskLogging 
-				new TaskLogging();
+			//	new TaskLogging();
 
 				// UPDATE DB WITH EACH ARRAY LIST ITEM
-
-
+				Database db = new Database();
+				for(Task task:Main.tasks) {
+					db.updateTask(task);
+				}
 			}
 		});
 		btnComplete.setBounds(330, 366, 330, 49);
@@ -195,21 +199,28 @@ public class CaretakerSchedule2 extends JFrame{
 		 String newTime = df.format(cal.getTime());
 		 			
 		//For loop, runs through the tasks in Main
-		for(Task task : Main.tasks)
-	    {
-			System.out.println(task.getTaskAssigned());
-			//If, taskAssigned == users id
-			if(task.getTaskAssigned() == null) {
-				//If, taskCompleted is false, run code
-				//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1
-				if(task.getTaskCompleted() == false) {
-					//Fills in table with respective data
-				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
+		 for(Task task : Main.tasks) {
+				//If, taskAssigned == users id
+				String userID = Main.user.getUsername();
+				String taskAssID;
+				if(task.getTaskAssigned() != null) {
+					 taskAssID = task.getTaskAssigned();
 				}
-			}
-			cal.add(Calendar.MINUTE, task.getTaskDuration());
-			newTime = df.format(cal.getTime());
-	    }
+				else {
+					taskAssID = "0";
+				}
+				
+				if(taskAssID.equals(userID)) {
+					//If, taskCompleted is false, run code
+					//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1
+					if(task.getTaskCompleted() == false) {
+						//Fills in table with respective data
+						model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), task.getTaskNotes()});
+					}
+				}
+				cal.add(Calendar.MINUTE, task.getTaskDuration());
+				newTime = df.format(cal.getTime());
+		  }
 		
 		// Runs sort function
 		sort();

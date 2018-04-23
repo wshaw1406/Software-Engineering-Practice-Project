@@ -5,16 +5,16 @@ import java.util.*;
 import java.util.Date;
 
 public class Database {
-	private Connection con;
+	private static Connection con;
 	
 	public Database() {
 
 	}
 	
-	public void connect() {
+	public static void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:F:\\Uni Work\\Software Development Practice\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Jordan\\Documents\\GitHub\\Software-Engineering-Practice-Project\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{
@@ -22,7 +22,7 @@ public class Database {
 		}
 	}
 	
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
 		con.close();
 		}
