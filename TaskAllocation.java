@@ -94,6 +94,9 @@ public class TaskAllocation {
 		});
 		
 		table.getColumnModel().getColumn(2).setPreferredWidth(95);
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		
 		model = (DefaultTableModel) table.getModel();
 

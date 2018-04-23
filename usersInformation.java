@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,6 +12,8 @@ import javax.swing.JTable;
 import java.awt.FlowLayout;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class usersInformation {
 
@@ -37,6 +41,7 @@ public class usersInformation {
 	 */
 	public usersInformation() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -79,6 +84,12 @@ public class usersInformation {
 		frame.getContentPane().add(label_2);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new UserReports();
+			}
+		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnReport.setBounds(395, 268, 89, 23);
 		frame.getContentPane().add(btnReport);
@@ -104,20 +115,18 @@ public class usersInformation {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
 			},
 			new String[] {
 				"ID", "First Name", "Surname"
 			}
 		));
 		scrollPane.setViewportView(table);
+		
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+		for(User user: Main.users) {
+			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname()});	
+		}
 		
 		JButton button_3 = new JButton("Back");
 		button_3.setBounds(422, 11, 89, 23);
