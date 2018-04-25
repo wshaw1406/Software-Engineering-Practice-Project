@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class adminGUI {
 
@@ -47,6 +46,17 @@ public class adminGUI {
 		frmAdministration.getContentPane().setLayout(null);
 		
 		JButton btnLogout = new JButton("Log-out");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to log out", "log out", 
+                        JOptionPane.YES_NO_OPTION); 
+				if (choice == JOptionPane.YES_OPTION) {
+					frmAdministration.setVisible(false);
+					new loginGUI();
+				}				
+			}
+		});
 		btnLogout.setBounds(465, 11, 89, 23);
 		frmAdministration.getContentPane().add(btnLogout);
 		
