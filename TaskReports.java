@@ -8,18 +8,29 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TaskReports {
 
@@ -29,6 +40,7 @@ public class TaskReports {
 	private static JComboBox cmBxType;
 	private static JComboBox cmBxComplete;
 	private static JComboBox cmBxTaskAssigned;
+	private static JComboBox cmBxWhoAssigned;
 
 
 	/**
@@ -60,7 +72,7 @@ public class TaskReports {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 591, 462);
+		frame.setBounds(100, 100, 591, 494);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -75,7 +87,7 @@ public class TaskReports {
 				}
 			}
 		});
-		btnDownload.setBounds(222, 377, 97, 25);
+		btnDownload.setBounds(226, 409, 97, 25);
 		frame.getContentPane().add(btnDownload);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -101,7 +113,7 @@ public class TaskReports {
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 274, 549, 90);
+		panel.setBounds(12, 274, 549, 122);
 		frame.getContentPane().add(panel);
 		
 		JPanel panel_1 = new JPanel();
@@ -137,44 +149,90 @@ public class TaskReports {
 		cmBxTaskAssigned.setSelectedIndex(0);
 		panel_6.add(cmBxTaskAssigned);
 		
-		JPanel panel_3 = new JPanel();
-		panel.add(panel_3);
+		JPanel panel_7 = new JPanel();
+		panel.add(panel_7);
 		
-		JLabel lblSrchCompletedBy = new JLabel("Completed by");
-		panel_3.add(lblSrchCompletedBy);
+		JLabel lblCompletedBy = new JLabel("Assigned To");
+		panel_7.add(lblCompletedBy);
 		
-		JComboBox cmBxCompletedBy = new JComboBox();
-		cmBxCompletedBy.setModel(new DefaultComboBoxModel(new String[] {"Any"}));
-		cmBxCompletedBy.setSelectedIndex(0);
-		panel_3.add(cmBxCompletedBy);
+		cmBxWhoAssigned = new JComboBox();
+		cmBxWhoAssigned.setModel(new DefaultComboBoxModel(new String[] {"Any"}));
+		cmBxWhoAssigned.setSelectedIndex(0);
+		panel_7.add(cmBxWhoAssigned);
+		
+		for(User user : Main.users) {
+			cmBxWhoAssigned.addItem(user.getUsername());
+		}
 		
 		JPanel panel_4 = new JPanel();
 		panel.add(panel_4);
 		
-		JLabel lblCompletedBefore = new JLabel("Completed Before");
+		JLabel lblCompletedBefore = new JLabel("Completed After");
 		panel_4.add(lblCompletedBefore);
 		
 		JPanel panel_5 = new JPanel();
 		panel.add(panel_5);
 		
-		JLabel lblCompletedAfter = new JLabel("Completed After");
+		JLabel lblCompletedAfter = new JLabel("Completed Before");
 		panel_5.add(lblCompletedAfter);
 		
 		TaskReportsAL actionListener = new TaskReportsAL();
 	    cmBxType.addItemListener(actionListener);
 	    cmBxComplete.addItemListener(actionListener);
 	    cmBxTaskAssigned.addItemListener(actionListener);
+	    cmBxWhoAssigned.addItemListener(actionListener);
+	    
+	    UtilDateModel Dmodel = new UtilDateModel();
+	    Dmodel.setDate(1, 1, 2018);
+	  // Need this...
+	    Properties p = new Properties();
+	    p.put("text.today", "Today");
+	    p.put("text.month", "Month");
+	    p.put("text.year", "Year");
+	    JDatePanelImpl datePanel = new JDatePanelImpl(Dmodel, p);
+	    
+	    // Don't know about the formatter, but there it is...
+	    JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+	    datePicker.getJFormattedTextField().addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		System.out.println("Hello");
+	    	}
+	    });
+	    
+	    panel_5.add(datePicker);
+	    
 	    
 	    updateTable();
 	    
 	}
-	
+	public class DateLabelFormatter extends AbstractFormatter {
+
+	    private String datePattern = "dd-MM-yyyy";
+	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	    @Override
+	    public Object stringToValue(String text) throws ParseException {
+	        return dateFormatter.parseObject(text);
+	    }
+
+	    @Override
+	    public String valueToString(Object value) throws ParseException {
+	        if (value != null) {
+	            Calendar cal = (Calendar) value;
+	            return dateFormatter.format(cal.getTime());
+	        }
+
+	        return "";
+	    }
+
+	}
 	public static void updateTable() {
 
 		model = (DefaultTableModel) table.getModel();
 		String complete = (String) cmBxComplete.getSelectedItem();
 		String type = (String) cmBxType.getSelectedItem();
 		String assigned = (String) cmBxTaskAssigned.getSelectedItem();
+		String whoAssigned = (String) cmBxWhoAssigned.getSelectedItem();
 
 		clearTable();
 		
@@ -185,6 +243,12 @@ public class TaskReports {
 			}
 			else {
 				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
+			}
+		}
+		
+		for(int i = model.getRowCount() - 1; i>= 0; i--) {
+			if(model.getValueAt(i, 3).equals("null")) {
+				model.setValueAt("None", i, 3);
 			}
 		}
 		
@@ -244,6 +308,20 @@ public class TaskReports {
 				};
 			break;
 		}
+		
+		if(whoAssigned != "Any") {
+			for (int i = model.getRowCount() - 1; i>= 0; i--) {
+				String value = (String) model.getValueAt(i, 3);
+				if(!value.equals("None")) {
+					if(!value.equals(whoAssigned)) {
+						model.removeRow(i);
+					}
+				}
+				if(value.equals("None")) {
+					model.removeRow(i);
+				}
+			}
+		}
 	}
 	
 	public static void clearTable() {
@@ -301,3 +379,4 @@ class TaskReportsAL implements ItemListener {
 		    }
 	  }
 	}
+

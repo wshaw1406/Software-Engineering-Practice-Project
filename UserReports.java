@@ -100,6 +100,16 @@ public class UserReports {
 		panel.setBounds(0, 274, 573, 85);
 		frame.getContentPane().add(panel);
 		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new usersInformation();
+			}
+		});
+		btnBack.setBounds(31, 377, 97, 25);
+		frame.getContentPane().add(btnBack);
+		
 		UserReportsAL actionListener = new UserReportsAL();
 	    
 	    updateTable();
