@@ -18,6 +18,7 @@ public class loginGUI extends JFrame {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private Database db;
+	public static String loggedIn;
 
 	/**
 	 * Launch the application.
@@ -34,11 +35,15 @@ public class loginGUI extends JFrame {
 			}
 		});
 	}
-
+	
+	public static String getLoggedIn(){
+		return loggedIn;
+	}
 
 	public loginGUI() {
 		db = new Database();
 		initialize();
+		frmLogin.setVisible(true);
 	}
 
 	/**
@@ -91,9 +96,12 @@ public class loginGUI extends JFrame {
 						if(user.getUsername().equals(textField.getText()) && Security.getHashedPass().equals(retrievedHashedPass)){
 							if(user.getAccountType().equals("Administrator")){
 								new adminGUI();
+								loggedIn= user.getUsername();
+								frmLogin.setVisible(false);
 							}
 							else{
 								new CaretakerSchedule2();
+								frmLogin.setVisible(false);
 							}
 						}
 						else{
@@ -111,8 +119,8 @@ public class loginGUI extends JFrame {
 		JButton btnForgot = new JButton("Forgotten Password");
 		btnForgot.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				//
-				
+				new ForgottenPassword();		
+				frmLogin.setVisible(false);
 			}			
 		});
 		btnForgot.setFont(new Font("Tahoma", Font.PLAIN, 12));
