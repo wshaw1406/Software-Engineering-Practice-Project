@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.DefaultComboBoxModel;
@@ -64,8 +66,9 @@ public class UserReports {
 		JButton btnDownload = new JButton("Download");
 		btnDownload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String fileName = JOptionPane.showInputDialog("Name File", "Type in file name:");
 				try {
-					download();
+					download(fileName);
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -137,37 +140,35 @@ public class UserReports {
 		}
 	}
 	
-	private void download() throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(new File("TaskReport.csv"));
+	private void download(String fileName) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(new File(fileName + ".csv"));
         StringBuilder sb = new StringBuilder();
         
         //Set up csv format
         
-        sb.append("Task ID");
+		model = (DefaultTableModel) table.getModel();
+        
+        sb.append("User ID");
         sb.append(',');
-        sb.append("Task Name");
+        sb.append("First Name");
         sb.append(',');
-        sb.append("Task Time");
+        sb.append("Last Name");
         sb.append(',');
-        sb.append("Task Assigned?");
+        sb.append("# Tasks completed");
         sb.append(',');
-        sb.append("Task Completed?");
+        sb.append("# Tasks assigned");
+        sb.append(',');
+        sb.append("# last Tasks");
         sb.append('\n');
         
-        for(Task task : Main.tasks)
-	    {
-			sb.append(task.getTaskID());
-	        sb.append(',');
-	        sb.append(task.getTaskTitle());
-	        sb.append(',');
-	      //  sb.append(task.getTaskTime());
-	        sb.append(',');
-	        sb.append(task.getTaskAssigned());
-	        sb.append(',');
-	        sb.append(task.getTaskCompleted());
-	        sb.append('\n');
-	    }
-
+        for(int i = 0; i < model.getRowCount() ; i++) {
+        	for(int j = 0; j < model.getColumnCount(); j++) {
+        		sb.append(model.getValueAt(i, j));
+        		sb.append(",");
+        	}
+        	sb.append("\n");
+        }
+        
         pw.write(sb.toString());
         pw.close();
         System.out.println("done!");

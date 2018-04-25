@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -104,7 +105,7 @@ public class TaskReports {
 			new Object[][] {
 			},
 			new String[] {
-				"Task ID", "Task Name", "Task Type", "Task assigned?", "Task Duration","Completed by", "Completed Date", "Completed Time"
+				"Task ID", "Task Name", "Task Type", "Task assigned?", "Task Duration", "Completed by", "Completed Date", "Completed Time"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
@@ -181,32 +182,31 @@ public class TaskReports {
 		JLabel lblCompletedAfter = new JLabel("Completed Before");
 		panel_5.add(lblCompletedAfter);
 		
-		TaskReportsAL actionListener = new TaskReportsAL();
-	    cmBxType.addItemListener(actionListener);
-	    cmBxComplete.addItemListener(actionListener);
-	    cmBxTaskAssigned.addItemListener(actionListener);
-	    cmBxWhoAssigned.addItemListener(actionListener);
-	    
-	    UtilDateModel Dmodel = new UtilDateModel();
-	    Dmodel.setDate(1, 1, 2018);
-	  // Need this...
+		UtilDateModel Dmodel = new UtilDateModel();
+		// Dmodel.setDate(1, 1, 2018);
+		// Need this...
 	    Properties p = new Properties();
 	    p.put("text.today", "Today");
 	    p.put("text.month", "Month");
 	    p.put("text.year", "Year");
 	    JDatePanelImpl datePanel = new JDatePanelImpl(Dmodel, p);
-	    
+		    
 	    // Don't know about the formatter, but there it is...
 	    JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-	    datePicker.getJFormattedTextField().addActionListener(new ActionListener() {
+	    datePicker.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		System.out.println("Hello");
+	    		updateTable();
 	    	}
 	    });
-	    
-	    panel_5.add(datePicker);
-	    
-	    
+		    
+		panel_5.add(datePicker);
+		
+		TaskReportsAL actionListener = new TaskReportsAL();
+	    cmBxType.addItemListener(actionListener);
+	    cmBxComplete.addItemListener(actionListener);
+	    cmBxTaskAssigned.addItemListener(actionListener);
+	    cmBxWhoAssigned.addItemListener(actionListener);
+	    	    
 	    updateTable();
 	    
 	}
@@ -244,7 +244,7 @@ public class TaskReports {
 		for(Task task : Main.tasks)
 		{
 			if(task.getTaskAssigned() == null) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), "None",task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});	
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), "None", task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});	
 			}
 			else {
 				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
@@ -379,11 +379,10 @@ public class TaskReports {
 class TaskReportsAL implements ItemListener {
 	  // This method is called only if a new item has been selected.
 	  public void itemStateChanged(ItemEvent evt) {
-
 		    if (evt.getStateChange() == ItemEvent.SELECTED) {
 		      // Item was just selected
+		    	System.out.println("Updating table!");
 		    	TaskReports.updateTable();
 		    }
 	  }
-	}
-
+}
