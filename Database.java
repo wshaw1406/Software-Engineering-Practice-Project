@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -14,7 +12,7 @@ public class Database {
 	public static void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Jordan\\Documents\\GitHub\\Software-Engineering-Practice-Project\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mgc29\\Documents\\UNI\\2 Software Engineering Practice\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{
@@ -41,6 +39,40 @@ public class Database {
 	        {
 			 	Statement stmt = con.createStatement(); 
 	            rs = stmt.executeQuery("SELECT * FROM task");
+	            while(rs.next())
+	            {
+	            	int id = rs.getInt("taskID");
+	            	String type = rs.getString("taskType");
+	            	String title = rs.getString("taskTitle");
+	            	String notes = rs.getString("taskNotes");
+	            	int duration = rs.getInt("taskDuration");
+	            	String assigned = rs.getString("taskAssigned");
+	            	boolean completed = rs.getBoolean("taskCompleted");
+	                String priority = rs.getString("taskPriority");
+	                int taskTimeCompleted = rs.getInt("taskTimeCompleted");
+	            	
+	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority, taskTimeCompleted));
+	            }
+	        }
+	        catch(Exception exc)
+	        {
+	            exc.printStackTrace();
+	        }
+	      
+	        closeConnection();
+	        return tasks;
+	    }
+	 
+	 public List<Task> pullUsersTasks(String userID)
+	    {
+			connect();
+	        ResultSet rs = null;
+	        List<Task> tasks = new ArrayList<Task>();
+	        
+	        try
+	        {
+			 	Statement stmt = con.createStatement(); 
+	            rs = stmt.executeQuery("SELECT * FROM task WHERE taskAssigned = '" + userID + "';");
 	            while(rs.next())
 	            {
 	            	int id = rs.getInt("taskID");
@@ -220,6 +252,35 @@ public class Database {
 	        return users;
 	    }
 	 
+	 public List<User> pullCaretakers()
+	    {
+			connect();
+	        ResultSet rs = null;
+	        List<User> users = new ArrayList<User>();
+	        try
+	        {
+			 	Statement stmt = con.createStatement(); 
+	            rs = stmt.executeQuery("SELECT * FROM users WHERE accountType = 'Caretaker'");
+	            while(rs.next())
+	            {
+	            	int id = rs.getInt("userID");
+	            	String username = rs.getString("username");
+	            	String passwordHash = rs.getString("passwordHash");
+	            	String firstname = rs.getString("firstname");
+	            	String surname = rs.getString("surname");
+	            	String accountType = rs.getString("accountType");
+	            	String gender = rs.getString("gender");
+	            	
+	            	users.add(new User(id, username, passwordHash, firstname, surname, gender, accountType));
+	            }
+	        }
+	        catch(Exception exc)
+	        {
+	            exc.printStackTrace();
+	        }
+	        closeConnection();
+	        return users;
+	    }
 	 public User pullSingleUser(String usernameSearch) {
 			connect();
 		 ResultSet rs = null;

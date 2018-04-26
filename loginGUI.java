@@ -85,15 +85,20 @@ public class loginGUI extends JFrame {
 				User user = db.pullSingleUser(textField.getText());
 				
 				try{
+					System.out.println("here");
 					String retrievedHashedPass = user.getPasswordHash();	
+					@SuppressWarnings("deprecation")
 					String enteredPassword = passwordField.getText();
 					Security.main(enteredPassword);
-						if(user.getUsername().equals(textField.getText()) && Security.getHashedPass().equals(retrievedHashedPass)){
+					System.out.println(Security.getHashedPass());
+						if(Security.getHashedPass().equals(retrievedHashedPass)){
 							if(user.getAccountType().equals("Administrator")){
+								Main.user = db.pullSingleUser(user.getUsername());
 								new adminGUI();
 								frmLogin.setVisible(false);
 							}
 							else{
+								Main.user = db.pullSingleUser(user.getUsername());
 								new CaretakerSchedule2();
 								frmLogin.setVisible(false);
 							}
@@ -103,6 +108,7 @@ public class loginGUI extends JFrame {
 						}				
 					}
 					catch(NullPointerException e1){ 
+						System.out.println(e1.toString());
 						JOptionPane.showMessageDialog(null, "Incorrect Login details");
 					}				
 				}			

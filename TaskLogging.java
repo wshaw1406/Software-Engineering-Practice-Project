@@ -13,36 +13,19 @@ import javax.swing.table.DefaultTableModel;
 public class TaskLogging {
 
 	private JFrame frmTaskLogging;
-	public static JTable table;
 	public static DefaultTableModel model;
 	private JTextField txtTaskName;
 	private Database db;
 	private JTextField txtTaskID;
+	private Task task;
 
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TaskLogging window = new TaskLogging();
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
-	public TaskLogging() {
+	public TaskLogging(Task task) {
+		this.task = task;
 		db = new Database();
-		db.connect();
 		initialize();
 		frmTaskLogging.setVisible(true);
 	}
@@ -106,26 +89,18 @@ public class TaskLogging {
 		frmTaskLogging.getContentPane().add(spinnerTime);
 		
 		
-		List<User> userList = db.pullUsers();
-		
-		String[] users = new String[userList.size()];
-		int i = 0;
-		for(User user: userList) {
-			users[i] = user.getFirstName();
-			i++;
-    	}
-		
 		//JComboBox for choosing caretakers
 		JComboBox comboCaretakerName = new JComboBox();
-		comboCaretakerName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-		//if(user.getAccountType() == "Caretaker") {  NEED TO FIX! only caretakers to show
-				User user = db.pullSingleUser((String) comboCaretakerName.getSelectedItem());
-			}
-		});
-		//}
-		//List of Options
-		comboCaretakerName.setModel(new DefaultComboBoxModel(users));
+		//List of Option
+		List<User> caretakers = db.pullCaretakers();
+		String[] caretakersNames = new String[caretakers.size()];
+		int z = 0;
+		for(User user: caretakers)
+		{
+			caretakersNames[z] = user.getFirstName();
+			z++;
+		}
+		comboCaretakerName.setModel(new DefaultComboBoxModel(caretakersNames));
 		comboCaretakerName.setBounds(169, 58, 134, 22);
 		frmTaskLogging.getContentPane().add(comboCaretakerName);
 		
@@ -159,6 +134,7 @@ public class TaskLogging {
 		
 		//JTextArea for Additional comments to be added
 		JTextArea txtrNotes = new JTextArea();
+		txtrNotes.setText(task.getTaskNotes());
 		scrollPane.setViewportView(txtrNotes);
 		txtrNotes.setLineWrap(true);
 		
@@ -171,34 +147,11 @@ public class TaskLogging {
 		
 		//JTextField for txtTaskName
 		txtTaskName = new JTextField();
-
-		//Defines variables column, row and value
-				int column = 3;
-				int row;
-				String value = "";
-				
-				//Sets row to the selected row
-				row = CaretakerSchedule2.table.getSelectedRow();
-				//Sets value to the Model
-				value = CaretakerSchedule2.table.getModel().getValueAt(row, column).toString();
-				//For loop, Goes through the tasks
-				for(Task task : Main.tasks)
-			    {
-					//If, the TaskTitle is equal to the String value
-					if(task.getTaskTitle() == value) {
-						//Sets the test to the taskTitle
-						txtTaskName.setText(task.getTaskTitle());
-						txtrNotes.setText(task.getTaskNotes());
-						int ID = task.getTaskID();
-						String IDString= Integer.toString(ID);
-						txtTaskID.setText(IDString);
-						int Time = task.getTaskID();
-						String StringTime= Integer.toString(Time);
-					}
-			    }
-				//Makes textbox uneditable 
-				txtTaskName.setEditable(false);
-				txtTaskName.setBounds(169, 30, 116, 22);
+		txtTaskName.setText(task.getTaskTitle());
+		
+	   //Makes textbox uneditable 
+		txtTaskName.setEditable(false);
+				txtTaskName.setBounds(169, 33, 116, 22);
 				frmTaskLogging.getContentPane().add(txtTaskName);
 				txtTaskName.setColumns(10);
 				

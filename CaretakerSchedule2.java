@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.util.*;
+import java.util.List;
 
 public class CaretakerSchedule2 extends JFrame{
 	
@@ -18,24 +17,11 @@ public class CaretakerSchedule2 extends JFrame{
 	private JFrame frame;
 	public static JTable table;
 	public static DefaultTableModel model;
-	private Database db;
 
 	//Sorts rows in table
 	private void sort() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
 		table.setRowSorter(sorter);
-	}
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CaretakerSchedule2 window = new CaretakerSchedule2();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 	
 	public CaretakerSchedule2() {
@@ -46,6 +32,7 @@ public class CaretakerSchedule2 extends JFrame{
 	}
 	
 	private void initialize() {
+		Database db = new Database();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 681, 463);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,27 +53,9 @@ public class CaretakerSchedule2 extends JFrame{
 		btnUndo.setBounds(0, 366, 330, 49);
 		frame.getContentPane().add(btnUndo);
 		
-		//JButton for Complete
-		JButton btnComplete = new JButton("Complete");
-		//ActionListener for when button is clicked
-		btnComplete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Hides the frame
-			//	frame.setVisible(false);
-				//Creates TaskLogging 
-			//	new TaskLogging();
 
-				// UPDATE DB WITH EACH ARRAY LIST ITEM
-				Database db = new Database();
-				for(Task task:Main.tasks) {
-					db.updateTask(task);
-				}
-			}
-		});
-		btnComplete.setBounds(330, 366, 330, 49);
-		frame.getContentPane().add(btnComplete);
 		
-		//JScrollPane for the table, so iff too much data scroll bar can be used
+		//JScrollPane for the table, so if too much data scroll bar can be used
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(101, 95, 463, 214);
 		frame.getContentPane().add(scrollPane_1);
@@ -121,7 +90,29 @@ public class CaretakerSchedule2 extends JFrame{
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		table.getColumnModel().getColumn(4).setPreferredWidth(103);
 		
+		//Table for caretakers tasks
+		model = (DefaultTableModel) table.getModel();
 		
+		String startTime = "9:15";
+		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		 Date d = null;
+		try {
+			d = df.parse(startTime);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} 
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(d);
+		 String newTime = df.format(cal.getTime());
+		 
+		List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
+		for(Task task: tasks) {
+			model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
+			
+			cal.add(Calendar.MINUTE, task.getTaskDuration());
+			newTime = df.format(cal.getTime());
+		}		
+		sort();
 		//JButton for Assign New Tasks	
 		JButton btnAssignNewTasks = new JButton("Assign New Tasks");
 		//When button is clicked
@@ -134,11 +125,37 @@ public class CaretakerSchedule2 extends JFrame{
 
 			}
 		});
+		
+		
 		btnAssignNewTasks.setBounds(225, 328, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);;
 		
 		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
 		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
+		
+		//JButton for Complete
+		JButton btnComplete = new JButton("Complete");
+
+		//ActionListener for when button is clicked
+		btnComplete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String value = " ";
+				int row;
+				row = table.getSelectedRow();
+				value = table.getModel().getValueAt(row, 3).toString();
+				Task task = db.pullSingleTask(value);
+				//Hides the frame
+				frame.setVisible(false);
+				//Creates TaskLogging 
+				new TaskLogging(task);
+
+				// UPDATE DB WITH EACH ARRAY LIST ITEM
+
+
+			}
+		});
+		btnComplete.setBounds(330, 366, 330, 49);
+		frame.getContentPane().add(btnComplete);
 		
 		//JButton for Completed Tasks
 		JButton btnEditCompletedTask = new JButton("Completed Tasks");
@@ -183,47 +200,9 @@ public class CaretakerSchedule2 extends JFrame{
 		btnLogout.setBounds(12, 13, 97, 25);
 		frame.getContentPane().add(btnLogout);
 		
-		//Table for caretakers tasks
-		model = (DefaultTableModel) table.getModel();
-		
-		String startTime = "9:15";
-		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		 Date d = null;
-		try {
-			d = df.parse(startTime);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		} 
-		 Calendar cal = Calendar.getInstance();
-		 cal.setTime(d);
-		 String newTime = df.format(cal.getTime());
+
 		 			
-		//For loop, runs through the tasks in Main
-		 for(Task task : Main.tasks) {
-				//If, taskAssigned == users id
-				String userID = Main.user.getUsername();
-				String taskAssID;
-				if(task.getTaskAssigned() != null) {
-					 taskAssID = task.getTaskAssigned();
-				}
-				else {
-					taskAssID = "0";
-				}
-				
-				if(taskAssID.equals(userID)) {
-					//If, taskCompleted is false, run code
-					//DOESNT WORK initailly but should be okay hehe!!!!!!!!!!!1
-					if(task.getTaskCompleted() == false) {
-						//Fills in table with respective data
-						model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), task.getTaskNotes()});
-					}
-				}
-				cal.add(Calendar.MINUTE, task.getTaskDuration());
-				newTime = df.format(cal.getTime());
-		  }
 		
-		// Runs sort function
-		sort();
 	}
 }
 
@@ -277,21 +256,18 @@ class ButtonEditor extends DefaultCellEditor
 		return btn;
 	}
 	
-	@Override
-		public Object getCellEditorValue() {
+	public Object getCellEditorValue(List<Task> tasks) {
 			
 			int column1 = 3;
 			int row1 = 1;
 			String value = "";
 			
 			if(clicked) {
-				//System.out.println(btn.getName());
-				//System.out.printf("testing"); 
 
 					if(lbl == "Notes") {
 					row1 = CaretakerSchedule2.table.getSelectedRow();
 					value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
-					for(Task task : Main.tasks)
+					for(Task task : tasks)
 				    {
 						if(task.getTaskTitle() == value) {
 							JOptionPane.showMessageDialog(btn, task.getTaskNotes());

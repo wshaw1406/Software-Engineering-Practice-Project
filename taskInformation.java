@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -23,7 +21,7 @@ import javax.swing.SpinnerNumberModel;
 public class taskInformation {
 
 	private JFrame frame;
-	private JTextField txtHi;
+	
 
 	/**
 	 * Launch the application.
