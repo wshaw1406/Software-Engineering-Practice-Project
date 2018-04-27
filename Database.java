@@ -1,3 +1,4 @@
+package software_eng;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -12,7 +13,7 @@ public class Database {
 	public static void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mgc29\\Documents\\UNI\\2 Software Engineering Practice\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:F:\\Uni Work\\Software Development Practice\\project\\software_eng\\src\\software_eng\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{

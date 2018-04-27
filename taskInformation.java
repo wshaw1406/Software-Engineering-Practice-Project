@@ -1,3 +1,4 @@
+package software_eng;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,7 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -21,6 +26,7 @@ import javax.swing.SpinnerNumberModel;
 public class taskInformation {
 
 	private JFrame frame;
+	private JTable table;
 	
 
 	/**
@@ -40,11 +46,9 @@ public class taskInformation {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 327, 425);
+		frame.setBounds(100, 100, 625, 425);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		JComboBox comboBox = new JComboBox();
 		Database db = new Database();
 		List<Task> tasks = db.pullTasks();
 		String[] taskTitles = new String[tasks.size()];
@@ -54,13 +58,9 @@ public class taskInformation {
 			taskTitles[i] = task.getTaskTitle();
 			i++;
 		}
-		
-		comboBox.setModel(new DefaultComboBoxModel(taskTitles));
-		comboBox.setBounds(83, 129, 140, 20);
-		frame.getContentPane().add(comboBox);
 		JLabel label = new JLabel("Add New Task");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label.setBounds(46, 55, 92, 14);
+		label.setBounds(344, 55, 92, 14);
 		frame.getContentPane().add(label);
 		
 		JButton button = new JButton("Add");
@@ -71,46 +71,50 @@ public class taskInformation {
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button.setBounds(157, 50, 92, 23);
+		button.setBounds(455, 50, 92, 23);
 		frame.getContentPane().add(button);
 		
 		JButton button_1 = new JButton("Edit");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			//	new EditTaskGUI((String)comboBox.getSelectedItem());
+				int row;
+				row = table.getSelectedRow();
+				new EditTaskGUI(table.getModel().getValueAt(row, 3).toString());
 				frame.setVisible(false);
 			}
 		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_1.setBounds(157, 191, 92, 23);
+		button_1.setBounds(455, 80, 92, 23);
 		frame.getContentPane().add(button_1);
 		
 		JLabel label_1 = new JLabel("Edit Task");
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_1.setBounds(46, 196, 92, 14);
+		label_1.setBounds(344, 85, 92, 14);
 		frame.getContentPane().add(label_1);
 		
 		JButton button_2 = new JButton("Remove");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Task toRemove = db.pullSingleTask((String)comboBox.getSelectedItem());
+				int row;
+				row = table.getSelectedRow();
+				Task toRemove = db.pullSingleTask(table.getModel().getValueAt(row, 3).toString());
 			    db.deleteTask(toRemove.getTaskID());
 			    frame.setVisible(false);
 			    new taskInformation();
 			}
 		});
 		button_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_2.setBounds(157, 225, 92, 23);
+		button_2.setBounds(455, 114, 92, 23);
 		frame.getContentPane().add(button_2);
 		
 		JLabel label_2 = new JLabel("Remove Task");
 		label_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_2.setBounds(46, 230, 92, 14);
+		label_2.setBounds(344, 119, 92, 14);
 		frame.getContentPane().add(label_2);
 		
 		JLabel label_3 = new JLabel("Task Report");
 		label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_3.setBounds(46, 260, 92, 23);
+		label_3.setBounds(344, 149, 92, 23);
 		frame.getContentPane().add(label_3);
 		
 		JButton btnReport = new JButton("Report");
@@ -121,22 +125,68 @@ public class taskInformation {
 			}
 		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnReport.setBounds(157, 259, 89, 23);
+		btnReport.setBounds(455, 148, 89, 23);
 		frame.getContentPane().add(btnReport);
 		
 		JLabel lblTasks = new JLabel("Tasks");
-		lblTasks.setBounds(127, 25, 46, 14);
+		lblTasks.setBounds(425, 25, 46, 14);
 		frame.getContentPane().add(lblTasks);
 		
 		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(212, 352, 89, 23);
+		btnBack.setBounds(510, 352, 89, 23);
 		frame.getContentPane().add(btnBack);
 		
-
-		
-		JLabel lblSelectATask = new JLabel("Select a task to edit, remove or generate a report on\r\n");
-		lblSelectATask.setBounds(28, 104, 262, 14);
-		frame.getContentPane().add(lblSelectATask);
+		//JScrollPane for the table, so if too much data scroll bar can be used
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 18, 267, 246);
+		frame.getContentPane().add(scrollPane_1);
+				
+		//Jtable table
+		table = new JTable();		
+		scrollPane_1.setViewportView(table);
+				
+		//Default table
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"ID", "Time", "Priority", "Title", "Duration"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, Object.class, Object.class, Object.class, Object.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table.getColumnModel().getColumn(0).setMinWidth(30);
+		table.getColumnModel().getColumn(0).setMaxWidth(30);
+		table.getColumnModel().getColumn(1).setPreferredWidth(79);
+		table.getColumnModel().getColumn(4).setPreferredWidth(103);
+				
+		//Table for caretakers tasks
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+				
+		String startTime = "9:15";
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		Date d = null;
+		try {
+			d = df.parse(startTime);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} 
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		String newTime = df.format(cal.getTime());
+				 
+		for(Task task: tasks) {
+			model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration()});
+			
+			cal.add(Calendar.MINUTE, task.getTaskDuration());
+					newTime = df.format(cal.getTime());
+				}		
 		
 	}
 }

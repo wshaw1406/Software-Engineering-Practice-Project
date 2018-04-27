@@ -45,7 +45,7 @@ public class Task {
     	for(Task task: tasks) {
     		taskIDs.add(task.getTaskID());
     	}
-    	return Collections.max(taskIDs)+1;
+    	return taskIDs.size()+1;
     }
     
     public int getTaskTimeCompleted() {

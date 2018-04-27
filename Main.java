@@ -1,3 +1,4 @@
+package software_eng;
 import java.util.*;
 
 
@@ -15,7 +16,8 @@ public class Main {
     	user = new User();
 
     	//new CaretakerSchedule2();
-    	new loginGUI();
-    
+    	//new loginGUI();
+    	//new addUserGUI();
+    	new taskInformation();
    }
 }
