@@ -15,7 +15,6 @@ public class TaskLogging {
 	private JFrame frmTaskLogging;
 	public static DefaultTableModel model;
 	private JTextField txtTaskName;
-	private Database db;
 	private JTextField txtTaskID;
 	private Task task;
 
@@ -25,7 +24,6 @@ public class TaskLogging {
 	 */
 	public TaskLogging(Task task) {
 		this.task = task;
-		db = new Database();
 		initialize();
 		frmTaskLogging.setVisible(true);
 	}
@@ -33,15 +31,16 @@ public class TaskLogging {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		
-		
+	private void initialize() {		
 		//JFrame for GUI TaskLogging
 		frmTaskLogging = new JFrame();
 		frmTaskLogging.setTitle("Task Logging");
 		frmTaskLogging.setBounds(100, 100, 434, 298);
 		frmTaskLogging.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTaskLogging.getContentPane().setLayout(null);
+		
+		Database db = new Database();
+		//Task task = db.pullSingleTask(taskTitle);
 				
 		//JLabel for Caretaker Name
 		JLabel lblCaretakerName = new JLabel("Caretaker Name:");
@@ -81,14 +80,13 @@ public class TaskLogging {
 		Date datenow = Calendar.getInstance().getTime();
 		SpinnerDateModel smb = new SpinnerDateModel(datenow, null, null, Calendar.HOUR_OF_DAY);
 		spinnerTime.setModel(smb);
-		//Displays day, month, year, hour, minute currently
+		//Displays hour, minute currently
 		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "HH:mm");
 		spinnerTime.setEditor(de_spinnerTime);
 		spinnerTime.setBackground(new Color(240, 240, 240));
 		spinnerTime.setBounds(169, 83, 134, 22);
-		frmTaskLogging.getContentPane().add(spinnerTime);
-		
-		
+		frmTaskLogging.getContentPane().add(spinnerTime);	
+				
 		//JComboBox for choosing caretakers
 		JComboBox comboCaretakerName = new JComboBox();
 		//List of Option
@@ -97,14 +95,13 @@ public class TaskLogging {
 		int z = 0;
 		for(User user: caretakers)
 		{
-			caretakersNames[z] = user.getFirstName();
+			caretakersNames[z] = user.getUsername();
 			z++;
 		}
 		comboCaretakerName.setModel(new DefaultComboBoxModel(caretakersNames));
 		comboCaretakerName.setBounds(169, 58, 134, 22);
 		frmTaskLogging.getContentPane().add(comboCaretakerName);
-		
-		
+				
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
 		//ActionListener for when clicked
@@ -170,15 +167,13 @@ public class TaskLogging {
 						        System.out.println("");
 						    //Else if, the user selects the 'yes' option
 						    } else if (response == JOptionPane.YES_OPTION) {
-						    	
-					    	    Task updateTask = new Task();	
-								int taskID = Integer.parseInt(txtTaskID.getText());
+						    	Task updateTask = task;
+					    	    updateTask.setTaskID(task.getTaskID());
 								updateTask.setTaskNotes(txtrNotes.getText());
-								//int taskTimeCompleted = Integer.parseInt(spinnerTime.getText());
-								//updateTask.setTaskTimeCompleted(taskTimeCompleted);
+								updateTask.setTaskTimeCompleted((int)spinnerTime.getValue());
 								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
 								updateTask.setTaskCompleted(true);
-								updateTask.setTaskID(taskID);
+								task.setTaskCompleted(true);
 								db.updateTask(updateTask);
 
 						    	//Prints Task has been logged

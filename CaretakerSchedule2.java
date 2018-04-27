@@ -52,9 +52,7 @@ public class CaretakerSchedule2 extends JFrame{
 		});
 		btnUndo.setBounds(0, 366, 330, 49);
 		frame.getContentPane().add(btnUndo);
-		
-
-		
+			
 		//JScrollPane for the table, so if too much data scroll bar can be used
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(101, 95, 463, 214);
@@ -69,50 +67,58 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes"
+				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes", "Completed"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				true, false, false, false, false, true
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
+					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+				boolean[] columnEditables = new boolean[] {
+					true, false, false, false, false, true, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
 		});
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
-		table.getColumnModel().getColumn(4).setPreferredWidth(103);
+		table.getColumnModel().getColumn(4).setPreferredWidth(103);;
+		
 		
 		//Table for caretakers tasks
 		model = (DefaultTableModel) table.getModel();
 		
+		// Defines String
 		String startTime = "9:15";
-		 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		 Date d = null;
+		// Sets format of the date
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		// Sets d to NULL
+		Date d = null;
 		try {
 			d = df.parse(startTime);
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		} 
 		 Calendar cal = Calendar.getInstance();
+		 // Sets time
 		 cal.setTime(d);
 		 String newTime = df.format(cal.getTime());
 		 
 		List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
 		for(Task task: tasks) {
-			model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes" });
-			
+			if (task.getTaskCompleted() == false) {
+				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted() });
+			}
 			cal.add(Calendar.MINUTE, task.getTaskDuration());
 			newTime = df.format(cal.getTime());
 		}		
+		//Runs sort function
 		sort();
+		
 		//JButton for Assign New Tasks	
 		JButton btnAssignNewTasks = new JButton("Assign New Tasks");
 		//When button is clicked
@@ -122,14 +128,13 @@ public class CaretakerSchedule2 extends JFrame{
 				new TaskAllocation();
 				//Hides frame
 				frame.hide();
-
 			}
 		});
-		
-		
+				
 		btnAssignNewTasks.setBounds(225, 328, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);;
 		
+
 		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
 		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
 		
@@ -148,9 +153,6 @@ public class CaretakerSchedule2 extends JFrame{
 				frame.setVisible(false);
 				//Creates TaskLogging 
 				new TaskLogging(task);
-
-				// UPDATE DB WITH EACH ARRAY LIST ITEM
-
 
 			}
 		});
@@ -179,9 +181,8 @@ public class CaretakerSchedule2 extends JFrame{
 				Component frame = null;
 				//Opens JOptionPane
 				JOptionPane.showMessageDialog(frame,
-						"To Log a task: Select a task, then press 'Complete', "
-									+ "\nTo view Completed tasks: Select 'Completed Task', "
-									+ "\nTo add more tasks to your schedule, use 'Assign New Tasks',"
+						"To Log or Edit a task: Select a task, then press 'Complete', "
+									+ "\n To add more tasks to your schedule, use 'Assign New Tasks',"
 									+ "\n then, tick the tasks you want and press 'submit'.");
 			}		
 		});
@@ -198,11 +199,7 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnLogout.setBounds(12, 13, 97, 25);
-		frame.getContentPane().add(btnLogout);
-		
-
-		 			
-		
+		frame.getContentPane().add(btnLogout); 			
 	}
 }
 
@@ -255,24 +252,31 @@ class ButtonEditor extends DefaultCellEditor
 		
 		return btn;
 	}
-	
-	public Object getCellEditorValue(List<Task> tasks) {
-			
+	@Override
+	public Object getCellEditorValue() {
+			Database db = new Database();
+		    List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
 			int column1 = 3;
-			int row1 = 1;
+			int row1;
 			String value = "";
-			
-			if(clicked) {
 
+			if(clicked) {
 					if(lbl == "Notes") {
-					row1 = CaretakerSchedule2.table.getSelectedRow();
-					value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
-					for(Task task : tasks)
-				    {
-						if(task.getTaskTitle() == value) {
-							JOptionPane.showMessageDialog(btn, task.getTaskNotes());
-						}
-				    }
+						row1 = CaretakerSchedule2.table.getSelectedRow();
+						value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
+						for(Task task : tasks)
+					    {
+							System.out.printf("testing4");  
+							if(task.getTaskTitle() == value) {
+								System.out.printf("testing5");  
+								JOptionPane.showMessageDialog(btn, task.getTaskNotes());
+							}
+							else {
+								System.out.printf("testing6");  
+
+							}
+							
+					    }
 				}
 			}
 			clicked = false;
