@@ -1,4 +1,3 @@
-package software_eng;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -51,7 +50,7 @@ public class usersInformation {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 531, 362);
+		frame.setBounds(100, 100, 583, 362);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -73,18 +72,18 @@ public class usersInformation {
 			}
 		});
 		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		button.setBounds(395, 102, 92, 23);
+		button.setBounds(454, 100, 92, 23);
 		frame.getContentPane().add(button);
 		
 		
 		JLabel label = new JLabel("Add New User");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label.setBounds(277, 106, 92, 14);
+		label.setBounds(336, 104, 92, 14);
 		frame.getContentPane().add(label);
 		
 		JLabel label_1 = new JLabel("Edit User");
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_1.setBounds(277, 157, 92, 14);
+		label_1.setBounds(336, 138, 92, 14);
 		frame.getContentPane().add(label_1);
 		
 		JButton button_1 = new JButton("Edit");
@@ -95,7 +94,7 @@ public class usersInformation {
 			}
 		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		button_1.setBounds(395, 153, 92, 23);
+		button_1.setBounds(454, 134, 92, 23);
 		frame.getContentPane().add(button_1);
 		
 		JButton button_2 = new JButton("Remove");
@@ -106,37 +105,37 @@ public class usersInformation {
 			}
 		});
 		button_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		button_2.setBounds(395, 209, 92, 23);
+		button_2.setBounds(454, 168, 92, 23);
 		frame.getContentPane().add(button_2);
 		
 		
 		JLabel label_2 = new JLabel("Remove User");
 		label_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_2.setBounds(277, 213, 92, 14);
+		label_2.setBounds(336, 172, 92, 14);
 		frame.getContentPane().add(label_2);
 		
 		JButton btnReport = new JButton("Report");
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnReport.setBounds(395, 268, 89, 23);
+		btnReport.setBounds(454, 202, 92, 23);
 		frame.getContentPane().add(btnReport);
 		
 		JLabel label_3 = new JLabel("Caretaker Report");
 		label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_3.setBounds(277, 270, 117, 18);
+		label_3.setBounds(336, 204, 117, 18);
 		frame.getContentPane().add(label_3);
 		
 		JLabel lblUsers = new JLabel("Users");
 		lblUsers.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblUsers.setBounds(100, 53, 275, 14);
+		lblUsers.setBounds(116, 69, 275, 14);
 		frame.getContentPane().add(lblUsers);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 100, 242, 177);
+		panel.setBounds(10, 100, 316, 177);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 222, 157);
+		scrollPane.setBounds(10, 11, 296, 155);
 		panel.add(scrollPane);
 				
 		userTable = new JTable();
@@ -146,11 +145,11 @@ public class usersInformation {
 			new Object[][] {
 			},
 			new String[] {
-				"UserID", "Firstname", "Surname"
+				"ID", "Firstname", "Surname", "AccountType"
 			}
 		){ 
 			Class[] columnTypes = new Class[] {
-				Integer.class, Object.class, Object.class
+				Integer.class, Object.class, Object.class, Object.class
 			};		
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -164,7 +163,7 @@ public class usersInformation {
 		DefaultTableModel model = (DefaultTableModel) userTable.getModel();
 		
 		for(User user: users) {
-			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname()});
+			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname(), user.getAccountType()});
     	}
 		
 		JButton button_3 = new JButton("Back");
@@ -174,7 +173,7 @@ public class usersInformation {
 				new adminGUI();
 			}
 		});
-		button_3.setBounds(416, 11, 89, 23);
+		button_3.setBounds(10, 11, 89, 23);
 		frame.getContentPane().add(button_3);
 	}
 }
