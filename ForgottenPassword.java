@@ -12,8 +12,8 @@ import java.awt.event.ActionEvent;
 
 public class ForgottenPassword {
 
-	private JFrame frmResetPassword;
-	private JTextField textField;
+	public static JFrame frmResetPassword;
+	public static JTextField textField;
 	private Database db;
 
 	/**
@@ -52,13 +52,13 @@ public class ForgottenPassword {
 		frmResetPassword.getContentPane().setLayout(null);
 		
 		textField = new JTextField();
-		textField.setBounds(127, 80, 167, 20);
+		textField.setBounds(131, 70, 167, 20);
 		frmResetPassword.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblPleaseEnterYour = new JLabel("Please enter your username to reset your password");
 		lblPleaseEnterYour.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPleaseEnterYour.setBounds(57, 23, 338, 55);
+		lblPleaseEnterYour.setBounds(57, 11, 338, 55);
 		frmResetPassword.getContentPane().add(lblPleaseEnterYour);
 		
 		JButton btnNewButton = new JButton("Reset\r\n");
@@ -66,13 +66,11 @@ public class ForgottenPassword {
 			public void actionPerformed(ActionEvent e) {
 				User updateUser = db.pullSingleUser(textField.getText());
 				try{
-				if(updateUser.getUsername().equals(textField.getText())){
-				Security.main("password");
-				updateUser.setPasswordHash(Security.getHashedPass());
-				db.updateUser(updateUser);
-				JOptionPane.showMessageDialog(null, "Password reset to 'password'");
-				new loginGUI();
-				frmResetPassword.setVisible(false);
+				if(updateUser.getUsername().equals(textField.getText())){				
+				new ChangePassword();
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "username not found");
 				}
 				}
 				catch(NullPointerException e1){ 
@@ -80,7 +78,7 @@ public class ForgottenPassword {
 				}				
 			}
 		});
-		btnNewButton.setBounds(222, 111, 89, 23);
+		btnNewButton.setBounds(230, 111, 89, 23);
 		frmResetPassword.getContentPane().add(btnNewButton);
 		
 		JButton btnBack = new JButton("Back");
