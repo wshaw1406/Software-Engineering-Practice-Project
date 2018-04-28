@@ -1,11 +1,10 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -13,12 +12,20 @@ import java.awt.FlowLayout;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class usersInformation {
 
 	private JFrame frame;
-	private JTable table;
+	public static DefaultTableModel model= new DefaultTableModel();
+	private JTable userTable = new JTable(model);    
+	
+	private void Sort(){
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
+		userTable.setRowSorter(sorter);
+	}
 
 	/**
 	 * Launch the application.
@@ -49,14 +56,31 @@ public class usersInformation {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 537, 426);
+		frame.setBounds(100, 100, 531, 362);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		Database db = new Database();
+		List<User> users = db.pullUsers();
+		String[] userList = new String[users.size()];
+		int i = 0;
+		for(User user: users)
+		{
+			userList[i] = user.getUsername();
+			i++;
+		}
+		
 		JButton button = new JButton("Add");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new addUserGUI();
+				frame.setVisible(false);
+			}
+		});
 		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		button.setBounds(395, 102, 92, 23);
 		frame.getContentPane().add(button);
+		
 		
 		JLabel label = new JLabel("Add New User");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -69,14 +93,27 @@ public class usersInformation {
 		frame.getContentPane().add(label_1);
 		
 		JButton button_1 = new JButton("Edit");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new editUserGUI();
+				frame.setVisible(false);
+			}
+		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		button_1.setBounds(395, 153, 92, 23);
 		frame.getContentPane().add(button_1);
 		
 		JButton button_2 = new JButton("Remove");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new removeUserGUI();
+				frame.setVisible(false);
+			}
+		});
 		button_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		button_2.setBounds(395, 209, 92, 23);
 		frame.getContentPane().add(button_2);
+		
 		
 		JLabel label_2 = new JLabel("Remove User");
 		label_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -84,12 +121,6 @@ public class usersInformation {
 		frame.getContentPane().add(label_2);
 		
 		JButton btnReport = new JButton("Report");
-		btnReport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.hide();
-				new UserReports();
-			}
-		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnReport.setBounds(395, 268, 89, 23);
 		frame.getContentPane().add(btnReport);
@@ -100,36 +131,46 @@ public class usersInformation {
 		frame.getContentPane().add(label_3);
 		
 		JLabel lblUsers = new JLabel("Users");
-		lblUsers.setBounds(116, 26, 27, 14);
+		lblUsers.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUsers.setBounds(100, 53, 275, 14);
 		frame.getContentPane().add(lblUsers);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 46, 242, 331);
+		panel.setBounds(10, 100, 242, 177);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 222, 309);
+		scrollPane.setBounds(10, 11, 222, 157);
 		panel.add(scrollPane);
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+				
+		userTable = new JTable();
+		scrollPane.setViewportView(userTable);
+
+		userTable.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "First Name", "Surname"
+				"UserID", "Firstname", "Surname"
 			}
-		));
-		scrollPane.setViewportView(table);
+		){ Class[] columnTypes = new Class[] {
+				Integer.class, Object.class, Object.class
+			};		
+		});
 		
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-		for(User user: Main.users) {
-			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname()});	
-		}
+		for(User user: users) {
+			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname()});
+    	}
+	    Sort();
 		
 		JButton button_3 = new JButton("Back");
-		button_3.setBounds(422, 11, 89, 23);
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new adminGUI();
+			}
+		});
+		button_3.setBounds(416, 11, 89, 23);
 		frame.getContentPane().add(button_3);
 	}
 }

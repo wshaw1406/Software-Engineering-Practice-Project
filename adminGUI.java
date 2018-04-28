@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -65,21 +63,21 @@ public class adminGUI {
 		JButton btnUsers = new JButton("User Information");
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frmAdministration.hide();
+				frmAdministration.setVisible(false);
 				new usersInformation();
-			}
+			}			
 		});
-		btnUsers.setBounds(95, 129, 127, 61);
+		btnUsers.setBounds(55, 129, 167, 72);
 		frmAdministration.getContentPane().add(btnUsers);
 		
 		JButton btnTaskInformation = new JButton("Task Information");
-		btnTaskInformation.setBounds(326, 129, 127, 61);
 		btnTaskInformation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frmAdministration.hide();
+			public void actionPerformed(ActionEvent e) {
+				frmAdministration.setVisible(false);
 				new taskInformation();
 			}
 		});
+		btnTaskInformation.setBounds(326, 129, 167, 72);
 		frmAdministration.getContentPane().add(btnTaskInformation);
 		frmAdministration.setVisible(true);
 	}
