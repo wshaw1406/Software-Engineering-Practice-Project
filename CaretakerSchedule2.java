@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -111,12 +113,19 @@ public class CaretakerSchedule2 extends JFrame{
 		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
 		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
 		 
-		List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
-		for(Task task: tasks) {
+		for(Task task: Main.tasks) {
+			String ass = "";
+			if(task.getTaskAssigned() == null) {
+				ass = "0";
+			}
+			else {
+				ass = task.getTaskAssigned();
+			}
+			if(ass.equals(Main.user.getUsername())) {
 				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted()  }); //DOESNT WORK-COMPLETED
-			
-			cal.add(Calendar.MINUTE, task.getTaskDuration());
-			newTime = df.format(cal.getTime());
+				cal.add(Calendar.MINUTE, task.getTaskDuration());
+				newTime = df.format(cal.getTime());
+			}			
 		}		
 		//Runs sort function
 		sort();
