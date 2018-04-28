@@ -1,7 +1,7 @@
 package software_eng;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
+import java.sql.Date;
 
 public class Database {
 	private static Connection con;
@@ -30,7 +30,7 @@ public class Database {
 		}
 	}
 	//Task table methods
-	 public List<Task> pullTasks()
+	 public static List<Task> pullTasks()
 	    {
 			connect();
 	        ResultSet rs = null;
@@ -51,8 +51,9 @@ public class Database {
 	            	boolean completed = rs.getBoolean("taskCompleted");
 	                String priority = rs.getString("taskPriority");
 	                int taskTimeCompleted = rs.getInt("taskTimeCompleted");
-	            	
-	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority, taskTimeCompleted));
+	                String dateDue = rs.getString("dateDue");
+	                Date date = Date.valueOf(dateDue);
+	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority, taskTimeCompleted, date));
 	            }
 	        }
 	        catch(Exception exc)
@@ -85,8 +86,10 @@ public class Database {
 	            	boolean completed = rs.getBoolean("taskCompleted");
 	                String priority = rs.getString("taskPriority");
 	                int taskTimeCompleted = rs.getInt("taskTimeCompleted");
-	            	
-	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority, taskTimeCompleted));
+	                String dateDue = rs.getString("dateDue");
+	                Date date = Date.valueOf(dateDue);
+	            	System.out.println(dateDue);
+	            	tasks.add(new Task(id, type, title, notes, duration, assigned, completed, priority, taskTimeCompleted, date));
 	            }
 	        }
 	        catch(Exception exc)
@@ -122,7 +125,10 @@ public class Database {
 
 	            	boolean taskCompleted = rs.getBoolean("taskCompleted");
 	            	String taskPriority = rs.getString("taskPriority");
-	            	task = new Task(taskID, taskType, taskTitle, taskNotes, taskDuration, taskAssigned, taskCompleted, taskPriority, taskTimeCompleted);
+	            	String dateDue = rs.getString("dateDue");
+		            Date date = Date.valueOf(dateDue);
+		            System.out.println(dateDue);
+		            task = new Task(taskID, taskType, taskTitle, taskNotes, taskDuration, taskAssigned, taskCompleted, taskPriority, taskTimeCompleted, date);
 	            	closeConnection();
 	            	return task;
 
@@ -159,7 +165,10 @@ public class Database {
 
 	            	boolean taskCompleted = rs.getBoolean("taskCompleted");
 	            	String taskPriority = rs.getString("taskPriority");
-	            	task = new Task(taskID, taskType, taskTitleSearch, taskNotes, taskDuration, taskAssigned, taskCompleted, taskPriority, taskTimeCompleted);
+	            	String dateDue = rs.getString("dateDue");
+		            Date date = Date.valueOf(dateDue);
+		            System.out.println(dateDue);
+		            task = new Task(taskID, taskType, taskTitleSearch, taskNotes, taskDuration, taskAssigned, taskCompleted, taskPriority, taskTimeCompleted, date);
 	            	closeConnection();
 	            	return task;
 
@@ -173,10 +182,10 @@ public class Database {
 	 }
 	 public void pushSingleTask(Task task) {
 			connect();
-		 String sql = "INSERT INTO task (taskID, taskType, taskTitle, taskNotes, taskDuration, taskPriority)"
+		 String sql = "INSERT INTO task (taskID, taskType, taskTitle, taskNotes, taskDuration, taskPriority, dateDue)"
 		 		+ "VALUES ('" + task.getTaskID() + "', '" + task.getTaskType() + "', '" + task.getTaskTitle()
 		 		+ "', '" + task.getTaskNotes() + "', '" + task.getTaskDuration() + "', '"
-		 	    + task.getTaskPriority() + "');";
+		 	    + task.getTaskPriority() + "', '"  + task.getDateDue() + "');";
 		 
 		 try
 		 {
@@ -210,7 +219,7 @@ public class Database {
 			connect();
 		 String sql = "UPDATE task SET taskTitle = '" + task.getTaskTitle() + "', taskNotes = '" + task.getTaskNotes() + "', taskPriority = '"
 	     + task.getTaskPriority() + "', taskDuration = '" + task.getTaskDuration() + "', taskAssigned = '" + task.getTaskAssigned() 
-	     + "', taskCompleted = '" + task.getTaskCompleted() + "', taskTimeCompleted = '" + task.getTaskTimeCompleted() + "' WHERE taskID = " + task.getTaskID() + ";";
+	     + "', taskCompleted = '" + task.getTaskCompleted() + "', taskTimeCompleted = '" + task.getTaskTimeCompleted() + "', dateDue = '" + task.getDateDue() + "' WHERE taskID = " + task.getTaskID() + ";";
 		 
 		 try
 		 {

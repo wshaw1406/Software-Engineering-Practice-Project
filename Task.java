@@ -1,5 +1,6 @@
 package software_eng;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,8 +20,9 @@ public class Task {
     private ArrayList<Task> tasks;
     private String taskPriority;
     private int taskTimeCompleted;
+    private Date dateDue;
     
-    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority, int taskTimeCompleted)
+    public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority, int taskTimeCompleted, Date dateDue)
     {
         setTaskID(taskID);
         setTaskType(taskType);
@@ -30,6 +32,7 @@ public class Task {
         setTaskAssigned(taskAssigned);
         setTaskCompleted(taskCompleted);
         setTaskPriority(taskPriority);
+        setDateDue(dateDue);
     }
     
     public Task()
@@ -46,6 +49,13 @@ public class Task {
     		taskIDs.add(task.getTaskID());
     	}
     	return taskIDs.size()+1;
+    }
+    public Date getDateDue() {
+    	return dateDue;
+    }
+    
+    public void setDateDue(Date dateDue) {
+    	this.dateDue = dateDue;
     }
     
     public int getTaskTimeCompleted() {

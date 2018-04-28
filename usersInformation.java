@@ -1,3 +1,4 @@
+package software_eng;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -19,13 +20,7 @@ import java.awt.event.ActionEvent;
 public class usersInformation {
 
 	private JFrame frame;
-	public static DefaultTableModel model= new DefaultTableModel();
-	private JTable userTable = new JTable(model);    
-	
-	private void Sort(){
-		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
-		userTable.setRowSorter(sorter);
-	}
+	private JTable userTable;    
 
 	/**
 	 * Launch the application.
@@ -153,15 +148,24 @@ public class usersInformation {
 			new String[] {
 				"UserID", "Firstname", "Surname"
 			}
-		){ Class[] columnTypes = new Class[] {
+		){ 
+			Class[] columnTypes = new Class[] {
 				Integer.class, Object.class, Object.class
 			};		
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
 		});
+		userTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+		userTable.getColumnModel().getColumn(0).setMinWidth(30);
+		userTable.getColumnModel().getColumn(0).setMaxWidth(30);
+		userTable.getColumnModel().getColumn(1).setPreferredWidth(79);
+		
+		DefaultTableModel model = (DefaultTableModel) userTable.getModel();
 		
 		for(User user: users) {
 			model.addRow(new Object[]{user.getUserID(), user.getFirstName(), user.getSurname()});
     	}
-	    Sort();
 		
 		JButton button_3 = new JButton("Back");
 		button_3.addActionListener(new ActionListener() {
