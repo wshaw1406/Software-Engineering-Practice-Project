@@ -2,11 +2,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.ArrayList;
 import java.awt.event.*;
 import java.util.*;
-import java.util.Calendar;
-
 
 import javax.swing.table.DefaultTableModel;
 
@@ -79,13 +76,20 @@ public class TaskLogging {
 		//Gets current time
 		Date datenow = Calendar.getInstance().getTime();
 		SpinnerDateModel smb = new SpinnerDateModel(datenow, null, null, Calendar.HOUR_OF_DAY);
-		spinnerTime.setModel(smb);
+		spinnerTime.setModel(new SpinnerDateModel(new Date(1524913474883L), null, null, Calendar.YEAR));
 		//Displays hour, minute currently
-		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "HH:mm");
+		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "dd-MM HH:mm");
 		spinnerTime.setEditor(de_spinnerTime);
 		spinnerTime.setBackground(new Color(240, 240, 240));
 		spinnerTime.setBounds(169, 83, 134, 22);
 		frmTaskLogging.getContentPane().add(spinnerTime);	
+		
+		int year = (int) (new Date().getYear());
+		int month = (int) (new Date().getMonth());
+		int day = (int) (new Date().getDate());
+		int hours = (int) (new Date().getHours());
+		int minutes = (int) (new Date().getMinutes());
+		int time = Integer.valueOf(String.valueOf(year) + String.valueOf(month) + String.valueOf(day) + String.valueOf(hours) + String.valueOf(minutes));
 				
 		//JComboBox for choosing caretakers
 		JComboBox comboCaretakerName = new JComboBox();
@@ -170,12 +174,25 @@ public class TaskLogging {
 						    	Task updateTask = task;
 					    	    updateTask.setTaskID(task.getTaskID());
 								updateTask.setTaskNotes(txtrNotes.getText());
-								updateTask.setTaskTimeCompleted((int)spinnerTime.getValue());
+								updateTask.setTaskTimeCompleted(time);
 								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
 								updateTask.setTaskCompleted(true);
-								task.setTaskCompleted(true);
 								db.updateTask(updateTask);
-
+								/*if (task.getTaskType().equals("Regular"))
+								{
+									System.out.printf("moose");  
+									Task updateTask2 = new Task();
+									updateTask2.setTaskID(updateTask2.generateTaskID());
+									updateTask2.setTaskTitle(txtTaskName.getText());
+									updateTask2.setTaskNotes(txtrNotes.getText());
+									updateTask2.setTaskType("Regular");
+									updateTask2.setTaskDuration(task.getTaskDuration());
+									updateTask2.setTaskPriority(task.getTaskPriority());
+									updateTask2.setTaskAssigned(null);
+									
+									db.pushSingleTask(updateTask2);
+								}
+*/
 						    	//Prints Task has been logged
 						    	System.out.println("Task has been logged");
 						    	//Hides this JFrame
