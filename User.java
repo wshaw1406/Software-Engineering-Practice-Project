@@ -50,6 +50,10 @@ public class User {
 		}
 	}
 	
+	public User() {
+		
+	}
+	
 	 public static int generateUserID() {
 	    	Database db = new Database();
 	    	db.connect();
