@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -85,13 +87,12 @@ public class loginGUI extends JFrame {
 				User user = db.pullSingleUser(textField.getText());
 				
 				try{
-					System.out.println("here");
 					String retrievedHashedPass = user.getPasswordHash();	
 					@SuppressWarnings("deprecation")
 					String enteredPassword = passwordField.getText();
 					Security.main(enteredPassword);
-					System.out.println(Security.getHashedPass());
 						if(Security.getHashedPass().equals(retrievedHashedPass)){
+							Main.user = user;
 							if(user.getAccountType().equals("Administrator")){
 								Main.user = db.pullSingleUser(user.getUsername());
 								new adminGUI();
