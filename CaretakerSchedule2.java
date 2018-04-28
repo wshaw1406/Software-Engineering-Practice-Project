@@ -71,7 +71,7 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
@@ -108,11 +108,13 @@ public class CaretakerSchedule2 extends JFrame{
 		 cal.setTime(d);
 		 String newTime = df.format(cal.getTime());
 		 
+		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
+		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
+		 
 		List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
 		for(Task task: tasks) {
-			if (task.getTaskCompleted() == false) {
-				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted() });
-			}
+				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted()  }); //DOESNT WORK-COMPLETED
+			
 			cal.add(Calendar.MINUTE, task.getTaskDuration());
 			newTime = df.format(cal.getTime());
 		}		
@@ -135,8 +137,7 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.getContentPane().add(btnAssignNewTasks);;
 		
 
-		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
-		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
+
 		
 		//JButton for Complete
 		JButton btnComplete = new JButton("Complete");
@@ -255,7 +256,7 @@ class ButtonEditor extends DefaultCellEditor
 	@Override
 	public Object getCellEditorValue() {
 			Database db = new Database();
-		    List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
+			List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
 			int column1 = 3;
 			int row1;
 			String value = "";
@@ -267,14 +268,14 @@ class ButtonEditor extends DefaultCellEditor
 						for(Task task : tasks)
 					    {
 							System.out.printf("testing4");  
-							if(task.getTaskTitle() == value) {
+							if(task.getTaskTitle() == value) {	//DOESNT WORK							
 								System.out.printf("testing5");  
 								JOptionPane.showMessageDialog(btn, task.getTaskNotes());
 							}
-							else {
-								System.out.printf("testing6");  
+							//else {
+							//	System.out.printf("testing6");  
 
-							}
+							//}
 							
 					    }
 				}
