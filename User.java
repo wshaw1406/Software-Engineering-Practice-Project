@@ -2,9 +2,11 @@
  * User class
  * @author Daniel Parr
  */
+package software_eng;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -16,6 +18,8 @@ public class User {
 	private String surname;
 	private String gender;
 	private String accountType;
+	private int numberComplete = 0;
+	private int numberAssigned = 0;
 	
 	public User(int userID, String username, String passwordHash, String firstName, String surname,
 			 String gender, String accountType)
@@ -27,10 +31,23 @@ public class User {
 		this.surname = surname;
 		this.gender = gender;
 		this.accountType = accountType;
-	}
-	
-	public User(){
 		
+		
+		for(Task task : Main.tasks) {
+			String ass = "";
+			if(task.getTaskAssigned() == null) {
+				ass = "";
+			}
+			else {
+				ass = task.getTaskAssigned();
+			}
+			if(ass.equals(username)) {
+				numberAssigned += 1;
+				if(task.getTaskCompleted()) {
+					numberComplete += 1;
+				}
+			}
+		}
 	}
 	
 	 public static int generateUserID() {
@@ -176,6 +193,14 @@ public class User {
 	public void removeUser(User user)
 	{
 		user.removeUser(user);
+	}
+	
+	public int getNumberComplete() {
+		return numberComplete;
+	}
+	
+	public int getNumberAssigned() {
+		return numberAssigned;
 	}
 	
 	public void displayUsers(ArrayList<User> users)
