@@ -3,7 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Calendar;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -83,7 +85,7 @@ public class TaskLogging {
 		spinnerTime.setBackground(new Color(240, 240, 240));
 		spinnerTime.setBounds(169, 83, 134, 22);
 		frmTaskLogging.getContentPane().add(spinnerTime);	
-		
+			
 		int year = (int) (new Date().getYear());
 		int month = (int) (new Date().getMonth());
 		int day = (int) (new Date().getDate());
@@ -176,9 +178,11 @@ public class TaskLogging {
 								updateTask.setTaskNotes(txtrNotes.getText());
 								updateTask.setTaskTimeCompleted(time);
 								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
-								updateTask.setTaskCompleted(true);
+								
+								boolean boolean1 = Boolean.parseBoolean("1");
+								updateTask.setTaskCompleted(boolean1);
 								db.updateTask(updateTask);
-								/*if (task.getTaskType().equals("Regular"))
+								if (task.getTaskType().equals("Regular"))
 								{
 									System.out.printf("moose");  
 									Task updateTask2 = new Task();
@@ -188,11 +192,11 @@ public class TaskLogging {
 									updateTask2.setTaskType("Regular");
 									updateTask2.setTaskDuration(task.getTaskDuration());
 									updateTask2.setTaskPriority(task.getTaskPriority());
+									updateTask2.setDateDue(task.getDateDue());
 									updateTask2.setTaskAssigned(null);
-									
 									db.pushSingleTask(updateTask2);
 								}
-*/
+
 						    	//Prints Task has been logged
 						    	System.out.println("Task has been logged");
 						    	//Hides this JFrame

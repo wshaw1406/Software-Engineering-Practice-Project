@@ -1,4 +1,3 @@
-package software_eng;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -73,7 +72,7 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
+					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
@@ -264,8 +263,6 @@ class ButtonEditor extends DefaultCellEditor
 	}
 	@Override
 	public Object getCellEditorValue() {
-			Database db = new Database();
-			List<Task> tasks = db.pullUsersTasks(Main.user.getUsername());
 			int column1 = 3;
 			int row1;
 			String value = "";
@@ -274,17 +271,13 @@ class ButtonEditor extends DefaultCellEditor
 					if(lbl == "Notes") {
 						row1 = CaretakerSchedule2.table.getSelectedRow();
 						value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
-						for(Task task : tasks)
+						for(Task task : Main.tasks)
 					    {
-							System.out.printf("testing4");  
-							if(task.getTaskTitle() == value) {	//DOESNT WORK							
+							if(task.getTaskTitle() == value) {							
 								System.out.printf("testing5");  
 								JOptionPane.showMessageDialog(btn, task.getTaskNotes());
 							}
-							//else {
-							//	System.out.printf("testing6");  
 
-							//}
 							
 					    }
 				}
