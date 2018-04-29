@@ -110,7 +110,7 @@ public class TaskAllocation {
 			if(taskAssID == "0" || taskAssID.equals("null")) {
 				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", false});
 			}
-			if(taskAssID.equals(Main.user.getUsername())) {
+			if(taskAssID.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
 				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", true});
 			}
 	    }
