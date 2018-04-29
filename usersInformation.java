@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableRowSorter;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -175,5 +176,20 @@ public class usersInformation {
 		});
 		button_3.setBounds(10, 11, 89, 23);
 		frame.getContentPane().add(button_3);
+		
+		JButton btnLogOut = new JButton("Log out");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to log out", "log out", 
+                        JOptionPane.YES_NO_OPTION); 
+				if (choice == JOptionPane.YES_OPTION) {
+					frame.setVisible(false);
+					new loginGUI();
+				}	
+			}
+		});
+		btnLogOut.setBounds(457, 11, 89, 23);
+		frame.getContentPane().add(btnLogOut);
 	}
 }
