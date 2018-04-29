@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -53,7 +55,7 @@ public class adminGUI {
                         JOptionPane.YES_NO_OPTION); 
 				if (choice == JOptionPane.YES_OPTION) {
 					frmAdministration.setVisible(false);
-					new loginGUI();
+					new Main();
 				}				
 			}
 		});

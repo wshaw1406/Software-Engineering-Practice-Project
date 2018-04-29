@@ -1,5 +1,6 @@
-import java.awt.EventQueue;
+package software_eng;
 
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -116,6 +117,12 @@ public class usersInformation {
 		frame.getContentPane().add(label_2);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new UserReports();
+			}
+		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnReport.setBounds(454, 202, 92, 23);
 		frame.getContentPane().add(btnReport);
@@ -185,7 +192,7 @@ public class usersInformation {
                         JOptionPane.YES_NO_OPTION); 
 				if (choice == JOptionPane.YES_OPTION) {
 					frame.setVisible(false);
-					new loginGUI();
+					new Main();
 				}	
 			}
 		});

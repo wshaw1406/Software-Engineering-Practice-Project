@@ -1,3 +1,4 @@
+package software_eng;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -204,7 +205,7 @@ public class CaretakerSchedule2 extends JFrame{
 				//Hides frame
 				frame.hide();
 				//Opens Task Reports
-				new loginGUI();
+				new Main();
 			}
 		});
 		btnLogout.setBounds(12, 13, 97, 25);

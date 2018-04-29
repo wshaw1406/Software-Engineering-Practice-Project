@@ -20,5 +20,8 @@ public class Main {
 	    new loginGUI();
 	    
 	}
+	public Main() {
+		main(null);
+	}
 }
 

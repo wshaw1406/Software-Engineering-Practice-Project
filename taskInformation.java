@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -134,6 +136,12 @@ public class taskInformation {
 		frame.getContentPane().add(lblTasks);
 		
 		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new adminGUI();
+			}
+		});
 		btnBack.setBounds(21, 11, 89, 23);
 		frame.getContentPane().add(btnBack);
 		
@@ -170,7 +178,7 @@ public class taskInformation {
                       JOptionPane.YES_NO_OPTION); 
 				if (choice == JOptionPane.YES_OPTION) {
 					frame.setVisible(false);
-					new loginGUI();
+					new Main();
 				}	
 			}
 		});
