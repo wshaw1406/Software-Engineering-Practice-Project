@@ -1,4 +1,3 @@
-package software_eng;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -159,6 +158,21 @@ public class CaretakerSchedule2 extends JFrame{
 				row = table.getSelectedRow();
 				value = table.getModel().getValueAt(row, 3).toString();
 				Task task = db.pullSingleTask(value);
+				/*if(task.getTaskCompleted() == "1")
+				{
+					//Hides the frame
+					frame.setVisible(false);
+					//Creates TaskLogging 
+					new TaskLogging(task);
+				}
+				else{
+					//Hides the frame
+					frame.setVisible(false);
+					//Creates TaskLogging 
+					new editRecord(task);
+				}
+				
+				*/
 				//Hides the frame
 				frame.setVisible(false);
 				//Creates TaskLogging 
@@ -199,6 +213,7 @@ public class CaretakerSchedule2 extends JFrame{
 		btnHelp.setBounds(12, 328, 97, 25);
 		frame.getContentPane().add(btnHelp);
 		
+
 		JButton btnLogout = new JButton("Log-out");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

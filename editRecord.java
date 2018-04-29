@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 import javax.swing.table.DefaultTableModel;
 
-public class TaskLogging {
+public class editRecord {
 
 	private JFrame frmTaskLogging;
 	public static DefaultTableModel model;
@@ -21,7 +21,7 @@ public class TaskLogging {
 	/**
 	 * Create the application.
 	 */
-	public TaskLogging(Task task) {
+	public editRecord(Task task) {
 		this.task = task;
 		initialize();
 		frmTaskLogging.setVisible(true);
@@ -178,32 +178,11 @@ public class TaskLogging {
 								updateTask.setTaskNotes(txtrNotes.getText());
 								updateTask.setTaskTimeCompleted(time);
 								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
-								Boolean boolean1= true;
-								updateTask.setTaskCompleted(boolean1);
 								db.updateTask(updateTask);
 								//Prints Task has been logged
 						    	System.out.println("Task updated");
-						    	java.sql.Date date= task.getDateDue();
-								Calendar c = Calendar.getInstance(); 
-								if (task.getTaskType().equals("Regular"))
-								{
-									Task updateTask2 = new Task();
-									updateTask2.setTaskID(task.generateTaskID());
-									updateTask2.setTaskTitle(txtTaskName.getText());
-									updateTask2.setTaskNotes(txtrNotes.getText());
-									updateTask2.setTaskType("Regular");
-									updateTask2.setTaskDuration(task.getTaskDuration());
-									updateTask2.setTaskPriority(task.getTaskPriority());									
-									c.setTime(date); 
-									c.add(Calendar.DATE, 7);
-									java.sql.Date sqlDate = new java.sql.Date(c.getTimeInMillis());	
-									updateTask2.setDateDue(sqlDate);
-									updateTask2.setTaskAssigned(null);
-									db.pushSingleTask(updateTask2);
-							    	//Prints Task has been logged
-							    	System.out.println("New task created");
-							    }
 
+								
 						    	//Hides this JFrame
 						    	frmTaskLogging.setVisible(false); 
 						    	//Opens CaretakerSchedule2

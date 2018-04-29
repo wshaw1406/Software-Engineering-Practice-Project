@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,7 +76,7 @@ public class Task {
     	for(Task task: tasks) {
     		taskIDs.add(task.getTaskID());
     	}
-    	return taskIDs.size()+1;
+    	return Collections.max(taskIDs)+1;
     }
     public Date getDateDue() {
     	return dateDue;
