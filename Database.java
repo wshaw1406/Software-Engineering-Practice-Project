@@ -13,7 +13,7 @@ public class Database {
 	public static void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:F:\\Uni Work\\Software Development Practice\\project\\software_eng\\src\\software_eng\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Jordan\\Documents\\GitHub\\Software-Engineering-Practice-Project\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{
@@ -30,7 +30,7 @@ public class Database {
 		}
 	}
 	//Task table methods
-	 public static List<Task> pullTasks()
+	 public List<Task> pullTasks()
 	    {
 			connect();
 	        ResultSet rs = null;
