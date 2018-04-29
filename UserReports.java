@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -87,7 +89,8 @@ public class UserReports {
 			new Object[][] {
 			},
 			new String[] {
-				"User ID", "First Name", "Last Name", "# tasks completed", "# tasks assigned", "# late tasks"			}
+				"User ID", "First Name", "Last Name", "# tasks completed", "# tasks assigned", "# late tasks"
+				}
 		) {
 			boolean[] columnEditables = new boolean[] {
 				false, false, false, false, false, false,
@@ -112,9 +115,7 @@ public class UserReports {
 		});
 		btnBack.setBounds(31, 377, 97, 25);
 		frame.getContentPane().add(btnBack);
-		
-		UserReportsAL actionListener = new UserReportsAL();
-	    
+			    
 	    updateTable();
 	    
 	}
@@ -127,7 +128,7 @@ public class UserReports {
 		
 		for(User user : Main.users)
 		{
-			model.addRow(new Object[]{user.getUsername(), user.getFirstName(), user.getSurname(), "","","",});	
+			model.addRow(new Object[]{user.getUsername(), user.getFirstName(), user.getSurname(), user.getNumberComplete(),user.getNumberAssigned(),user.getNumberLate()});	
 		}
 		
 	}
@@ -174,14 +175,3 @@ public class UserReports {
         System.out.println("done!");
 	}
 }
-
-class UserReportsAL implements ItemListener {
-	  // This method is called only if a new item has been selected.
-	  public void itemStateChanged(ItemEvent evt) {
-
-		    if (evt.getStateChange() == ItemEvent.SELECTED) {
-		      // Item was just selected
-		    	TaskReports.updateTable();
-		    }
-	  }
-	}

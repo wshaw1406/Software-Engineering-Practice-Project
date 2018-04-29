@@ -4,8 +4,11 @@
  */
 package software_eng;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class User {
 	private String accountType;
 	private int numberComplete = 0;
 	private int numberAssigned = 0;
+	private int numberLate = 0;
 	
 	public User(int userID, String username, String passwordHash, String firstName, String surname,
 			 String gender, String accountType)
@@ -42,7 +46,25 @@ public class User {
 				ass = task.getTaskAssigned();
 			}
 			if(ass.equals(username)) {
-				numberAssigned += 1;
+				
+				SimpleDateFormat dt = new SimpleDateFormat("yyyy-m-dd"); 
+				Date taskDateComplete;
+				try {
+					if(task.getTaskTimeCompleted() != 0) {
+						taskDateComplete = dt.parse(task.getTaskDateCompleted());
+						java.util.Date taskDateDue = task.getDateDue();
+
+						if(taskDateComplete.after(taskDateDue)) {
+							numberLate += 1;
+						}
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+				
+				if(ass.equals(username) && !task.getTaskCompleted()) {
+					numberAssigned += 1;
+				}
 				if(task.getTaskCompleted()) {
 					numberComplete += 1;
 				}
@@ -66,6 +88,14 @@ public class User {
 	    	}
 	
 	/*getters*/	
+	
+	/**
+	 * get number of late tasks
+	 * @return numberLate
+	 */
+	public int getNumberLate() {
+		return numberLate;
+	}
 	/**
 	 * gets userID
 	 * @return userID

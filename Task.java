@@ -1,6 +1,8 @@
 package software_eng;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Task {
     private String taskPriority;
     private int taskTimeCompleted;
     private Date dateDue;
+    private String dateComplete = "0";
     
     public Task(int taskID, String taskType, String taskTitle, String taskNotes, int taskDuration, String taskAssigned, boolean taskCompleted, String taskPriority, int taskTimeCompleted, Date dateDue)
     {
@@ -32,7 +35,34 @@ public class Task {
         setTaskAssigned(taskAssigned);
         setTaskCompleted(taskCompleted);
         setTaskPriority(taskPriority);
+        setTaskTimeCompleted(taskTimeCompleted);
         setDateDue(dateDue);
+        
+        //If complete date has been set
+        if(taskTimeCompleted > 0) {
+        	 //Convert the date integer to the correct string
+        	 String str = Integer.toString(taskTimeCompleted);
+
+             int fullInt = Integer.parseInt(str);
+             String yearChar = str.substring(0,3);
+             int first3 = Integer.parseInt(yearChar);
+             int year = first3 + 1900;
+             String monthChar = str.substring(3,4);
+             int monthInt = Integer.parseInt(monthChar);
+             monthInt += 1;
+             String dayChar = str.substring(4,6);
+             int dayInt = Integer.parseInt(dayChar);
+             
+             String date = year + "-" + monthInt + "-" + dayInt;
+             
+             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd");
+             try {
+				java.util.Date dateType = formatter.parse(date);
+	            dateComplete = formatter.format(dateType);
+             } catch (ParseException e) {
+				e.printStackTrace();
+			}
+        }
     }
     
     public Task()
@@ -60,6 +90,10 @@ public class Task {
     
     public int getTaskTimeCompleted() {
     	return taskTimeCompleted;
+    }
+    
+    public String getTaskDateCompleted() {
+    	return dateComplete;
     }
     
     public void setTaskTimeCompleted(int taskTimeCompleted)

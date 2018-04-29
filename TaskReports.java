@@ -9,9 +9,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
@@ -46,6 +49,9 @@ public class TaskReports {
 	private static JComboBox cmBxComplete;
 	private static JComboBox cmBxTaskAssigned;
 	private static JComboBox cmBxWhoAssigned;
+	private static JDatePickerImpl BeforeDatePicker;
+	private static JDatePickerImpl AfterDatePicker;
+
 
 
 	/**
@@ -77,7 +83,7 @@ public class TaskReports {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 591, 494);
+		frame.setBounds(100, 100, 762, 495);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -93,11 +99,11 @@ public class TaskReports {
 				}
 			}
 		});
-		btnDownload.setBounds(226, 409, 97, 25);
+		btnDownload.setBounds(321, 410, 97, 25);
 		frame.getContentPane().add(btnDownload);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 573, 261);
+		scrollPane.setBounds(0, 0, 744, 261);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -105,7 +111,7 @@ public class TaskReports {
 			new Object[][] {
 			},
 			new String[] {
-				"Task ID", "Task Name", "Task Type", "Task assigned?", "Task Duration", "Completed by", "Completed Date", "Completed Time"
+				"Task ID", "Task Name", "Task Type", "Task assigned?", "Task Duration", "Completed?", "Completed Date", "Due Date"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
@@ -119,7 +125,7 @@ public class TaskReports {
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 274, 549, 122);
+		panel.setBounds(12, 274, 732, 122);
 		frame.getContentPane().add(panel);
 		
 		JPanel panel_1 = new JPanel();
@@ -173,33 +179,61 @@ public class TaskReports {
 		JPanel panel_4 = new JPanel();
 		panel.add(panel_4);
 		
-		JLabel lblCompletedBefore = new JLabel("Completed After");
-		panel_4.add(lblCompletedBefore);
+		JLabel lblCompletedAfter = new JLabel("Completed After");
+		panel_4.add(lblCompletedAfter);
 		
-		JPanel panel_5 = new JPanel();
-		panel.add(panel_5);
-		
-		JLabel lblCompletedAfter = new JLabel("Completed Before");
-		panel_5.add(lblCompletedAfter);
-		
-		UtilDateModel Dmodel = new UtilDateModel();
-		// Dmodel.setDate(1, 1, 2018);
-		// Need this...
-	    Properties p = new Properties();
-	    p.put("text.today", "Today");
-	    p.put("text.month", "Month");
-	    p.put("text.year", "Year");
-	    JDatePanelImpl datePanel = new JDatePanelImpl(Dmodel, p);
+		UtilDateModel AfterDmodel = new UtilDateModel();
+
+		Properties Ap = new Properties();
+	    Ap.put("text.today", "Today");
+	    Ap.put("text.month", "Month");
+	    Ap.put("text.year", "Year");
+	    JDatePanelImpl AfterDatePanel = new JDatePanelImpl(AfterDmodel, Ap);
 		    
-	    // Don't know about the formatter, but there it is...
-	    JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-	    datePicker.addActionListener(new ActionListener() {
+	    AfterDatePicker = new JDatePickerImpl(AfterDatePanel, new DateLabelFormatter());
+	    AfterDatePicker.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		updateTable();
 	    	}
 	    });
 		    
-		panel_5.add(datePicker);
+		panel_4.add(AfterDatePicker);
+		
+		JPanel panel_5 = new JPanel();
+		panel.add(panel_5);
+		
+		JLabel lblCompletedBefore = new JLabel("Completed Before");
+		panel_5.add(lblCompletedBefore);
+		
+		UtilDateModel BeforeDmodel = new UtilDateModel();
+		LocalDateTime now = LocalDateTime.now(); 
+		String now2 = now.getYear() + "-" + now.getMonthValue() + "-" + now.getDayOfMonth();
+
+		Properties Bp = new Properties();
+	    Bp.put("text.today", "Today");
+	    Bp.put("text.month", "Month");
+	    Bp.put("text.year", "Year");
+	    JDatePanelImpl BeforeDatePanel = new JDatePanelImpl(BeforeDmodel, Bp);
+		    
+	    BeforeDatePicker = new JDatePickerImpl(BeforeDatePanel, new DateLabelFormatter());
+	    BeforeDatePicker.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		updateTable();
+	    	}
+	    });
+		    
+	    BeforeDatePicker.getJFormattedTextField().setText(now2);
+		panel_5.add(BeforeDatePicker);		
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.hide();
+				new taskInformation();
+			}
+		});
+		btnBack.setBounds(33, 410, 97, 25);
+		frame.getContentPane().add(btnBack);
 		
 		TaskReportsAL actionListener = new TaskReportsAL();
 	    cmBxType.addItemListener(actionListener);
@@ -212,7 +246,7 @@ public class TaskReports {
 	}
 	public class DateLabelFormatter extends AbstractFormatter {
 
-	    private String datePattern = "dd-MM-yyyy";
+	    private String datePattern = "yyyy-MM-dd";
 	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
 	    @Override
@@ -238,22 +272,61 @@ public class TaskReports {
 		String type = (String) cmBxType.getSelectedItem();
 		String assigned = (String) cmBxTaskAssigned.getSelectedItem();
 		String whoAssigned = (String) cmBxWhoAssigned.getSelectedItem();
-
+		String completeBefore = (String) BeforeDatePicker.getJFormattedTextField().getText();
+		String completeAfter = (String) AfterDatePicker.getJFormattedTextField().getText();
+		
 		clearTable();
 		
 		for(Task task : Main.tasks)
 		{
 			if(task.getTaskAssigned() == null) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), "None", task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});	
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), "None", task.getTaskDuration(), task.getTaskCompleted(), task.getTaskDateCompleted(), task.getDateDue()});	
 			}
 			else {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), "Completed date", "completed time"});
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskTitle(), task.getTaskType(), task.getTaskAssigned(),task.getTaskDuration(), task.getTaskCompleted(), task.getTaskDateCompleted(), task.getDateDue()});
 			}
 		}
 		
 		for(int i = model.getRowCount() - 1; i>= 0; i--) {
 			if(model.getValueAt(i, 3).equals("null")) {
 				model.setValueAt("None", i, 3);
+			}
+		}
+		
+		if(completeAfter != null) {
+			for(int i = model.getRowCount() - 1; i>= 0; i--) {
+				if(model.getValueAt(i, 6) != "0") {
+					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						if(!completeAfter.isEmpty()) {
+							Date selectedDate = format.parse(completeAfter);
+							Date taskDate = format.parse((String) model.getValueAt(i,6));
+							if(taskDate.before(selectedDate)){
+								model.removeRow(i);
+							}
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		
+		if(completeBefore != null) {
+			for(int i = model.getRowCount() - 1; i>= 0; i--) {
+				if(model.getValueAt(i, 6) != "0") {
+					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					try {
+						Date selectedDate = format.parse(completeBefore);
+						Date taskDate = format.parse((String) model.getValueAt(i,6));
+						if(taskDate.after(selectedDate)){
+							model.removeRow(i); 
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
