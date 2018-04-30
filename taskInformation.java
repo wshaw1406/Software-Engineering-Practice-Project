@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -25,6 +23,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 public class taskInformation {
 
@@ -184,12 +183,14 @@ public class taskInformation {
 		});
 		btnLogOut.setBounds(469, 11, 89, 23);
 		frame.getContentPane().add(btnLogOut);
+				
 		table.getColumnModel().getColumn(0).setPreferredWidth(30);
 		table.getColumnModel().getColumn(0).setMinWidth(30);
 		table.getColumnModel().getColumn(0).setMaxWidth(30);
 		table.getColumnModel().getColumn(1).setPreferredWidth(79);
 		table.getColumnModel().getColumn(4).setPreferredWidth(103);
-				
+		
+	
 		//Table for caretakers tasks
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 				
@@ -210,7 +211,43 @@ public class taskInformation {
 			
 			cal.add(Calendar.MINUTE, task.getTaskDuration());
 					newTime = df.format(cal.getTime());
-				}		
+		}
+		
+		JButton btnComplete = new JButton("Complete/edit task");
+		//ActionListener for when button is clicked
+		btnComplete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String value = " ";
+				int row;
+				row = table.getSelectedRow();
+				value = table.getModel().getValueAt(row, 3).toString();
+				Task task = db.pullSingleTask(value);
+				if(task.getTaskCompleted() == false)
+				{
+					//Hides the frame
+					frame.setVisible(false);
+					//Creates TaskLogging 
+					new TaskLogging(task);
+					System.out.println("test");
+				}
+				else{
+					//Hides the frame
+					frame.setVisible(false);
+					//Creates TaskLogging 
+					new editRecord(task);
+					System.out.println("test2");
+				}
+			}
+		});
+			
+		btnComplete.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnComplete.setBounds(355, 305, 203, 23);
+		frame.getContentPane().add(btnComplete);
+		
+		JLabel lblNewLabel = new JLabel("Select a task before Complete");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel.setBounds(355, 283, 203, 16);
+		frame.getContentPane().add(lblNewLabel);
 		
 	}
 }

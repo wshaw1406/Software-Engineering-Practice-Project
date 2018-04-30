@@ -1,4 +1,3 @@
-package software_eng;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -69,17 +68,17 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes", "Completed"
+				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes", "Completed", "Date Due"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 				boolean[] columnEditables = new boolean[] {
-					true, false, false, false, false, true, false
+					true, false, false, false, false, true, false, false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
@@ -121,8 +120,8 @@ public class CaretakerSchedule2 extends JFrame{
 			else {
 				ass = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
-				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted()  }); //DOESNT WORK-COMPLETED
+			if(ass.equals(Main.user.getUsername())) {
+				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted(),task.getDateDue()  }); 
 				cal.add(Calendar.MINUTE, task.getTaskDuration());
 				newTime = df.format(cal.getTime());
 			}			
@@ -144,10 +143,7 @@ public class CaretakerSchedule2 extends JFrame{
 				
 		btnAssignNewTasks.setBounds(225, 328, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);;
-		
-
-
-		
+				
 		//JButton for Complete
 		JButton btnComplete = new JButton("Complete");
 
@@ -159,26 +155,21 @@ public class CaretakerSchedule2 extends JFrame{
 				row = table.getSelectedRow();
 				value = table.getModel().getValueAt(row, 3).toString();
 				Task task = db.pullSingleTask(value);
-				/*if(task.getTaskCompleted() == "1")
+				if(task.getTaskCompleted() == false)
 				{
 					//Hides the frame
 					frame.setVisible(false);
 					//Creates TaskLogging 
 					new TaskLogging(task);
+					System.out.println("test");
 				}
 				else{
 					//Hides the frame
 					frame.setVisible(false);
 					//Creates TaskLogging 
 					new editRecord(task);
+					System.out.println("test2");
 				}
-				
-				*/
-				//Hides the frame
-				frame.setVisible(false);
-				//Creates TaskLogging 
-				new TaskLogging(task);
-
 			}
 		});
 		btnComplete.setBounds(330, 366, 330, 49);

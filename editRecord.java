@@ -33,13 +33,12 @@ public class editRecord {
 	private void initialize() {		
 		//JFrame for GUI TaskLogging
 		frmTaskLogging = new JFrame();
-		frmTaskLogging.setTitle("Task Logging");
+		frmTaskLogging.setTitle("Edit Record");
 		frmTaskLogging.setBounds(100, 100, 434, 298);
 		frmTaskLogging.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTaskLogging.getContentPane().setLayout(null);
 		
 		Database db = new Database();
-		//Task task = db.pullSingleTask(taskTitle);
 				
 		//JLabel for Caretaker Name
 		JLabel lblCaretakerName = new JLabel("Caretaker Name:");
@@ -78,7 +77,7 @@ public class editRecord {
 		//Gets current time
 		Date datenow = Calendar.getInstance().getTime();
 		SpinnerDateModel smb = new SpinnerDateModel(datenow, null, null, Calendar.HOUR_OF_DAY);
-		spinnerTime.setModel(new SpinnerDateModel(new Date(1524913474883L), null, null, Calendar.YEAR));
+		spinnerTime.setModel(smb);
 		//Displays hour, minute currently
 		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "dd-MM HH:mm");
 		spinnerTime.setEditor(de_spinnerTime);
