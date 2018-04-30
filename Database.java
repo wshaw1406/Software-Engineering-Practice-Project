@@ -1,4 +1,3 @@
-package software_eng;
 import java.sql.*;
 import java.util.*;
 import java.sql.Date;
@@ -356,7 +355,7 @@ public class Database {
 	 public void updateUser(User user)
 	 {
 			connect();
-		 String sql = "UPDATE users SET passwordHash = '" + user.getPasswordHash() + "', firstname = '" + user.getFirstName() + "', surname = '"
+		 String sql = "UPDATE users SET passwordHash = '" + user.getPasswordHash() + "', firstname = '" + user.getFirstName() + "', username = '" + user.getUsername()+ "', surname = '"
 	     + user.getSurname() + "', accountType = '" + user.getAccountType() + "', gender = '" + user.getGender() + "' WHERE userID = " + user.getUserID() + ";";
 		 
 		 try
