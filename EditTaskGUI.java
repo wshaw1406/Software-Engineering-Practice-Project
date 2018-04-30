@@ -1,4 +1,3 @@
-package software_eng;
 
 import java.awt.EventQueue;
 
@@ -10,22 +9,10 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JFormattedTextField.AbstractFormatter;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
-import software_eng.CreateTaskGUI.DateLabelFormatter;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Properties;
 
 public class EditTaskGUI {
 
@@ -42,32 +29,12 @@ public class EditTaskGUI {
 		frame.setVisible(true);
 	}
 
-	public class DateLabelFormatter extends AbstractFormatter {
-
-	    private String datePattern = "yyyy-MM-dd";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
-
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
-
-	        return "";
-	    }
-
-	}
-	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 401, 320);
+		frame.setBounds(100, 100, 401, 281);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -109,19 +76,8 @@ public class EditTaskGUI {
 		frame.getContentPane().add(lblTaskDuration);
 		
 		JLabel lblTaskNotes = new JLabel("Task Notes");
-		lblTaskNotes.setBounds(30, 183, 86, 14);
+		lblTaskNotes.setBounds(30, 145, 86, 14);
 		frame.getContentPane().add(lblTaskNotes);
-		
-		UtilDateModel model = new UtilDateModel();
-		Properties p = new Properties();
-		p.put("text.today", "Today");
-		p.put("text.month", "Month");
-		p.put("text.year", "Year");
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-		datePicker.getJFormattedTextField().setBounds(0, 0, 190, 23);
-		datePicker.setBounds(126, 144, 163, 23);
-		frame.getContentPane().add(datePicker);
 		
 		textField = new JTextField();
 		textField.setBounds(126, 58, 86, 20);
@@ -148,7 +104,7 @@ public class EditTaskGUI {
 		frame.getContentPane().add(lblHours);
 		
 		JTextArea textArea = new JTextArea();
-		textArea.setBounds(126, 178, 220, 56);
+		textArea.setBounds(126, 140, 220, 56);
 		frame.getContentPane().add(textArea);
 		textArea.setText(defaultTask.getTaskNotes());
 		
@@ -188,14 +144,12 @@ public class EditTaskGUI {
 					System.out.println(exc.toString());
 				}
 				task.setTaskDuration((int)durationSpinner.getValue());
-				String strDate = datePicker.getJFormattedTextField().getText();
-				Date dateDue = Date.valueOf(strDate);
-				task.setDateDue(dateDue);
+				
 				task.setTaskNotes(textArea.getText());
 				db.updateTask(task);
 			}
 		});
-		btnSubmit.setBounds(286, 247, 89, 23);
+		btnSubmit.setBounds(286, 209, 89, 23);
 		frame.getContentPane().add(btnSubmit);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -205,13 +159,7 @@ public class EditTaskGUI {
 				new taskInformation();
 			}
 		});
-		btnCancel.setBounds(10, 247, 89, 23);
+		btnCancel.setBounds(10, 209, 89, 23);
 		frame.getContentPane().add(btnCancel);
-		
-		JLabel lblDateDue = new JLabel("* Date due");
-		lblDateDue.setBounds(30, 148, 69, 14);
-		frame.getContentPane().add(lblDateDue);
-		
-
 	}
 }
