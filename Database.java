@@ -42,13 +42,15 @@ public class Database {
 	            rs = stmt.executeQuery("SELECT * FROM task");
 	            while(rs.next())
 	            {
+	            	String tCompleted = rs.getString("taskCompleted");
+	            	boolean completed = Boolean.parseBoolean(tCompleted);
+
 	            	int id = rs.getInt("taskID");
 	            	String type = rs.getString("taskType");
 	            	String title = rs.getString("taskTitle");
 	            	String notes = rs.getString("taskNotes");
 	            	int duration = rs.getInt("taskDuration");
 	            	String assigned = rs.getString("taskAssigned");
-	            	boolean completed = rs.getBoolean("taskCompleted");
 	                String priority = rs.getString("taskPriority");
 	                int taskTimeCompleted = rs.getInt("taskTimeCompleted");
 	                String dateDue = rs.getString("dateDue");
