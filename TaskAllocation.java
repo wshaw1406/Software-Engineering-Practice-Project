@@ -108,10 +108,10 @@ public class TaskAllocation {
 			}
 			//Fill out the table with tasks that are not assigned and tasks that are assigned to the user already
 			if(taskAssID == "0" || taskAssID.equals("null")) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", false});
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), "notes", false});
 			}
 			if(taskAssID.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), "DSFSDF", "notes", true});
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), "notes", true});
 			}
 	    }
 		scrollPane.setViewportView(createData((DefaultTableModel) table.getModel()));
