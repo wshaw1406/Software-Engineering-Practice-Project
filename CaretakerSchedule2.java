@@ -1,4 +1,4 @@
-
+package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +47,8 @@ public class CaretakerSchedule2 extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
 				frame.hide();
+				//Refill the task list with the one from the db that has had no changes to it
+			    Main.tasks = (ArrayList<Task>) db.pullTasks();
 				//Opens Task Reports
 				new CaretakerSchedule2();
 			}
@@ -120,7 +122,7 @@ public class CaretakerSchedule2 extends JFrame{
 			else {
 				ass = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername())) {
+			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
 				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted(),task.getDateDue()  }); 
 				cal.add(Calendar.MINUTE, task.getTaskDuration());
 				newTime = df.format(cal.getTime());
