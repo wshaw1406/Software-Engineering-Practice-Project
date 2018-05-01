@@ -12,7 +12,10 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -49,6 +52,7 @@ public class TaskReports {
 	private static JComboBox cmBxComplete;
 	private static JComboBox cmBxTaskAssigned;
 	private static JComboBox cmBxWhoAssigned;
+	private static JComboBox cmBxOverDue;
 	private static JDatePickerImpl BeforeDatePicker;
 	private static JDatePickerImpl AfterDatePicker;
 
@@ -206,8 +210,6 @@ public class TaskReports {
 		panel_5.add(lblCompletedBefore);
 		
 		UtilDateModel BeforeDmodel = new UtilDateModel();
-		LocalDateTime now = LocalDateTime.now(); 
-		String now2 = now.getYear() + "-" + now.getMonthValue() + "-" + now.getDayOfMonth();
 
 		Properties Bp = new Properties();
 	    Bp.put("text.today", "Today");
@@ -222,8 +224,18 @@ public class TaskReports {
 	    	}
 	    });
 		    
-	    BeforeDatePicker.getJFormattedTextField().setText(now2);
 		panel_5.add(BeforeDatePicker);		
+		
+		JPanel panel_3 = new JPanel();
+		panel.add(panel_3);
+		
+		JLabel lblOverDue = new JLabel("Overdue tasks");
+		panel_3.add(lblOverDue);
+		
+		cmBxOverDue = new JComboBox();
+		cmBxOverDue.setModel(new DefaultComboBoxModel(new String[] {"Any", "True"}));
+		cmBxOverDue.setSelectedIndex(0);
+		panel_3.add(cmBxOverDue);
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
@@ -240,6 +252,8 @@ public class TaskReports {
 	    cmBxComplete.addItemListener(actionListener);
 	    cmBxTaskAssigned.addItemListener(actionListener);
 	    cmBxWhoAssigned.addItemListener(actionListener);
+	    cmBxOverDue.addItemListener(actionListener);
+
 	    	    
 	    updateTable();
 	    
@@ -268,6 +282,7 @@ public class TaskReports {
 	public static void updateTable() {
 
 		model = (DefaultTableModel) table.getModel();
+		String overdue = (String) cmBxOverDue.getSelectedItem();
 		String complete = (String) cmBxComplete.getSelectedItem();
 		String type = (String) cmBxType.getSelectedItem();
 		String assigned = (String) cmBxTaskAssigned.getSelectedItem();
@@ -318,10 +333,12 @@ public class TaskReports {
 				if(model.getValueAt(i, 6) != "0") {
 					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					try {
-						Date selectedDate = format.parse(completeBefore);
-						Date taskDate = format.parse((String) model.getValueAt(i,6));
-						if(taskDate.after(selectedDate)){
-							model.removeRow(i); 
+						if(!completeBefore.isEmpty()) {
+							Date selectedDate = format.parse(completeBefore);
+							Date taskDate = format.parse((String) model.getValueAt(i,6));
+							if(taskDate.after(selectedDate)){
+								model.removeRow(i); 
+							}
 						}
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -330,6 +347,16 @@ public class TaskReports {
 			}
 		}
 		
+		switch(overdue) {
+			case "True":
+				for (int i = model.getRowCount() - 1; i>= 0; i--) {
+					Date localDate = new Date();
+					if(!localDate.after((Date) model.getValueAt(i, 7))) {
+						model.removeRow(i);
+					}
+				};
+			break;
+		}
 		switch(type) {
 			case "Routine": 
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
