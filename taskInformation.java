@@ -248,6 +248,10 @@ public class taskInformation {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel.setBounds(355, 283, 203, 16);
 		frame.getContentPane().add(lblNewLabel);
-		
+
+		JLabel currentLbl = new JLabel("");
+		currentLbl.setBounds(21, 340, 233, 14);
+		currentLbl.setText("Currently logged in: "+ Main.user.getUsername());
+		frame.getContentPane().add(currentLbl);		
 	}
 }
