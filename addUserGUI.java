@@ -116,22 +116,24 @@ public class addUserGUI {
 		lblSurname.setBounds(59, 139, 76, 14);
 		frmAddNewUser.getContentPane().add(lblSurname);
 		
-		//surname textfield
 		surnameField = new JTextField();
+		surnameField.setColumns(10);
+		//action listener to ensure only letters are input
 		surnameField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c=e.getKeyChar();
-				//actionlistener to check that only letters are entered
 				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				    {
 				        e.consume();
-					String userID = Integer.toString(user.getUserID());
-					//automatically set the username field with surname + auto generated user ID
-					usernameField.setText(surnameField.getText()+userIDField.getText());		
 					}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				usernameField.setText(surnameField.getText()+userIDField.getText());
+			}
 		});
-		surnameField.setColumns(10);
-		surnameField.setBounds(182, 139, 184, 20);
+		surnameField.setBounds(182, 136, 182, 20);
 		frmAddNewUser.getContentPane().add(surnameField);
 		
 		//label to show where the user where account type is entered

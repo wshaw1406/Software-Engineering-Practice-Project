@@ -126,9 +126,13 @@ public class editUserGUI {
 			public void keyTyped(KeyEvent e) {
 				char c=e.getKeyChar();
 				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				    {
 				        e.consume();
-					usernameField.setText(surnameField.getText()+userIDField.getText());		
-					
+					}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				usernameField.setText(surnameField.getText()+userIDField.getText());
 			}
 		});
 		surnameField.setBounds(201, 150, 182, 20);
@@ -273,6 +277,7 @@ public class editUserGUI {
 		userIDField.setBounds(201, 80, 180, 20);
 		panel.add(userIDField);
 		userIDField.setColumns(10);
+		
 		
 		//label for user ID
 		JLabel lblUserid = new JLabel("UserID");
