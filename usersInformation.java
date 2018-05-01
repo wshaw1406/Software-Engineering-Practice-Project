@@ -116,6 +116,12 @@ public class usersInformation {
 		frame.getContentPane().add(label_2);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setVisible(false);
+				new UserReports();
+			}
+		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnReport.setBounds(454, 202, 92, 23);
 		frame.getContentPane().add(btnReport);
@@ -193,7 +199,7 @@ public class usersInformation {
 		frame.getContentPane().add(btnLogOut);
 		
 		JLabel currentLbl = new JLabel("");
-		currentLbl.setBounds(20, 288, 233, 14);
+		currentLbl.setBounds(20, 288, 251, 14);
 		currentLbl.setText("Currently logged in: "+ Main.user.getUsername());
 		frame.getContentPane().add(currentLbl);
 	}

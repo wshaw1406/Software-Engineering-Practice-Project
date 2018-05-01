@@ -250,7 +250,7 @@ public class taskInformation {
 		frame.getContentPane().add(lblNewLabel);
 
 		JLabel currentLbl = new JLabel("");
-		currentLbl.setBounds(21, 340, 233, 14);
+		currentLbl.setBounds(21, 340, 249, 14);
 		currentLbl.setText("Currently logged in: "+ Main.user.getUsername());
 		frame.getContentPane().add(currentLbl);		
 	}

@@ -98,7 +98,7 @@ public class adminGUI {
 		
 		//label that calls the user's get username and displays it
 		JLabel usernameLbl = new JLabel("");
-		usernameLbl.setBounds(84, 15, 46, 14);
+		usernameLbl.setBounds(84, 15, 89, 14);
 		frmAdministration.getContentPane().add(usernameLbl);
 		usernameLbl.setText(Main.user.getUsername());
 		frmAdministration.setVisible(true);
