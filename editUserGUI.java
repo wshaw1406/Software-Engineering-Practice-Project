@@ -123,7 +123,7 @@ public class editUserGUI {
 		//action listener to ensure only letters are input
 		surnameField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c=e.getKeyChar();
 				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
 				        e.consume();
