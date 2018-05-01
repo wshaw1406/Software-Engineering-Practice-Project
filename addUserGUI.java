@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -166,6 +167,11 @@ public class addUserGUI {
 		btnSubmit.addActionListener(new ActionListener() {
 			//action listener which adds all of the entered fields into the new user
 			public void actionPerformed(ActionEvent arg0) {
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to add a user with these details?", "Add user", 
+                        JOptionPane.YES_NO_OPTION); 
+				//if they choose yes run main which runs log in ui
+				if (choice == JOptionPane.YES_OPTION) {		
 				Database db = new Database();
 				User newUser = new User();	
 				//gets the automatically generated userID and turns it into an int
@@ -185,7 +191,8 @@ public class addUserGUI {
 				frmAddNewUser.setVisible(false);
 				//create a new users information page
 				new usersInformation();
-			}
+			    }
+		    }
 		});
 		btnSubmit.setEnabled(false);
 
