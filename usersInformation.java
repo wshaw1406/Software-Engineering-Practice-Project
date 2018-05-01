@@ -191,7 +191,7 @@ public class usersInformation {
                         JOptionPane.YES_NO_OPTION); 
 				if (choice == JOptionPane.YES_OPTION) {
 					frame.setVisible(false);
-					new loginGUI();
+					new Main();
 				}	
 			}
 		});
