@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;

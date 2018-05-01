@@ -81,7 +81,7 @@ public class taskInformation {
 			public void actionPerformed(ActionEvent e) {
 				int row;
 				row = table.getSelectedRow();
-				new EditTaskGUI(table.getModel().getValueAt(row, 3).toString());
+				new EditTaskGUI(table.getModel().getValueAt(row, 2).toString());
 				frame.setVisible(false);
 			}
 		});
@@ -99,7 +99,7 @@ public class taskInformation {
 			public void actionPerformed(ActionEvent arg0) {
 				int row;
 				row = table.getSelectedRow();
-				Task toRemove = db.pullSingleTask(table.getModel().getValueAt(row, 3).toString());
+				Task toRemove = db.pullSingleTask(table.getModel().getValueAt(row, 2).toString());
 			    db.deleteTask(toRemove.getTaskID());
 			    frame.setVisible(false);
 			    new taskInformation();
@@ -158,11 +158,11 @@ public class taskInformation {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "Time", "Priority", "Title", "Duration"
+				"ID", "Priority", "Title", "Duration"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Integer.class, Object.class, Object.class, Object.class, Object.class
+				Integer.class, Object.class, Object.class, Object.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -187,55 +187,49 @@ public class taskInformation {
 		table.getColumnModel().getColumn(0).setPreferredWidth(30);
 		table.getColumnModel().getColumn(0).setMinWidth(30);
 		table.getColumnModel().getColumn(0).setMaxWidth(30);
-		table.getColumnModel().getColumn(1).setPreferredWidth(79);
-		table.getColumnModel().getColumn(4).setPreferredWidth(103);
+		table.getColumnModel().getColumn(3).setPreferredWidth(103);
 		
 	
 		//Table for caretakers tasks
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 				
-		String startTime = "9:15";
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		Date d = null;
-		try {
-			d = df.parse(startTime);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		} 
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(d);
-		String newTime = df.format(cal.getTime());
+		
 				 
 		for(Task task: tasks) {
-			model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration()});
-			
-			cal.add(Calendar.MINUTE, task.getTaskDuration());
-					newTime = df.format(cal.getTime());
+			model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration()});
+
 		}
 		
-		JButton btnComplete = new JButton("Complete/edit task");
+		JButton btnComplete = new JButton("Complete/Edit Completed Task");
 		//ActionListener for when button is clicked
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String value = " ";
+				int value;
 				int row;
 				row = table.getSelectedRow();
-				value = table.getModel().getValueAt(row, 3).toString();
+				value = (int) table.getModel().getValueAt(row, 0);
 				Task task = db.pullSingleTask(value);
-				if(task.getTaskCompleted() == false)
+				System.out.println(task.getTaskAssigned());
+				if(task.getTaskAssigned() == null)
 				{
-					//Hides the frame
-					frame.setVisible(false);
-					//Creates TaskLogging 
-					new TaskLogging(task);
-					System.out.println("test");
+					System.out.println("This task has not been assigned to anyone yet");
 				}
-				else{
-					//Hides the frame
-					frame.setVisible(false);
-					//Creates TaskLogging 
-					new editRecord(task);
-					System.out.println("test2");
+				else {
+					if(task.getTaskCompleted() == false)
+					{
+						//Hides the frame
+						frame.setVisible(false);
+						//Creates TaskLogging 
+						new TaskLogging(task);
+						System.out.println("test");
+					}
+					else{
+						//Hides the frame
+						frame.setVisible(false);
+						//Creates TaskLogging 
+						new editRecord(task);
+						System.out.println("test2");
+					}
 				}
 			}
 		});
@@ -250,7 +244,7 @@ public class taskInformation {
 		frame.getContentPane().add(lblNewLabel);
 
 		JLabel currentLbl = new JLabel("");
-		currentLbl.setBounds(21, 340, 249, 14);
+		currentLbl.setBounds(21, 340, 233, 14);
 		currentLbl.setText("Currently logged in: "+ Main.user.getUsername());
 		frame.getContentPane().add(currentLbl);		
 	}

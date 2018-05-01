@@ -12,7 +12,7 @@ public class Database {
 	public static void connect() {
 		try
 		{
-		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Jordan\\Documents\\GitHub\\Software-Engineering-Practice-Project\\softwareEng.db");
+		con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mgc29\\Documents\\UNI\\2 Software Engineering Practice\\softwareEng.db");
 		}
 		catch(SQLException e) 
 		{
@@ -124,7 +124,8 @@ public class Database {
 		            	taskAssigned = rs.getString("taskAssigned");
 	            	}
 
-	            	boolean taskCompleted = rs.getBoolean("taskCompleted");
+	            	String strComplete = rs.getString("taskCompleted");
+	            	boolean taskCompleted = Boolean.parseBoolean(strComplete);
 	            	String taskPriority = rs.getString("taskPriority");
 	            	String dateDue = rs.getString("dateDue");
 		            Date date = Date.valueOf(dateDue);
@@ -355,7 +356,7 @@ public class Database {
 	 public void updateUser(User user)
 	 {
 			connect();
-		 String sql = "UPDATE users SET passwordHash = '" + user.getPasswordHash() + "', firstname = '" + user.getFirstName() + "', username = '" + user.getUsername()+ "', surname = '"
+		 String sql = "UPDATE users SET passwordHash = '" + user.getPasswordHash() + "', firstname = '" + user.getFirstName() + "', surname = '"
 	     + user.getSurname() + "', accountType = '" + user.getAccountType() + "', gender = '" + user.getGender() + "' WHERE userID = " + user.getUserID() + ";";
 		 
 		 try

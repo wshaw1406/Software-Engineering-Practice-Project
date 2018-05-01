@@ -1,4 +1,4 @@
-package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +33,11 @@ public class CaretakerSchedule2 extends JFrame{
 	}
 	
 	private void initialize() {
+		
+		//Connects tot eh database
 		Database db = new Database();
+		
+		//Makes the JFrame called frame
 		frame = new JFrame();
 		frame.setBounds(100, 100, 681, 463);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +62,7 @@ public class CaretakerSchedule2 extends JFrame{
 			
 		//JScrollPane for the table, so if too much data scroll bar can be used
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(101, 95, 463, 214);
+		scrollPane_1.setBounds(57, 95, 549, 214);
 		frame.getContentPane().add(scrollPane_1);
 		
 		//Jtable table
@@ -122,7 +126,7 @@ public class CaretakerSchedule2 extends JFrame{
 			else {
 				ass = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
+			if(ass.equals(Main.user.getUsername())) {
 				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted(),task.getDateDue()  }); 
 				cal.add(Calendar.MINUTE, task.getTaskDuration());
 				newTime = df.format(cal.getTime());
@@ -147,7 +151,7 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.getContentPane().add(btnAssignNewTasks);;
 				
 		//JButton for Complete
-		JButton btnComplete = new JButton("Complete");
+		JButton btnComplete = new JButton("Complete/Edit Completed Task");
 
 		//ActionListener for when button is clicked
 		btnComplete.addActionListener(new ActionListener() {
@@ -175,21 +179,7 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnComplete.setBounds(330, 366, 330, 49);
-		frame.getContentPane().add(btnComplete);
-		
-		//JButton for Completed Tasks
-		JButton btnEditCompletedTask = new JButton("Completed Tasks");
-		//When clicked
-		btnEditCompletedTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//Hides frame
-				frame.hide();
-				//Opens Task Reports
-				new TaskReports();
-			}
-		});
-		btnEditCompletedTask.setBounds(503, 13, 148, 25);
-		frame.getContentPane().add(btnEditCompletedTask);;
+		frame.getContentPane().add(btnComplete);;
 		
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
@@ -217,8 +207,21 @@ public class CaretakerSchedule2 extends JFrame{
 				new Main();
 			}
 		});
-		btnLogout.setBounds(12, 13, 97, 25);
-		frame.getContentPane().add(btnLogout); 			
+		btnLogout.setBounds(554, 8, 97, 25);
+		frame.getContentPane().add(btnLogout); 		
+		
+		//welcome label 
+		JLabel welcomeLbl = new JLabel("");
+		welcomeLbl.setBounds(12, 19, 65, 14);
+		frame.getContentPane().add(welcomeLbl);
+		welcomeLbl.setText("Welcome, ");
+
+		//label that calls the user's get username and displays it
+		JLabel usernameLbl = new JLabel("");
+		usernameLbl.setBounds(72, 19, 90, 14);
+		frame.getContentPane().add(usernameLbl);
+		usernameLbl.setText(Main.user.getUsername());
+		frame.setVisible(true);
 	}
 }
 
