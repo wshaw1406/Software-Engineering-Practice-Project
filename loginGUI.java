@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -127,5 +125,9 @@ public class loginGUI extends JFrame {
 		btnForgot.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnForgot.setBounds(64, 143, 148, 23);
 		frmLogin.getContentPane().add(btnForgot);
+		
+		JLabel lblCaseSensitive = new JLabel("* Username and password are both case sensitive");
+		lblCaseSensitive.setBounds(64, 120, 294, 14);
+		frmLogin.getContentPane().add(lblCaseSensitive);
 	}
 }
