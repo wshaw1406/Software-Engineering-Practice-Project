@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -115,22 +116,24 @@ public class addUserGUI {
 		lblSurname.setBounds(59, 139, 76, 14);
 		frmAddNewUser.getContentPane().add(lblSurname);
 		
-		//surname textfield
 		surnameField = new JTextField();
+		surnameField.setColumns(10);
+		//action listener to ensure only letters are input
 		surnameField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c=e.getKeyChar();
-				//actionlistener to check that only letters are entered
 				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				    {
 				        e.consume();
-					String userID = Integer.toString(user.getUserID());
-					//automatically set the username field with surname + auto generated user ID
-					usernameField.setText(surnameField.getText()+userIDField.getText());		
 					}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				usernameField.setText(surnameField.getText()+userIDField.getText());
+			}
 		});
-		surnameField.setColumns(10);
-		surnameField.setBounds(182, 139, 184, 20);
+		surnameField.setBounds(182, 136, 182, 20);
 		frmAddNewUser.getContentPane().add(surnameField);
 		
 		//label to show where the user where account type is entered
@@ -166,6 +169,11 @@ public class addUserGUI {
 		btnSubmit.addActionListener(new ActionListener() {
 			//action listener which adds all of the entered fields into the new user
 			public void actionPerformed(ActionEvent arg0) {
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to add a user with these details?", "Add user", 
+                        JOptionPane.YES_NO_OPTION); 
+				//if they choose yes run main which runs log in ui
+				if (choice == JOptionPane.YES_OPTION) {		
 				Database db = new Database();
 				User newUser = new User();	
 				//gets the automatically generated userID and turns it into an int
@@ -185,7 +193,8 @@ public class addUserGUI {
 				frmAddNewUser.setVisible(false);
 				//create a new users information page
 				new usersInformation();
-			}
+			    }
+		    }
 		});
 		btnSubmit.setEnabled(false);
 
