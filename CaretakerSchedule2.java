@@ -1,3 +1,4 @@
+package software_eng;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -126,7 +127,7 @@ public class CaretakerSchedule2 extends JFrame{
 			else {
 				ass = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername())) {
+			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
 				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getTaskCompleted(),task.getDateDue()  }); 
 				cal.add(Calendar.MINUTE, task.getTaskDuration());
 				newTime = df.format(cal.getTime());
