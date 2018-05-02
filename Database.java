@@ -164,8 +164,9 @@ public class Database {
 	            	{
 		            	taskAssigned = rs.getString("taskAssigned");
 	            	}
-
-	            	boolean taskCompleted = rs.getBoolean("taskCompleted");
+	            	
+	            	String strComplete = rs.getString("taskCompleted");
+	            	boolean taskCompleted = Boolean.parseBoolean(strComplete);
 	            	String taskPriority = rs.getString("taskPriority");
 	            	String dateDue = rs.getString("dateDue");
 		            Date date = Date.valueOf(dateDue);
