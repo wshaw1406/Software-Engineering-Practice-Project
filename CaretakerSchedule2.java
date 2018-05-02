@@ -3,6 +3,7 @@ package software_eng;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -35,7 +36,7 @@ public class CaretakerSchedule2 extends JFrame{
 	
 	private void initialize() {
 		
-		//Connects tot eh database
+		//Connects to the database
 		Database db = new Database();
 		
 		//Makes the JFrame called frame
@@ -153,7 +154,6 @@ public class CaretakerSchedule2 extends JFrame{
 				
 		//JButton for Complete
 		JButton btnComplete = new JButton("Complete/Edit Completed Task");
-
 		//ActionListener for when button is clicked
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -162,6 +162,8 @@ public class CaretakerSchedule2 extends JFrame{
 				row = table.getSelectedRow();
 				value = table.getModel().getValueAt(row, 3).toString();
 				Task task = db.pullSingleTask(value);
+				System.out.println(task.getTaskCompleted());
+								
 				if(task.getTaskCompleted() == false)
 				{
 					//Hides the frame
@@ -170,10 +172,11 @@ public class CaretakerSchedule2 extends JFrame{
 					new TaskLogging(task);
 					System.out.println("test");
 				}
-				else{
+				else
+				{
 					//Hides the frame
 					frame.setVisible(false);
-					//Creates TaskLogging 
+					//Creates editRecord 
 					new editRecord(task);
 					System.out.println("test2");
 				}
@@ -219,9 +222,14 @@ public class CaretakerSchedule2 extends JFrame{
 
 		//label that calls the user's get username and displays it
 		JLabel usernameLbl = new JLabel("");
-		usernameLbl.setBounds(72, 19, 90, 14);
+		usernameLbl.setBounds(72, 19, 152, 14);
 		frame.getContentPane().add(usernameLbl);
 		usernameLbl.setText(Main.user.getUsername());
+		
+		JLabel lblEnsureATask = new JLabel("*Ensure a task is selected");
+		lblEnsureATask.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEnsureATask.setBounds(487, 350, 164, 14);
+		frame.getContentPane().add(lblEnsureATask);
 		frame.setVisible(true);
 	}
 }
