@@ -5,7 +5,6 @@ import java.util.List;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Calendar;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -34,10 +33,11 @@ public class editRecord {
 		//JFrame for GUI TaskLogging
 		frmTaskLogging = new JFrame();
 		frmTaskLogging.setTitle("Edit Record");
-		frmTaskLogging.setBounds(100, 100, 434, 298);
+		frmTaskLogging.setBounds(100, 100, 434, 338);
 		frmTaskLogging.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTaskLogging.getContentPane().setLayout(null);
 		
+		//Connects to the database
 		Database db = new Database();
 				
 		//JLabel for Caretaker Name
@@ -65,19 +65,24 @@ public class editRecord {
 				System.out.println("No task logged");
 				//Sets Frames visibilty to false (hides it)
 			    frmTaskLogging.setVisible(false); 
-			    //Opens new CaretakerSchedule2
+			    //If the user account type is 'Caretaker'
 			    if(Main.user.getAccountType().equals("Caretaker"))
 			    {
-			    	//Opens new CaretakerSchedule2
+			    	//Hides frame
+			    	frmTaskLogging.setVisible(false); 
+			    	//Opens new CompleteTasks
 				    new CompleteTasks();
 			    }
+			    //else, run code
 			    else {
+			    	//Hides frame
+			    	frmTaskLogging.setVisible(false); 
 			    	//Opens new taskInformation
 				    new taskInformation();
 			    }
 			}
 		});		
-		btnCancel.setBounds(290, 215, 89, 23);
+		btnCancel.setBounds(290, 255, 89, 23);
 		frmTaskLogging.getContentPane().add(btnCancel);
 	
 		//Jspinner for TimeOfCompletion 
@@ -93,22 +98,28 @@ public class editRecord {
 		spinnerTime.setBounds(169, 83, 134, 22);
 		frmTaskLogging.getContentPane().add(spinnerTime);	
 			
+		//Converts the dates into a int for year, month, day, hours, minutes
 		int year = (int) (new Date().getYear());
 		int month = (int) (new Date().getMonth());
 		int day = (int) (new Date().getDate());
 		int hours = (int) (new Date().getHours());
 		int minutes = (int) (new Date().getMinutes());
+		// Joins all the ints together to which is set to int time
 		int time = Integer.valueOf(String.valueOf(year) + String.valueOf(month) + String.valueOf(day) + String.valueOf(hours) + String.valueOf(minutes));
 				
 		//JComboBox for choosing caretakers
 		JComboBox comboCaretakerName = new JComboBox();
-		//List of Option
+		//List of Options of the Caretakers on the System 
 		List<User> caretakers = db.pullCaretakers();
 		String[] caretakersNames = new String[caretakers.size()];
+		//Makes int variable z
 		int z = 0;
+		//For loop that run through all the users who are caretakers
 		for(User user: caretakers)
 		{
+			//Gets the caretakers username
 			caretakersNames[z] = user.getUsername();
+			//Incriment by 1
 			z++;
 		}
 		comboCaretakerName.setModel(new DefaultComboBoxModel(caretakersNames));
@@ -125,11 +136,13 @@ public class editRecord {
 				//Opens JOptionPane
 				JOptionPane.showMessageDialog(frame,
 						"Select the Caretaker that completed the job, "
-									+ "\nSelect the time it was completed at, "
-									+ "\nThen add any additional comments in the box.");
+						+ "\nSelect the time it was completed at, "
+						+ "\nThen add any additional comments in the box."
+						+ "\nIf you want to uncomplete the task press the "
+						+ "\n'Uncomplete Task button");
 			}		
 		});
-		btnHelp.setBounds(23, 214, 89, 23);
+		btnHelp.setBounds(23, 254, 89, 23);
 		frmTaskLogging.getContentPane().add(btnHelp);
 		
 		//JLabel for TaskName
@@ -148,10 +161,12 @@ public class editRecord {
 		scrollPane.setViewportView(txtrNotes);
 		txtrNotes.setLineWrap(true);
 		
+		//JTextfield for task ID
 		txtTaskID = new JTextField();		
 		txtTaskID.setBounds(169, 0, 116, 22);
 		frmTaskLogging.getContentPane().add(txtTaskID);
 		txtTaskID.setColumns(10);
+		//Hides the JTextfield 
 		txtTaskID.setVisible(false);
 		
 		//JTextField for txtTaskName
@@ -170,7 +185,7 @@ public class editRecord {
 		btnSubmit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
 				//When clicked, shows Dialog confirming action 
-				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
+				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Edit this task?", "Confirm",
 				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    //If, the user selects the 'No' option
 				    if (response == JOptionPane.NO_OPTION) {
@@ -179,21 +194,75 @@ public class editRecord {
 				    //Else if, the user selects the 'yes' option
 				    } else if (response == JOptionPane.YES_OPTION) {
 				    	Task updateTask = task;
+				    	//Sets the TaskID to the taskID
 			    	    updateTask.setTaskID(task.getTaskID());
+			    	    //Sets the notes to whatever was in the notes text area
 						updateTask.setTaskNotes(txtrNotes.getText());
+						//Sets the time completed to the timme in the JSpinner
 						updateTask.setTaskTimeCompleted(time);
+						//Sets the Task Assigned to the caretakers selcted in the drop down box 
 						updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
+						//Updates the datebasee with the new data
 						db.updateTask(updateTask);
 						//Prints Task has been logged
 				    	System.out.println("Task updated");					
 				    	//Hides this JFrame
 				    	frmTaskLogging.setVisible(false); 
-				    	//Opens CaretakerSchedule2
-				    	new CompleteTasks();
+						//Uses Main to pull the tasks form the database again, so table is up to date
+				    	Main.tasks = (ArrayList<Task>) db.pullTasks();
+				    	// If the User has there account type as Caretaker, run code
+				    	if(Main.user.getAccountType().equals("Caretaker"))
+						  {
+						  	//Opens new CompleteTasks
+						    new CompleteTasks();
+						}
+				    	//Else, Must be Administrator 
+						else {
+						  	//Opens new taskInformation
+						    new taskInformation();
+						}		
 				    } 
 			}
 		});
-		btnSubmit.setBounds(169, 215, 89, 23);
+		btnSubmit.setBounds(169, 255, 89, 23);
 		frmTaskLogging.getContentPane().add(btnSubmit);
+		
+		//JButton for uncompleting a task
+		JButton btnUncomplete = new JButton("Uncomplete");
+		btnUncomplete.addActionListener(new ActionListener() {
+			//Action for when button is clicked
+			public void actionPerformed(ActionEvent e) {
+				//Sets the task to taskCompleted to false
+				task.setTaskCompleted(false);
+				//Sets the the time it was completed to 0
+				task.setTaskTimeCompleted(0);
+				//Updates the database
+				db.updateTask(task);
+				//Hides the frame
+				frmTaskLogging.setVisible(false); 
+				//Uses Main to pull the tasks form the database again, so table is up to date
+		    	Main.tasks = (ArrayList<Task>) db.pullTasks();
+		    	// If the User has there account type as Caretaker, run code
+		    	if(Main.user.getAccountType().equals("Caretaker"))
+				  {
+				  	//Opens new CompleteTasks
+				    new CompleteTasks();
+				}
+		    	//Else, Must be Administrator 
+				else {
+				  	//Opens new taskInformation
+				    new taskInformation();
+				}	
+			}
+		});
+		btnUncomplete.setBounds(169, 217, 116, 25);
+		frmTaskLogging.getContentPane().add(btnUncomplete);
+		
+		//JLabel for uncompletedTasks
+		JLabel lblUncompleteTask = new JLabel("Uncomplete task:");
+		//Sets the text to the right side
+		lblUncompleteTask.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUncompleteTask.setBounds(23, 221, 134, 16);
+		frmTaskLogging.getContentPane().add(lblUncompleteTask);
 	}
 } 

@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,8 +150,8 @@ public class CaretakerSchedule2 extends JFrame{
 		btnAssignNewTasks.setBounds(225, 328, 213, 25);
 		frame.getContentPane().add(btnAssignNewTasks);;
 				
-		//JButton for Complete
-		JButton btnComplete = new JButton("Complete Tasks");
+		//JButton for Complete Task
+		JButton btnComplete = new JButton("Complete Task");
 		//ActionListener for when button is clicked
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -169,7 +167,7 @@ public class CaretakerSchedule2 extends JFrame{
 				
 			}
 		});
-		btnComplete.setBounds(225, 29, 213, 25);
+		btnComplete.setBounds(57, 57, 213, 25);
 		frame.getContentPane().add(btnComplete);;
 		
 		//JButton for Help
@@ -204,19 +202,19 @@ public class CaretakerSchedule2 extends JFrame{
 		
 		//welcome label 
 		JLabel welcomeLbl = new JLabel("");
-		welcomeLbl.setBounds(12, 19, 65, 14);
+		welcomeLbl.setBounds(12, 8, 65, 14);
 		frame.getContentPane().add(welcomeLbl);
 		welcomeLbl.setText("Welcome, ");
 
 		//label that calls the user's get username and displays it
 		JLabel usernameLbl = new JLabel("");
-		usernameLbl.setBounds(72, 19, 152, 14);
+		usernameLbl.setBounds(72, 8, 152, 14);
 		frame.getContentPane().add(usernameLbl);
 		usernameLbl.setText(Main.user.getUsername());
 		
 		JLabel lblEnsureATask = new JLabel("*Ensure a task is selected");
-		lblEnsureATask.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblEnsureATask.setBounds(487, 350, 164, 14);
+		lblEnsureATask.setHorizontalAlignment(SwingConstants.LEFT);
+		lblEnsureATask.setBounds(57, 40, 213, 14);
 		frame.getContentPane().add(lblEnsureATask);
 		
 		JButton btnCompletedTasks = new JButton("View Completed Tasks");
@@ -229,7 +227,7 @@ public class CaretakerSchedule2 extends JFrame{
 				
 			}
 		});
-		btnCompletedTasks.setBounds(225, 57, 213, 25);
+		btnCompletedTasks.setBounds(393, 57, 213, 25);
 		frame.getContentPane().add(btnCompletedTasks);
 		
 		JButton btnSave = new JButton("Save");

@@ -43,23 +43,7 @@ public class CompleteTasks extends JFrame{
 		frmCompletedTasks.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCompletedTasks.setTitle("Completed Tasks");
 		frmCompletedTasks.getContentPane().setLayout(null);
-		
-		//JButton for undo
-		JButton btnUndo = new JButton("Undo");
-		//ActionListener, when button is clicked
-		btnUndo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//Hides frame
-				frmCompletedTasks.hide();
-				//Refill the task list with the one from the db that has had no changes to it
-			    Main.tasks = (ArrayList<Task>) db.pullTasks();
-				//Opens Task Reports
-				new CompleteTasks();
-			}
-		});
-		btnUndo.setBounds(0, 366, 330, 49);
-		frmCompletedTasks.getContentPane().add(btnUndo);
-			
+				
 		//JScrollPane for the table, so if too much data scroll bar can be used
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(57, 95, 549, 214);
@@ -74,15 +58,18 @@ public class CompleteTasks extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
+			//Titles of the columns in the table
 				"ID", "Priority", "Title", "Time Allocated", "Notes", "Date Due"
 			}
 		) {
+			//The column types
 			Class[] columnTypes = new Class[] {
 					Integer.class,  Object.class, Object.class, Object.class, Object.class, Object.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
+				//Whether or not column is editable
 				boolean[] columnEditables = new boolean[] {
 					false,  false, false, false, true, false
 				};
@@ -90,25 +77,32 @@ public class CompleteTasks extends JFrame{
 					return columnEditables[column];
 				}
 		});
-
-		table.getColumnModel().getColumn(3).setPreferredWidth(103);;
-		
+		table.getColumnModel().getColumn(3).setPreferredWidth(103);
 		
 		//Table for caretakers tasks
 		model = (DefaultTableModel) table.getModel();
 		
+		//Gets column 4 whihc is Notes and calls functions
 		table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());; 
 		table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JTextField())); 
-		 
+		
+		//For loop that runs through the tasks in Main
 		for(Task task: Main.tasks) {
-			String ass = "";
+			//Makes String varaible of assign and makes it an empty string
+			String assign = "";
+			//If the task assigned is null, run code
 			if(task.getTaskAssigned() == null) {
-				ass = "0";
+				//Sets teh the string to 0
+				assign = "0";
 			}
+			//Else, cun code
 			else {
-				ass = task.getTaskAssigned();
+				//Gets the TaskAssigned and makes it the string assign
+				assign = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == true) {
+			//If the new string, assign, equlas the username of the person logged in AND if the task completed is true, run code
+			if(assign.equals(Main.user.getUsername()) && task.getTaskCompleted() == true) {
+				//Adds rows to the table. This includes ID, Priority, Title, Duration, "Notes" and Date Due by getting them from task
 				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getDateDue()  }); 
 			}			
 		}		
@@ -120,10 +114,14 @@ public class CompleteTasks extends JFrame{
 		//ActionListener for when button is clicked
 		btnEditTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Makes interger varaibles value and row
 				int value;
 				int row;
+				//Sets row to the selected row in the table
 				row = table.getSelectedRow();
+				//Sets value to the ID of the row selected 
 				value = (int) table.getModel().getValueAt(row, 0);
+				//Pulls that task from the database
 				Task task = db.pullSingleTask(value);
 				//Hides the frame
 				frmCompletedTasks.setVisible(false);
@@ -145,11 +143,12 @@ public class CompleteTasks extends JFrame{
 						"To Edit a task: Select a task, then press 'Edit Task'");
 			}		
 		});
-		btnHelp.setBounds(12, 328, 97, 25);
+		btnHelp.setBounds(0, 366, 330, 49);
 		frmCompletedTasks.getContentPane().add(btnHelp);
 		
-
+		//JButton for logout
 		JButton btnLogout = new JButton("Log-out");
+		//When clicked
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
@@ -161,21 +160,26 @@ public class CompleteTasks extends JFrame{
 		btnLogout.setBounds(554, 8, 97, 25);
 		frmCompletedTasks.getContentPane().add(btnLogout);
 
-		//label that calls the user's get username and displays it
+		//JLabel that calls the user's get username and displays it
 		JLabel usernameLbl = new JLabel("");
-		usernameLbl.setBounds(137, 13, 152, 14);
+		usernameLbl.setBounds(12, 39, 152, 14);
 		frmCompletedTasks.getContentPane().add(usernameLbl);
 		usernameLbl.setText(Main.user.getUsername());
 		
+		//JLabel for Ensure a task is selected
 		JLabel lblEnsureATask = new JLabel("*Ensure a task is selected");
 		lblEnsureATask.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblEnsureATask.setBounds(487, 350, 164, 14);
 		frmCompletedTasks.getContentPane().add(lblEnsureATask);
 		
+		//JButton for Back
 		JButton btnBack = new JButton("Back");
+		//When clicked
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Hides the frame
 				frmCompletedTasks.setVisible(false);
+				//Opens Caretaker Schedule2
 				new CaretakerSchedule2();
 			}
 		});
@@ -184,7 +188,7 @@ public class CompleteTasks extends JFrame{
 		frmCompletedTasks.setVisible(true);
 	}
 
-
+//This class is for getting the notes column to display a button and when clicked to display the notes from the database
 class ButtonRenderer extends JButton implements TableCellRenderer
 {
 

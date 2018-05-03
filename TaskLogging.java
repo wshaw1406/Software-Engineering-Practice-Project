@@ -1,13 +1,10 @@
 /* This page logs incompleted tasks from CaretakerSchedule page. */
-package software_eng;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Calendar;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -109,10 +106,14 @@ public class TaskLogging {
 		//List of Options of the Caretakers on the System 
 		List<User> caretakers = db.pullCaretakers();
 		String[] caretakersNames = new String[caretakers.size()];
+		//Makes int variable z
 		int z = 0;
+		//For loop that run through all the users who are caretakers
 		for(User user: caretakers)
 		{
+			//Gets the caretakers username
 			caretakersNames[z] = user.getUsername();
+			//Incriment by 1
 			z++;
 		}
 		comboCaretakerName.setModel(new DefaultComboBoxModel(caretakersNames));
@@ -238,6 +239,9 @@ public class TaskLogging {
 
 				    	//Hides this JFrame
 				    	frmTaskLogging.setVisible(false); 
+				    	
+				    	Main.tasks = (ArrayList<Task>) db.pullTasks();
+				    	
 				    	// If the User has there account type as Caretaker, run code
 				    	if(Main.user.getAccountType().equals("Caretaker"))
 						  {
