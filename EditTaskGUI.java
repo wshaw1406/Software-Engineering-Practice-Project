@@ -1,8 +1,11 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -110,42 +113,50 @@ public class EditTaskGUI {
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Task task = defaultTask;
-				task.setTaskID(defaultTask.getTaskID());
-				task.setTaskTitle(textField.getText());
-				
-				
-				try {
-				prioritySpinner.commitEdit();
-				}
-				catch(java.text.ParseException ex)
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to edit the task?", "Edit Task", 
+                        JOptionPane.YES_NO_OPTION); 
+				if(choice == JOptionPane.YES_OPTION)
 				{
-					System.out.println(ex.toString());
+					Task task = defaultTask;
+					task.setTaskID(defaultTask.getTaskID());
+					task.setTaskTitle(textField.getText());
+					
+					
+					try {
+					prioritySpinner.commitEdit();
+					}
+					catch(java.text.ParseException ex)
+					{
+						System.out.println(ex.toString());
+					}
+					if((int)prioritySpinner.getValue() == 1) 
+					{
+						task.setTaskPriority("Low");
+					}
+					else if((int)prioritySpinner.getValue() == 2)
+					{
+						task.setTaskPriority("Medium");
+					}
+					else
+					{
+						task.setTaskPriority("High");
+					}
+					
+					try {
+						durationSpinner.commitEdit();
+					}
+					catch(java.text.ParseException exc)
+					{
+						System.out.println(exc.toString());
+					}
+					task.setTaskDuration((int)durationSpinner.getValue());
+					
+					task.setTaskNotes(textArea.getText());
+					db.updateTask(task);
+					frame.setVisible(false);
+					new taskInformation();
 				}
-				if((int)prioritySpinner.getValue() == 1) 
-				{
-					task.setTaskPriority("Low");
-				}
-				else if((int)prioritySpinner.getValue() == 2)
-				{
-					task.setTaskPriority("Medium");
-				}
-				else
-				{
-					task.setTaskPriority("High");
-				}
-				
-				try {
-					durationSpinner.commitEdit();
-				}
-				catch(java.text.ParseException exc)
-				{
-					System.out.println(exc.toString());
-				}
-				task.setTaskDuration((int)durationSpinner.getValue());
-				
-				task.setTaskNotes(textArea.getText());
-				db.updateTask(task);
 			}
 		});
 		btnSubmit.setBounds(286, 209, 89, 23);

@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -100,9 +102,15 @@ public class taskInformation {
 				int row;
 				row = table.getSelectedRow();
 				Task toRemove = db.pullSingleTask(table.getModel().getValueAt(row, 2).toString());
-			    db.deleteTask(toRemove.getTaskID());
-			    frame.setVisible(false);
-			    new taskInformation();
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to remove the selected task?" + toRemove.getTaskTitle(), "Remove Task", 
+                        JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.YES_OPTION)
+				{
+					db.deleteTask(toRemove.getTaskID());
+				    frame.setVisible(false);
+				    new taskInformation();
+				}
 			}
 		});
 		button_2.setFont(new Font("Tahoma", Font.PLAIN, 12));

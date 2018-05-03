@@ -1,4 +1,6 @@
 /* This page logs incompleted tasks from CaretakerSchedule. */
+package software_eng;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

@@ -1,7 +1,11 @@
+package software_eng;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -18,6 +22,8 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,11 +36,15 @@ public class CreateTaskGUI {
 	private JFrame frame;
 	private JTextField textField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private Task task;
+	private JButton btnSubmit;
 
 	/**
 	 * Create the application.
 	 */
 	public CreateTaskGUI() {
+		task = new Task();
+		btnSubmit = new JButton("Submit");
 		initialize();
 		frame.setVisible(true);
 	}
@@ -67,6 +77,9 @@ public class CreateTaskGUI {
 		frame.setBounds(100, 100, 401, 383);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		btnSubmit.setBounds(286, 309, 89, 23);
+		frame.getContentPane().add(btnSubmit);
 		
 		UtilDateModel model = new UtilDateModel();
 		Properties p = new Properties();
@@ -123,6 +136,17 @@ public class CreateTaskGUI {
 		buttonGroup.add(rdbtnOneoff);
 		rdbtnOneoff.setBounds(274, 93, 72, 23);
 		frame.getContentPane().add(rdbtnOneoff);
+		if(rdbtnRegular.isSelected())
+		{
+		    task.setTaskType("Regular");
+		    btnSubmit.setEnabled(true);
+		}
+		else if(rdbtnOneoff.isSelected())
+		{
+			task.setTaskType("One-off");
+			btnSubmit.setEnabled(true);
+		}
+		
 		
 		JSpinner prioritySpinner = new JSpinner();
 		prioritySpinner.setModel(new SpinnerNumberModel(1, 1, 3, 1));
@@ -146,59 +170,104 @@ public class CreateTaskGUI {
 		textArea.setBounds(126, 229, 220, 56);
 		frame.getContentPane().add(textArea);
 		
-		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Database db = new Database();
-				Task task = new Task();
-				task.setTaskID(task.generateTaskID());
-				task.setTaskTitle(textField.getText());
-				if(rdbtnRegular.isSelected())
+				int choice = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to add a new task?", "Add Task", 
+                        JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.YES_OPTION)
 				{
-				    task.setTaskType("Regular");
+					Database db = new Database();
+					task.setTaskID(task.generateTaskID());
+					task.setTaskTitle(textField.getText());
+					if(rdbtnRegular.isSelected())
+					{
+						task.setTaskType("Regular");
+						try {
+							prioritySpinner.commitEdit();
+							}
+							catch(java.text.ParseException ex)
+							{
+								System.out.println(ex.toString());
+							}
+							if((int)prioritySpinner.getValue() == 1) 
+							{
+								task.setTaskPriority("Low");
+							}
+							else if((int)prioritySpinner.getValue() == 2)
+							{
+								task.setTaskPriority("Medium");
+							}
+							else
+							{
+								task.setTaskPriority("High");
+							}
+							
+							try {
+								durationSpinner.commitEdit();
+							}
+							catch(java.text.ParseException exc)
+							{
+								System.out.println(exc.toString());
+							}
+							task.setTaskDuration((int)durationSpinner.getValue());
+							String strDate = datePicker.getJFormattedTextField().getText();
+							Date dateDue = Date.valueOf(strDate);
+							task.setDateDue(dateDue);
+							task.setTaskNotes(textArea.getText());
+							db.pushSingleTask(task);
+							frame.setVisible(false);
+							new taskInformation();
+					}
+					else if(rdbtnOneoff.isSelected())
+					{
+						task.setTaskType("One-off");
+						try {
+							prioritySpinner.commitEdit();
+							}
+							catch(java.text.ParseException ex)
+							{
+								System.out.println(ex.toString());
+							}
+							if((int)prioritySpinner.getValue() == 1) 
+							{
+								task.setTaskPriority("Low");
+							}
+							else if((int)prioritySpinner.getValue() == 2)
+							{
+								task.setTaskPriority("Medium");
+							}
+							else
+							{
+								task.setTaskPriority("High");
+							}
+							
+							try {
+								durationSpinner.commitEdit();
+							}
+							catch(java.text.ParseException exc)
+							{
+								System.out.println(exc.toString());
+							}
+							task.setTaskDuration((int)durationSpinner.getValue());
+							String strDate = datePicker.getJFormattedTextField().getText();
+							Date dateDue = Date.valueOf(strDate);
+							task.setDateDue(dateDue);
+							task.setTaskNotes(textArea.getText());
+							db.pushSingleTask(task);
+							frame.setVisible(false);
+							new taskInformation();
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "No task type selected, please try again!");
+						frame.setVisible(false);
+						new CreateTaskGUI();
+					}
 				}
-				else
-				{
-					task.setTaskType("One-off");
-				}
-				
-				try {
-				prioritySpinner.commitEdit();
-				}
-				catch(java.text.ParseException ex)
-				{
-					System.out.println(ex.toString());
-				}
-				if((int)prioritySpinner.getValue() == 1) 
-				{
-					task.setTaskPriority("Low");
-				}
-				else if((int)prioritySpinner.getValue() == 2)
-				{
-					task.setTaskPriority("Medium");
-				}
-				else
-				{
-					task.setTaskPriority("High");
-				}
-				
-				try {
-					durationSpinner.commitEdit();
-				}
-				catch(java.text.ParseException exc)
-				{
-					System.out.println(exc.toString());
-				}
-				task.setTaskDuration((int)durationSpinner.getValue());
-				String strDate = datePicker.getJFormattedTextField().getText();
-				Date dateDue = Date.valueOf(strDate);
-				task.setDateDue(dateDue);
-				task.setTaskNotes(textArea.getText());
-				db.pushSingleTask(task);
 			}
 		});
-		btnSubmit.setBounds(286, 309, 89, 23);
-		frame.getContentPane().add(btnSubmit);
+		
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
