@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -151,7 +153,7 @@ public class CaretakerSchedule2 extends JFrame{
 		frame.getContentPane().add(btnAssignNewTasks);;
 				
 		//JButton for Complete
-		JButton btnComplete = new JButton("Complete");
+		JButton btnComplete = new JButton("Complete Tasks");
 		//ActionListener for when button is clicked
 		btnComplete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -167,7 +169,7 @@ public class CaretakerSchedule2 extends JFrame{
 				
 			}
 		});
-		btnComplete.setBounds(330, 366, 330, 49);
+		btnComplete.setBounds(225, 29, 213, 25);
 		frame.getContentPane().add(btnComplete);;
 		
 		//JButton for Help
@@ -228,7 +230,19 @@ public class CaretakerSchedule2 extends JFrame{
 			}
 		});
 		btnCompletedTasks.setBounds(225, 57, 213, 25);
-		frame.getContentPane().add(btnCompletedTasks);;
+		frame.getContentPane().add(btnCompletedTasks);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Database db = new Database();
+				for(Task task:Main.tasks) {
+					db.updateTask(task);
+				}
+			}
+		});
+		btnSave.setBounds(333, 366, 330, 49);
+		frame.getContentPane().add(btnSave);;
 }
 
 class ButtonRenderer extends JButton implements TableCellRenderer
