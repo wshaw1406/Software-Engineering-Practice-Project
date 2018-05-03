@@ -12,10 +12,10 @@ import javax.swing.table.TableRowSorter;
 import java.util.*;
 import java.util.List;
 
-public class CaretakerSchedule2 extends JFrame{
+public class CompleteTasks extends JFrame{
 	
 	//Define private and public variables 
-	private JFrame frame;
+	private JFrame frmCompletedTasks;
 	public static JTable table;
 	public static DefaultTableModel model;
 
@@ -25,11 +25,11 @@ public class CaretakerSchedule2 extends JFrame{
 		table.setRowSorter(sorter);
 	}
 	
-	public CaretakerSchedule2() {
+	public CompleteTasks() {
 		//Calls initialize function
 		initialize();
 		//Shows the frame
-		frame.setVisible(true);
+		frmCompletedTasks.setVisible(true);
 	}
 	
 	private void initialize() {
@@ -38,11 +38,11 @@ public class CaretakerSchedule2 extends JFrame{
 		Database db = new Database();
 		
 		//Makes the JFrame called frame
-		frame = new JFrame();
-		frame.setBounds(100, 100, 681, 463);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Caretaker Schedule");
-		frame.getContentPane().setLayout(null);
+		frmCompletedTasks = new JFrame();
+		frmCompletedTasks.setBounds(100, 100, 681, 463);
+		frmCompletedTasks.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmCompletedTasks.setTitle("Completed Tasks");
+		frmCompletedTasks.getContentPane().setLayout(null);
 		
 		//JButton for undo
 		JButton btnUndo = new JButton("Undo");
@@ -50,20 +50,20 @@ public class CaretakerSchedule2 extends JFrame{
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
-				frame.hide();
+				frmCompletedTasks.hide();
 				//Refill the task list with the one from the db that has had no changes to it
 			    Main.tasks = (ArrayList<Task>) db.pullTasks();
 				//Opens Task Reports
-				new CaretakerSchedule2();
+				new CompleteTasks();
 			}
 		});
 		btnUndo.setBounds(0, 366, 330, 49);
-		frame.getContentPane().add(btnUndo);
+		frmCompletedTasks.getContentPane().add(btnUndo);
 			
 		//JScrollPane for the table, so if too much data scroll bar can be used
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(57, 95, 549, 214);
-		frame.getContentPane().add(scrollPane_1);
+		frmCompletedTasks.getContentPane().add(scrollPane_1);
 		
 		//Jtable table
 		table = new JTable();		
@@ -74,49 +74,31 @@ public class CaretakerSchedule2 extends JFrame{
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "Time", "Priority", "Title", "Time Allocated", "Notes", "Date Due"
+				"ID", "Priority", "Title", "Time Allocated", "Notes", "Date Due"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-					Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+					Integer.class,  Object.class, Object.class, Object.class, Object.class, Object.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 				boolean[] columnEditables = new boolean[] {
-					true, false, false, false, false, true, false
+					false,  false, false, false, true, false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
 				}
 		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(0);
-		table.getColumnModel().getColumn(0).setMinWidth(0);
-		table.getColumnModel().getColumn(0).setMaxWidth(0);
-		table.getColumnModel().getColumn(4).setPreferredWidth(103);;
+
+		table.getColumnModel().getColumn(3).setPreferredWidth(103);;
 		
 		
 		//Table for caretakers tasks
 		model = (DefaultTableModel) table.getModel();
 		
-		// Defines String
-		String startTime = "9:15";
-		// Sets format of the date
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		// Sets d to NULL
-		Date d = null;
-		try {
-			d = df.parse(startTime);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		} 
-		 Calendar cal = Calendar.getInstance();
-		 // Sets time
-		 cal.setTime(d);
-		 String newTime = df.format(cal.getTime());
-		 
-		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
-		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
+		table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());; 
+		table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JTextField())); 
 		 
 		for(Task task: Main.tasks) {
 			String ass = "";
@@ -126,34 +108,17 @@ public class CaretakerSchedule2 extends JFrame{
 			else {
 				ass = task.getTaskAssigned();
 			}
-			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
-				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getDateDue()  }); 
-				cal.add(Calendar.MINUTE, task.getTaskDuration());
-				newTime = df.format(cal.getTime());
+			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == true) {
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getDateDue()  }); 
 			}			
 		}		
 		//Runs sort function
-		sort();
-		
-		//JButton for Assign New Tasks	
-		JButton btnAssignNewTasks = new JButton("Assign New Tasks");
-		//When button is clicked
-		btnAssignNewTasks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Creates TaskAllocation
-				new TaskAllocation();
-				//Hides frame
-				frame.hide();
-			}
-		});
-				
-		btnAssignNewTasks.setBounds(225, 328, 213, 25);
-		frame.getContentPane().add(btnAssignNewTasks);;
+		sort();;
 				
 		//JButton for Complete
-		JButton btnComplete = new JButton("Complete");
+		JButton btnEditTask = new JButton("Edit Task");
 		//ActionListener for when button is clicked
-		btnComplete.addActionListener(new ActionListener() {
+		btnEditTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int value;
 				int row;
@@ -161,14 +126,13 @@ public class CaretakerSchedule2 extends JFrame{
 				value = (int) table.getModel().getValueAt(row, 0);
 				Task task = db.pullSingleTask(value);
 				//Hides the frame
-				frame.setVisible(false);
-				//Creates TaskLogging 
-				new TaskLogging(task);	
-				
+				frmCompletedTasks.setVisible(false);
+				//Creates editRecord 
+				new editRecord(task);
 			}
 		});
-		btnComplete.setBounds(330, 366, 330, 49);
-		frame.getContentPane().add(btnComplete);;
+		btnEditTask.setBounds(330, 366, 330, 49);
+		frmCompletedTasks.getContentPane().add(btnEditTask);;
 		
 		//JButton for Help
 		JButton btnHelp = new JButton("Help");
@@ -178,58 +142,48 @@ public class CaretakerSchedule2 extends JFrame{
 				Component frame = null;
 				//Opens JOptionPane
 				JOptionPane.showMessageDialog(frame,
-						"To Log a task: Select a task, then press 'Complete', "
-									+ "\n To add more tasks to your schedule, use 'Assign New Tasks',"
-									+ "\n then, tick the tasks you want and press 'submit'."
-									+ "\n To view tasks that have been completed, press 'View Completed tasks.");
+						"To Edit a task: Select a task, then press 'Edit Task'");
 			}		
 		});
 		btnHelp.setBounds(12, 328, 97, 25);
-		frame.getContentPane().add(btnHelp);
+		frmCompletedTasks.getContentPane().add(btnHelp);
 		
 
 		JButton btnLogout = new JButton("Log-out");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Hides frame
-				frame.hide();
+				frmCompletedTasks.hide();
 				//Opens Task Reports
 				new Main();
 			}
 		});
 		btnLogout.setBounds(554, 8, 97, 25);
-		frame.getContentPane().add(btnLogout); 		
-		
-		//welcome label 
-		JLabel welcomeLbl = new JLabel("");
-		welcomeLbl.setBounds(12, 19, 65, 14);
-		frame.getContentPane().add(welcomeLbl);
-		welcomeLbl.setText("Welcome, ");
+		frmCompletedTasks.getContentPane().add(btnLogout);
 
 		//label that calls the user's get username and displays it
 		JLabel usernameLbl = new JLabel("");
-		usernameLbl.setBounds(72, 19, 152, 14);
-		frame.getContentPane().add(usernameLbl);
+		usernameLbl.setBounds(137, 13, 152, 14);
+		frmCompletedTasks.getContentPane().add(usernameLbl);
 		usernameLbl.setText(Main.user.getUsername());
 		
 		JLabel lblEnsureATask = new JLabel("*Ensure a task is selected");
 		lblEnsureATask.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblEnsureATask.setBounds(487, 350, 164, 14);
-		frame.getContentPane().add(lblEnsureATask);
+		frmCompletedTasks.getContentPane().add(lblEnsureATask);
 		
-		JButton btnCompletedTasks = new JButton("View Completed Tasks");
-		btnCompletedTasks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Hides the frame
-				frame.setVisible(false);
-				//Creates CompleteTasks 
-				new CompleteTasks();	
-				
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmCompletedTasks.setVisible(false);
+				new CaretakerSchedule2();
 			}
 		});
-		btnCompletedTasks.setBounds(225, 57, 213, 25);
-		frame.getContentPane().add(btnCompletedTasks);;
-}
+		btnBack.setBounds(12, 8, 97, 25);
+		frmCompletedTasks.getContentPane().add(btnBack);
+		frmCompletedTasks.setVisible(true);
+	}
+
 
 class ButtonRenderer extends JButton implements TableCellRenderer
 {
@@ -282,14 +236,14 @@ class ButtonEditor extends DefaultCellEditor
 	}
 	@Override
 	public Object getCellEditorValue() {
-			int column1 = 3;
+			int column1 = 2;
 			int row1;
 			String value = "";
 
 			if(clicked) {
 					if(lbl == "Notes") {
-						row1 = CaretakerSchedule2.table.getSelectedRow();
-						value = CaretakerSchedule2.table.getModel().getValueAt(row1, column1).toString();
+						row1 = CompleteTasks.table.getSelectedRow();
+						value = CompleteTasks.table.getModel().getValueAt(row1, column1).toString();
 						for(Task task : Main.tasks)
 					    {
 							if(task.getTaskTitle() == value) {							

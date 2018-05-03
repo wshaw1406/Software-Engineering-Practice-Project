@@ -1,6 +1,4 @@
 /* This page logs incompleted tasks from CaretakerSchedule. */
-package software_eng;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -68,7 +66,15 @@ public class editRecord {
 				//Sets Frames visibilty to false (hides it)
 			    frmTaskLogging.setVisible(false); 
 			    //Opens new CaretakerSchedule2
-			    new CaretakerSchedule2();
+			    if(Main.user.getAccountType().equals("Caretaker"))
+			    {
+			    	//Opens new CaretakerSchedule2
+				    new CompleteTasks();
+			    }
+			    else {
+			    	//Opens new taskInformation
+				    new taskInformation();
+			    }
 			}
 		});		
 		btnCancel.setBounds(290, 215, 89, 23);
@@ -148,53 +154,46 @@ public class editRecord {
 		txtTaskID.setColumns(10);
 		txtTaskID.setVisible(false);
 		
-		
 		//JTextField for txtTaskName
 		txtTaskName = new JTextField();
 		txtTaskName.setText(task.getTaskTitle());
 		
-	   //Makes textbox uneditable 
+	    //Makes textbox uneditable 
 		txtTaskName.setEditable(false);
-				txtTaskName.setBounds(169, 33, 116, 22);
-				frmTaskLogging.getContentPane().add(txtTaskName);
-				txtTaskName.setColumns(10);
-				
-			
-				//JButton for Submit
-				JButton btnSubmit = new JButton("Submit");
-				//ActionListener for when button is clicked
-				btnSubmit.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent arg0){
-						//When clicked, shows Dialog confirming action 
-						int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
-						        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-						    //If, the user selects the 'No' option
-						    if (response == JOptionPane.NO_OPTION) {
-						    	//Prints nothing
-						        System.out.println("");
-						    //Else if, the user selects the 'yes' option
-						    } else if (response == JOptionPane.YES_OPTION) {
-						    	Task updateTask = task;
-					    	    updateTask.setTaskID(task.getTaskID());
-								updateTask.setTaskNotes(txtrNotes.getText());
-								updateTask.setTaskTimeCompleted(time);
-								updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
-								db.updateTask(updateTask);
-								//Prints Task has been logged
-						    	System.out.println("Task updated");
-
-								
-						    	//Hides this JFrame
-						    	frmTaskLogging.setVisible(false); 
-						    	//Opens CaretakerSchedule2
-						    	new CaretakerSchedule2();
-						    } 
-					}
-				});
-				btnSubmit.setBounds(169, 215, 89, 23);
-				frmTaskLogging.getContentPane().add(btnSubmit);
-				
-
-
+		txtTaskName.setBounds(169, 33, 116, 22);
+		frmTaskLogging.getContentPane().add(txtTaskName);
+		txtTaskName.setColumns(10);
+	
+		//JButton for Submit
+		JButton btnSubmit = new JButton("Submit");
+		//ActionListener for when button is clicked
+		btnSubmit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				//When clicked, shows Dialog confirming action 
+				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to Log this task?", "Confirm",
+				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    //If, the user selects the 'No' option
+				    if (response == JOptionPane.NO_OPTION) {
+				    	//Prints nothing
+				        System.out.println("");
+				    //Else if, the user selects the 'yes' option
+				    } else if (response == JOptionPane.YES_OPTION) {
+				    	Task updateTask = task;
+			    	    updateTask.setTaskID(task.getTaskID());
+						updateTask.setTaskNotes(txtrNotes.getText());
+						updateTask.setTaskTimeCompleted(time);
+						updateTask.setTaskAssigned((String) comboCaretakerName.getSelectedItem());
+						db.updateTask(updateTask);
+						//Prints Task has been logged
+				    	System.out.println("Task updated");					
+				    	//Hides this JFrame
+				    	frmTaskLogging.setVisible(false); 
+				    	//Opens CaretakerSchedule2
+				    	new CompleteTasks();
+				    } 
+			}
+		});
+		btnSubmit.setBounds(169, 215, 89, 23);
+		frmTaskLogging.getContentPane().add(btnSubmit);
 	}
 } 
