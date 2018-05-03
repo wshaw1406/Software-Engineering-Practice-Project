@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -44,7 +42,7 @@ public class addUserGUI {
 	private Database db;
 	private boolean passMatch= false;
 	private JTextField userIDField;
-	
+	private boolean eightChar;
 
 	/**
 	 * Launch the application.
@@ -98,45 +96,10 @@ public class addUserGUI {
 		validation2.setBounds(182, 291, 516, 14);
 		frmAddNewUser.getContentPane().add(validation2);
 		
-		//textfield for first name
-		firstnameField = new JTextField();
-		firstnameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				//action listener which checks when a key is typed that it is not a number or character
-				char c=e.getKeyChar();
-				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
-				        e.consume();
-			}
-		});
-		firstnameField.setBounds(182, 103, 184, 20);
-		frmAddNewUser.getContentPane().add(firstnameField);
-		firstnameField.setColumns(10);
-		
 		//label to show the user where to enter surname
 		JLabel lblSurname = new JLabel("* Surname");
 		lblSurname.setBounds(59, 139, 76, 14);
 		frmAddNewUser.getContentPane().add(lblSurname);
-		
-		surnameField = new JTextField();
-		surnameField.setColumns(10);
-		//action listener to ensure only letters are input
-		surnameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c=e.getKeyChar();
-				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
-				    {
-				        e.consume();
-					}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				usernameField.setText(surnameField.getText()+userIDField.getText());
-			}
-		});
-		surnameField.setBounds(182, 136, 182, 20);
-		frmAddNewUser.getContentPane().add(surnameField);
 		
 		//label to show where the user where account type is entered
 		JLabel lblAccountType = new JLabel("* Account Type");
@@ -199,9 +162,57 @@ public class addUserGUI {
 		    }
 		});
 		btnSubmit.setEnabled(false);
-
 		btnSubmit.setBounds(234, 354, 89, 23);
 		frmAddNewUser.getContentPane().add(btnSubmit);	
+		
+		//textfield for first name
+		firstnameField = new JTextField();
+		firstnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				//action listener which checks when a key is typed that it is not a number or character
+				char c=e.getKeyChar();
+			    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE )){
+				        e.consume();}
+				if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+						btnSubmit.setEnabled(false);
+						}
+			    else{btnSubmit.setEnabled(true);}    
+			}
+			public void keyReleased(KeyEvent e) {
+				if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+						btnSubmit.setEnabled(false);
+						}
+			    else{btnSubmit.setEnabled(true);}   
+			}
+		});
+		firstnameField.setBounds(182, 103, 184, 20);
+		frmAddNewUser.getContentPane().add(firstnameField);
+		firstnameField.setColumns(10);
+		
+		surnameField = new JTextField();
+		surnameField.setColumns(10);
+		//action listener to ensure only letters are input
+		surnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c=e.getKeyChar();
+				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				    {
+				        e.consume();
+					}				   
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				usernameField.setText(surnameField.getText()+userIDField.getText());
+				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+						btnSubmit.setEnabled(false);
+						}
+			    else{btnSubmit.setEnabled(true);}   
+			}
+		});
+		surnameField.setBounds(182, 136, 182, 20);
+		frmAddNewUser.getContentPane().add(surnameField);
 		
 		//uneditable username field 
 		usernameField = new JTextField();		
@@ -215,6 +226,10 @@ public class addUserGUI {
 		lblPassword.setBounds(59, 277, 76, 14);
 		frmAddNewUser.getContentPane().add(lblPassword);
 		
+		JLabel rePassVal = new JLabel("");
+		rePassVal.setBounds(182, 329, 398, 14);
+		frmAddNewUser.getContentPane().add(rePassVal);
+		
 		//password field
 		passwordField = new JPasswordField();
 		String p2 = passwordField.getText();
@@ -225,13 +240,27 @@ public class addUserGUI {
 				if (passwordField.getText().length() < 8){
 				     //sets the validation label to say the following
 				     validation2.setText("Password must be 8 or more characters");
-				     //and disable the submit button
-					 btnSubmit.setEnabled(false);
+				     //and sets a check boolean to false
+				     eightChar= false;
 
 			} else {
 				//sets validation label to empty if correct
 				validation2.setText("");
-			}
+				eightChar = true;
+			}				 
+				 if (passwordField.getText().equals(passwordField_1.getText())){
+						rePassVal.setText("");
+						passMatch = true;						
+					}
+					else{
+						//if passwords dont match
+						rePassVal.setText("Passwords must match");
+						passMatch = false;
+					}
+				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false || eightChar== false){
+						btnSubmit.setEnabled(false);
+						}
+			    else{btnSubmit.setEnabled(true);}  
 			}
 		});		
 		passwordField.setBounds(182, 274, 184, 20);
@@ -265,11 +294,6 @@ public class addUserGUI {
 		lblTheseFields.setBounds(10, 35, 254, 14);
 		frmAddNewUser.getContentPane().add(lblTheseFields);
 		
-		//label that is filled with validation message if needed
-		JLabel rePassVal = new JLabel("");
-		rePassVal.setBounds(182, 329, 398, 14);
-		frmAddNewUser.getContentPane().add(rePassVal);
-		
 		//re enter password field 
 		passwordField_1 = new JPasswordField();
 		passwordField_1.addKeyListener(new KeyAdapter() {
@@ -279,12 +303,17 @@ public class addUserGUI {
 				if (passwordField.getText().equals(passwordField_1.getText())){
 					rePassVal.setText("");
 					passMatch = true;
+					
 				}
 				else{
 					//if passwords dont match
 					rePassVal.setText("Passwords must match");
 					passMatch = false;
 				}
+				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false || eightChar== false){
+						btnSubmit.setEnabled(false);
+						}
+			    else{btnSubmit.setEnabled(true);}   
 			}
 		});
 		passwordField_1.setBounds(182, 305, 184, 20);
@@ -307,17 +336,6 @@ public class addUserGUI {
 		lblUserId.setBounds(63, 73, 46, 14);
 		frmAddNewUser.getContentPane().add(lblUserId);
 		
-		//disables submit button if certain requirements are not met
-		frmAddNewUser.getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				//checks if firstname surname are empty, and that passwords match
-				if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
-					btnSubmit.setEnabled(false);
-					}
-				else{btnSubmit.setEnabled(true);}
-			}
-		  });
 		}	
 	}
 
