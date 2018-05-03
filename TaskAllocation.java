@@ -36,6 +36,7 @@ public class TaskAllocation {
 	private JButton btnSubmit;
 	private JButton btnCancel;
 	private JButton btnNewButton;
+	private JButton btnViewNotes;
 	
 	private void sort() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
@@ -85,19 +86,17 @@ public class TaskAllocation {
 			new Object[][] {
 			},
 			new String[] {
-				"TaskID", "Priority", "Time", "Name", "Due date", "Notes","Assign"
+				"TaskID", "Priority", "Time", "Name", "Due date", "Assign"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
+				Integer.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
-		
-		table.getColumnModel().getColumn(0).setMinWidth(0);
-		table.getColumnModel().getColumn(0).setMaxWidth(0);
+
 		
 		model = (DefaultTableModel) table.getModel();
 
@@ -109,10 +108,10 @@ public class TaskAllocation {
 			}
 			//Fill out the table with tasks that are not assigned and tasks that are assigned to the user already
 			if(taskAssID == "0" || taskAssID.equals("null")) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), "notes", false});
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), false});
 			}
 			if(taskAssID.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
-				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), "notes", true});
+				model.addRow(new Object[]{task.getTaskID(), task.getTaskPriority(), task.getTaskDuration(), task.getTaskTitle(), task.getDateDue(), true});
 			}
 	    }
 		scrollPane.setViewportView(createData((DefaultTableModel) table.getModel()));
@@ -122,7 +121,7 @@ public class TaskAllocation {
 			public void actionPerformed(ActionEvent e) {
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
-					Boolean value = (Boolean) table.getModel().getValueAt(i, 6);
+					Boolean value = (Boolean) table.getModel().getValueAt(i, 5);
 					if (value == null) {
 						value = false;
 					}
@@ -144,7 +143,7 @@ public class TaskAllocation {
 		});
 		frame.getContentPane().add(btnSubmit);
 		
-		btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Back");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.hide();
@@ -153,6 +152,29 @@ public class TaskAllocation {
 		});
 
 		frame.getContentPane().add(btnCancel);
+		
+		btnViewNotes = new JButton("View notes");
+		btnViewNotes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String strTaskID = JOptionPane.showInputDialog("Task ID", "Type in the task ID:");
+				int taskID = 0;
+				try {
+					taskID = Integer.parseInt(strTaskID);
+				}
+				catch(Exception ex) {
+					JOptionPane.showMessageDialog(frame,
+						    "Please enter a number",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+				}
+				for(Task task:Main.tasks) {
+					if(task.getTaskID() == taskID) {
+						JOptionPane.showMessageDialog(frame, task.getTaskNotes());
+					}
+				}
+			}
+		});
+		frame.getContentPane().add(btnViewNotes);
 		
 		frame.setVisible(true);
 		sort();
