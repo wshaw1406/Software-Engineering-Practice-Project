@@ -42,7 +42,7 @@ public class addUserGUI {
 	private Database db;
 	private boolean passMatch= false;
 	private JTextField userIDField;
-	
+	private boolean eightChar;
 
 	/**
 	 * Launch the application.
@@ -240,24 +240,24 @@ public class addUserGUI {
 				if (passwordField.getText().length() < 8){
 				     //sets the validation label to say the following
 				     validation2.setText("Password must be 8 or more characters");
-				     //and disable the submit button
-					 btnSubmit.setEnabled(false);
+				     //and sets a check boolean to false
+				     eightChar= false;
 
 			} else {
 				//sets validation label to empty if correct
 				validation2.setText("");
+				eightChar = true;
 			}				 
 				 if (passwordField.getText().equals(passwordField_1.getText())){
 						rePassVal.setText("");
-						passMatch = true;
-						
+						passMatch = true;						
 					}
 					else{
 						//if passwords dont match
 						rePassVal.setText("Passwords must match");
 						passMatch = false;
 					}
-				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false || eightChar== false){
 						btnSubmit.setEnabled(false);
 						}
 			    else{btnSubmit.setEnabled(true);}  
@@ -310,7 +310,7 @@ public class addUserGUI {
 					rePassVal.setText("Passwords must match");
 					passMatch = false;
 				}
-				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false){
+				 if(firstnameField.getText().equals("") || surnameField.getText().equals("") || passMatch == false || eightChar== false){
 						btnSubmit.setEnabled(false);
 						}
 			    else{btnSubmit.setEnabled(true);}   

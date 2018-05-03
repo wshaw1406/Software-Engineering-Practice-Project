@@ -1,5 +1,3 @@
-package software_eng;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -37,6 +35,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 
 public class editUserGUI {
 
@@ -51,6 +50,7 @@ public class editUserGUI {
 	private boolean valid;
 	boolean resetPass =false;
 	private JTextField userIDField;
+	boolean submitReady =false;
 
 	/**
 	 * Launch the application
@@ -93,21 +93,6 @@ public class editUserGUI {
 		panel.setLayout(null);
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		frmEditUserGUI.getContentPane().add(panel, BorderLayout.CENTER);
-		
-		//firstname textfield to type the first name
-		firstnameField = new JTextField();
-		firstnameField.setColumns(10);
-		//action listener to ensure on letters are input
-		firstnameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c=e.getKeyChar();
-				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
-				        e.consume();
-			}
-		});
-		firstnameField.setBounds(201, 114, 182, 20);
-		panel.add(firstnameField);
 
 		//first name label on the ui
 		JLabel label_1 = new JLabel("First name");
@@ -118,27 +103,6 @@ public class editUserGUI {
 		JLabel label_2 = new JLabel("Surname");
 		label_2.setBounds(55, 150, 76, 14);
 		panel.add(label_2);
-		
-		//surname textfield where surname will be input
-		surnameField = new JTextField();
-		surnameField.setColumns(10);
-		//action listener to ensure only letters are input
-		surnameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c=e.getKeyChar();
-				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
-				    {
-				        e.consume();
-					}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				usernameField.setText(surnameField.getText()+userIDField.getText());
-			}
-		});
-		surnameField.setBounds(201, 150, 182, 20);
-		panel.add(surnameField);
 		
 		//label for Account type
 		JLabel label_4 = new JLabel("Account Type");
@@ -205,26 +169,6 @@ public class editUserGUI {
 			users[i] = user.getUsername();
 			i++;
     	}
-				
-		//fill the drop down box with usernames retrieved from above
-		JComboBox userDropDown = new JComboBox();
-		//when an action is performed the rest of the fields will be filled with data from the database
-		userDropDown.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//pull the single user whos username is selected
-				User user = db.pullSingleUser((String) userDropDown.getSelectedItem());
-				firstnameField.setText(user.getFirstName());
-				surnameField.setText(user.getSurname());
-				accountTypeBox.setSelectedItem(user.getAccountType());
-				String userID = Integer.toString(user.getUserID());
-				userIDField.setText(userID);
-				usernameField.setText(surnameField.getText()+userIDField.getText());
-			}
-		});
-		userDropDown.setModel(new DefaultComboBoxModel(users));
-		userDropDown.setBounds(59, 36, 201, 20);
-		userDropDown.setSelectedItem("-");
-		panel.add(userDropDown);
 		
 		//reset button which sets a bool to true, meaning pass will be reset on submit
 		JButton btnReset = new JButton("Reset");
@@ -238,8 +182,30 @@ public class editUserGUI {
 		btnReset.setBounds(201, 295, 89, 23);
 		panel.add(btnReset);
 		
-		//submit button
+		//create jbutton
 		JButton submit = new JButton("Submit");
+		submit.setEnabled(false);
+		//fill the drop down box with usernames retrieved from above
+	    JComboBox userDropDown = new JComboBox();
+		//when an action is performed the rest of the fields will be filled with data from the database
+		userDropDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			  submit.setEnabled(true);
+			  //pull the single user whos username is selected
+			  User user = db.pullSingleUser((String) userDropDown.getSelectedItem());
+			  firstnameField.setText(user.getFirstName());
+			  surnameField.setText(user.getSurname());
+			  accountTypeBox.setSelectedItem(user.getAccountType());
+			  String userID = Integer.toString(user.getUserID());
+			  userIDField.setText(userID);
+			  usernameField.setText(surnameField.getText()+userIDField.getText());
+			  }
+		});
+		userDropDown.setModel(new DefaultComboBoxModel(users));
+		userDropDown.setBounds(59, 36, 201, 20);
+		userDropDown.setSelectedItem("-");
+		panel.add(userDropDown);
+		
 		submit.addActionListener(new ActionListener() {
 			//action listener which sets the database fields with information from the form
 			public void actionPerformed(ActionEvent arg0) {
@@ -278,8 +244,7 @@ public class editUserGUI {
 		userIDField.setEditable(false);
 		userIDField.setBounds(201, 80, 180, 20);
 		panel.add(userIDField);
-		userIDField.setColumns(10);
-		
+		userIDField.setColumns(10);		
 		
 		//label for user ID
 		JLabel lblUserid = new JLabel("UserID");
@@ -295,18 +260,54 @@ public class editUserGUI {
 		lblNewLabel.setBounds(55, 330, 435, 14);
 		panel.add(lblNewLabel);
 		
-		//mouse movement listener which checks that all of the fields are filled in to prevent empty fields being accidently submitted
-		frmEditUserGUI.getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
+		//firstname textfield to type the first name
+		firstnameField = new JTextField();
+		firstnameField.setColumns(10);
+		//action listener to ensure on letters are input
+		firstnameField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void mouseMoved(MouseEvent e) {
-				//checks that the first name field and surname field are no empty
+			public void keyTyped(KeyEvent e) {
+				char c=e.getKeyChar();
+				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				        e.consume();
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
 				if(firstnameField.getText().equals("") || surnameField.getText().equals("")){
 					//set the submit button as false if the form is not valid
 					submit.setEnabled(false);
 					}
 				else{submit.setEnabled(true);}
 			}
-		});		
+		});
+		firstnameField.setBounds(201, 114, 182, 20);
+		panel.add(firstnameField);
+		
+		//surname textfield where surname will be input
+		surnameField = new JTextField();
+		surnameField.setColumns(10);
+		//action listener to ensure only letters are input
+		surnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c=e.getKeyChar();
+				    if(!(Character.isAlphabetic(c) || (c==KeyEvent.VK_BACK_SPACE)|| c==KeyEvent.VK_DELETE ))
+				    {
+				        e.consume();
+					}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				usernameField.setText(surnameField.getText()+userIDField.getText());
+				if(firstnameField.getText().equals("") || surnameField.getText().equals("")){
+					//set the submit button as false if the form is not valid
+					submit.setEnabled(false);
+					}
+				else{submit.setEnabled(true);}
+			}
+		});
+		surnameField.setBounds(201, 150, 182, 20);
+		panel.add(surnameField);
 	}
 }
 
