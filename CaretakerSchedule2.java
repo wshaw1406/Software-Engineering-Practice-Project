@@ -1,3 +1,5 @@
+package software_eng;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,6 +92,7 @@ public class CaretakerSchedule2 extends JFrame{
 					return columnEditables[column];
 				}
 		});
+		//Hide the task ID column from the user as they do not need it but the system does
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -99,34 +102,41 @@ public class CaretakerSchedule2 extends JFrame{
 		//Table for caretakers tasks
 		model = (DefaultTableModel) table.getModel();
 		
-		// Defines String
+		// Defines start time of day, for the purpose of the task we assume its 915 am
 		String startTime = "9:15";
 		// Sets format of the date
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		// Sets d to NULL
 		Date d = null;
 		try {
+			//Try to format the date to the start time
 			d = df.parse(startTime);
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		} 
-		 Calendar cal = Calendar.getInstance();
-		 // Sets time
-		 cal.setTime(d);
-		 String newTime = df.format(cal.getTime());
+		Calendar cal = Calendar.getInstance();
+		// Sets time
+		cal.setTime(d);
+		String newTime = df.format(cal.getTime());
 		 
+		//Add the button to the notes table
 		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());; 
 		table.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JTextField())); 
 		 
 		for(Task task: Main.tasks) {
+			//String ass stores the task assigned value from the db
 			String ass = "";
+			//If the value of task assigned is null set it to a string
 			if(task.getTaskAssigned() == null) {
 				ass = "0";
 			}
+			//If task assigned is not null set it to ass string
 			else {
 				ass = task.getTaskAssigned();
 			}
+			//If the username of the logged in user matches that of the user who's been assigned a task and the task isnt complete then show that task
 			if(ass.equals(Main.user.getUsername()) && task.getTaskCompleted() == false) {
+				//Add the task information to the table and calculate the time at which it needs complete
 				model.addRow(new Object[]{task.getTaskID(), newTime, task.getTaskPriority(), task.getTaskTitle(), task.getTaskDuration(), "Notes", task.getDateDue()  }); 
 				cal.add(Calendar.MINUTE, task.getTaskDuration());
 				newTime = df.format(cal.getTime());
@@ -233,6 +243,7 @@ public class CaretakerSchedule2 extends JFrame{
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Update the db with any changes to each task
 				Database db = new Database();
 				for(Task task:Main.tasks) {
 					db.updateTask(task);

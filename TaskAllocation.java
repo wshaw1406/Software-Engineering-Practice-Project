@@ -38,28 +38,12 @@ public class TaskAllocation {
 	private JButton btnNewButton;
 	private JButton btnViewNotes;
 	
+	//Function to add soring function to the table based on column
 	private void sort() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel> (model);
 		table.setRowSorter(sorter);
 	}
-	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TaskAllocation window = new TaskAllocation();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	 
 	/**
 	 * Create the application.
 	 */
@@ -80,6 +64,7 @@ public class TaskAllocation {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		frame.getContentPane().add(scrollPane);
 		
+		//Create table
 		table = new JTable();
 		table.setCellSelectionEnabled(true);
 		table.setModel(new DefaultTableModel(
@@ -100,9 +85,11 @@ public class TaskAllocation {
 		
 		model = (DefaultTableModel) table.getModel();
 
+		//For each task that exists
 		for(Task task : Main.tasks)
 	    {
 			String taskAssID = task.getTaskAssigned();
+			//If a taskassigned is null then set it to a string to avoid null pointer error 
 			if(taskAssID == null) {
 				taskAssID = "0";
 			}
@@ -121,7 +108,9 @@ public class TaskAllocation {
 			public void actionPerformed(ActionEvent e) {
 				model = (DefaultTableModel) table.getModel();
 				for(int i = 0; i < model.getRowCount(); i++) {
+					//Get value of tick box in table
 					Boolean value = (Boolean) table.getModel().getValueAt(i, 5);
+					//If not ticked then set the value to false
 					if (value == null) {
 						value = false;
 					}
@@ -146,6 +135,7 @@ public class TaskAllocation {
 		btnCancel = new JButton("Back");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Go back to the previous page
 				frame.hide();
 				new CaretakerSchedule2();
 			}
@@ -156,17 +146,21 @@ public class TaskAllocation {
 		btnViewNotes = new JButton("View notes");
 		btnViewNotes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Show a option box that takes a string from the user to search for tasks notes
 				String strTaskID = JOptionPane.showInputDialog("Task ID", "Type in the task ID:");
 				int taskID = 0;
 				try {
+					//Convert the string taken in to an int
 					taskID = Integer.parseInt(strTaskID);
 				}
 				catch(Exception ex) {
+					//Throw an error is they dont enter a number
 					JOptionPane.showMessageDialog(frame,
 						    "Please enter a number",
 						    "Error",
 						    JOptionPane.ERROR_MESSAGE);
 				}
+				//Search all tasks for the taskid entered and show the notes of that task
 				for(Task task:Main.tasks) {
 					if(task.getTaskID() == taskID) {
 						JOptionPane.showMessageDialog(frame, task.getTaskNotes());
@@ -180,6 +174,7 @@ public class TaskAllocation {
 		sort();
 	}
 	
+	//Function to handle the colouring of the table rows depending on the priority
 	static public JComponent createData(DefaultTableModel model)
 	{
 		JTable table = new JTable( model )
@@ -188,7 +183,7 @@ public class TaskAllocation {
 			{
 				Component c = super.prepareRenderer(renderer, row, column);
 
-				//  Color row based on a cell value
+				//Colour row based on a cell value
 
 				if (!isRowSelected(row))
 				{

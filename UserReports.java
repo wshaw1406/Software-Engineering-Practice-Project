@@ -33,22 +33,6 @@ public class UserReports {
 
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UserReports window = new UserReports();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
 	public UserReports() {
@@ -68,6 +52,7 @@ public class UserReports {
 		JButton btnDownload = new JButton("Download");
 		btnDownload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Allow the user to input a name of the file
 				String fileName = JOptionPane.showInputDialog("Name File", "Type in file name:");
 				try {
 					download(fileName);
@@ -125,7 +110,7 @@ public class UserReports {
 		model = (DefaultTableModel) table.getModel();
 
 		clearTable();
-		
+		//Clears the table and adds all the tasks to it
 		for(User user : Main.users)
 		{
 			model.addRow(new Object[]{user.getUsername(), user.getFirstName(), user.getSurname(), user.getNumberComplete(),user.getNumberAssigned(),user.getNumberLate()});	
@@ -135,7 +120,7 @@ public class UserReports {
 	
 	public static void clearTable() {
 		model = (DefaultTableModel) table.getModel();
-
+		//Remove all tasks from the table
 		for(int i = model.getRowCount() - 1; i >= 0 ; i--) {
 			model.removeRow(i);
 		}
@@ -145,7 +130,7 @@ public class UserReports {
 		PrintWriter pw = new PrintWriter(new File(fileName + ".csv"));
         StringBuilder sb = new StringBuilder();
         
-        //Set up csv format
+        //Set up csv format to print out all the information in the table
         
 		model = (DefaultTableModel) table.getModel();
         

@@ -57,23 +57,6 @@ public class TaskReports {
 	private static JDatePickerImpl AfterDatePicker;
 
 
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TaskReports window = new TaskReports();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the application.
 	 */
@@ -94,6 +77,7 @@ public class TaskReports {
 		JButton btnDownload = new JButton("Download");
 		btnDownload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Allows the user to create a name for the downloaded file
 				String fileName = JOptionPane.showInputDialog("Name File", "Type in file name:");
 				try {
 					download(fileName);
@@ -110,6 +94,7 @@ public class TaskReports {
 		scrollPane.setBounds(0, 0, 744, 261);
 		frame.getContentPane().add(scrollPane);
 		
+		//Create table
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -176,6 +161,7 @@ public class TaskReports {
 		cmBxWhoAssigned.setSelectedIndex(0);
 		panel_7.add(cmBxWhoAssigned);
 		
+		//Add all the users to the combobox to allow sorting
 		for(User user : Main.users) {
 			cmBxWhoAssigned.addItem(user.getUsername());
 		}
@@ -186,6 +172,7 @@ public class TaskReports {
 		JLabel lblCompletedAfter = new JLabel("Completed After");
 		panel_4.add(lblCompletedAfter);
 		
+		//Creates the datepicker for sorting tasks completed after date selected
 		UtilDateModel AfterDmodel = new UtilDateModel();
 
 		Properties Ap = new Properties();
@@ -197,6 +184,7 @@ public class TaskReports {
 	    AfterDatePicker = new JDatePickerImpl(AfterDatePanel, new DateLabelFormatter());
 	    AfterDatePicker.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
+	    		//If a date is selected update table
 	    		updateTable();
 	    	}
 	    });
@@ -209,6 +197,7 @@ public class TaskReports {
 		JLabel lblCompletedBefore = new JLabel("Completed Before");
 		panel_5.add(lblCompletedBefore);
 		
+		//Create a date picker for sorting by tasks completed before a date
 		UtilDateModel BeforeDmodel = new UtilDateModel();
 
 		Properties Bp = new Properties();
@@ -220,6 +209,7 @@ public class TaskReports {
 	    BeforeDatePicker = new JDatePickerImpl(BeforeDatePanel, new DateLabelFormatter());
 	    BeforeDatePicker.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
+	    		//If a date is selecte update table
 	    		updateTable();
 	    	}
 	    });
@@ -247,6 +237,7 @@ public class TaskReports {
 		btnBack.setBounds(33, 410, 97, 25);
 		frame.getContentPane().add(btnBack);
 		
+		//Create action listener to that is a change is made to a combobox it will update table
 		TaskReportsAL actionListener = new TaskReportsAL();
 	    cmBxType.addItemListener(actionListener);
 	    cmBxComplete.addItemListener(actionListener);
@@ -260,6 +251,7 @@ public class TaskReports {
 	}
 	public class DateLabelFormatter extends AbstractFormatter {
 
+		//Formate the date stored in the table
 	    private String datePattern = "yyyy-MM-dd";
 	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
@@ -282,6 +274,8 @@ public class TaskReports {
 	public static void updateTable() {
 
 		model = (DefaultTableModel) table.getModel();
+		
+		//Get value of all the sorting boxes
 		String overdue = (String) cmBxOverDue.getSelectedItem();
 		String complete = (String) cmBxComplete.getSelectedItem();
 		String type = (String) cmBxType.getSelectedItem();
@@ -290,8 +284,10 @@ public class TaskReports {
 		String completeBefore = (String) BeforeDatePicker.getJFormattedTextField().getText();
 		String completeAfter = (String) AfterDatePicker.getJFormattedTextField().getText();
 		
+		//Clears the table
 		clearTable();
 		
+		//Adds all tasks to the table
 		for(Task task : Main.tasks)
 		{
 			if(task.getTaskAssigned() == null) {
@@ -302,21 +298,26 @@ public class TaskReports {
 			}
 		}
 		
+		//If the task has not been assigned set the value of the column to None as it is better presented to user rather than null
 		for(int i = model.getRowCount() - 1; i>= 0; i--) {
 			if(model.getValueAt(i, 3).equals("null")) {
 				model.setValueAt("None", i, 3);
 			}
 		}
 		
+		//If a date has been selected for completed after
 		if(completeAfter != null) {
 			for(int i = model.getRowCount() - 1; i>= 0; i--) {
 				if(model.getValueAt(i, 6) != "0") {
 					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					try {
 						if(!completeAfter.isEmpty()) {
+							//Convert the string in the completed after datepicker to a date format
 							Date selectedDate = format.parse(completeAfter);
+							//Conver the string in the table to a date format
 							Date taskDate = format.parse((String) model.getValueAt(i,6));
 							if(taskDate.before(selectedDate)){
+								//Remove all tasks whoes completed date is before the selected date
 								model.removeRow(i);
 							}
 						}
@@ -327,16 +328,19 @@ public class TaskReports {
 			}
 		}
 		
-		
+		//If a date has been selected for completed before
 		if(completeBefore != null) {
 			for(int i = model.getRowCount() - 1; i>= 0; i--) {
 				if(model.getValueAt(i, 6) != "0") {
 					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					try {
 						if(!completeBefore.isEmpty()) {
+							//Convert the string in the completed before datepicker to a date format
 							Date selectedDate = format.parse(completeBefore);
+							//Convert the string the the table to a date format
 							Date taskDate = format.parse((String) model.getValueAt(i,6));
 							if(taskDate.after(selectedDate)){
+								//Remove any tasks that have been completed after a selected date
 								model.removeRow(i); 
 							}
 						}
@@ -347,7 +351,9 @@ public class TaskReports {
 			}
 		}
 		
+		//Switch statement to sort the table
 		switch(overdue) {
+			//If true is selected in the overdue combobox them remove all tasks that are not overdue
 			case "True":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					Date localDate = new Date();
@@ -357,7 +363,9 @@ public class TaskReports {
 				};
 			break;
 		}
+		//Switch statement to sort the table
 		switch(type) {
+			//If routine is selected in task type then it removes all one-off tasks
 			case "Routine": 
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					String value = (String) model.getValueAt(i, 2);
@@ -366,6 +374,7 @@ public class TaskReports {
 					}
 				};
 			break;
+			//If one-off is selected then it removes all routine tasks
 			case "One-off": 
 				for (int i = model.getRowCount() - 1; i >= 0; i--) {
 					String value = (String) model.getValueAt(i, 2);
@@ -376,7 +385,9 @@ public class TaskReports {
 			break;
 		}
 		
+		//Switch statement to sort based on if a task is complete
 		switch(complete) {
+			//If true is selected in combobox then remove all tasks that have not been completed
 			case "True":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					boolean value = (boolean) model.getValueAt(i, 5);
@@ -385,6 +396,7 @@ public class TaskReports {
 					}
 				};
 			break;
+			//If false is selected remove all tasks that have been completed
 			case "False":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					boolean value = (boolean) model.getValueAt(i, 5);
@@ -395,7 +407,9 @@ public class TaskReports {
 			break;
 		}
 		
+		//Switch statement to sort based on if a task has been assigned
 		switch(assigned) {
+			//If true is selected then remove all tasks that have not been assigned
 			case "True":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					String value = (String) model.getValueAt(i, 3);
@@ -404,6 +418,7 @@ public class TaskReports {
 					}
 				};
 			break;
+			//If false is selected then remove all tasks that have been assigned
 			case "False":
 				for (int i = model.getRowCount() - 1; i>= 0; i--) {
 					String value = (String) model.getValueAt(i, 3);
@@ -414,14 +429,18 @@ public class TaskReports {
 			break;
 		}
 		
+		//If statement to sort the table based on who a task is assigned to
 		if(whoAssigned != "Any") {
+			//If any is not selected then remove all tasks that have been not assigned to the selected person
 			for (int i = model.getRowCount() - 1; i>= 0; i--) {
+				//Convert the value at the assigned column to a string 
 				String value = (String) model.getValueAt(i, 3);
 				if(!value.equals("None")) {
 					if(!value.equals(whoAssigned)) {
 						model.removeRow(i);
 					}
 				}
+				//If task has not been assigned then remove
 				if(value.equals("None")) {
 					model.removeRow(i);
 				}
@@ -430,6 +449,7 @@ public class TaskReports {
 	}
 	
 	public static void clearTable() {
+		//Function to clear the table
 		model = (DefaultTableModel) table.getModel();
 
 		for(int i = model.getRowCount() - 1; i >= 0 ; i--) {
@@ -441,7 +461,7 @@ public class TaskReports {
 		PrintWriter pw = new PrintWriter(new File(fileName + ".csv"));
         StringBuilder sb = new StringBuilder();
         
-        //Set up csv format
+        //Set up csv format that displays all information in the table
         
 		model = (DefaultTableModel) table.getModel();
         
@@ -477,8 +497,8 @@ public class TaskReports {
 }
 
 class TaskReportsAL implements ItemListener {
-	  // This method is called only if a new item has been selected.
-	  public void itemStateChanged(ItemEvent evt) {
+	//Action listener to handle any changes in the combo boxes
+	public void itemStateChanged(ItemEvent evt) {
 		    if (evt.getStateChange() == ItemEvent.SELECTED) {
 		      // Item was just selected
 		    	System.out.println("Updating table!");
