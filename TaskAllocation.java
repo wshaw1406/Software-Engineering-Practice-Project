@@ -160,11 +160,20 @@ public class TaskAllocation {
 						    "Error",
 						    JOptionPane.ERROR_MESSAGE);
 				}
+				//Boolean to store if a task is found
+				boolean found = false;
 				//Search all tasks for the taskid entered and show the notes of that task
 				for(Task task:Main.tasks) {
 					if(task.getTaskID() == taskID) {
 						JOptionPane.showMessageDialog(frame, task.getTaskNotes());
+						found = true;
 					}
+				}
+				if(found == false) {
+					JOptionPane.showMessageDialog(frame,
+						    "Please enter a valid task id",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
