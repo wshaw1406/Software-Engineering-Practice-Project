@@ -92,7 +92,7 @@ public class editRecord {
 		SpinnerDateModel smb = new SpinnerDateModel(datenow, null, null, Calendar.HOUR_OF_DAY);
 		spinnerTime.setModel(smb);
 		//Displays hour, minute currently
-		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "dd-MM HH:mm");
+		JSpinner.DateEditor de_spinnerTime = new JSpinner.DateEditor(spinnerTime, "dd-MM-yyyy HH:mm");
 		spinnerTime.setEditor(de_spinnerTime);
 		spinnerTime.setBackground(new Color(240, 240, 240));
 		spinnerTime.setBounds(169, 83, 134, 22);
